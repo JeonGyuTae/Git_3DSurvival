@@ -69,7 +69,6 @@ public class Interaction : MonoBehaviour
             curInteractable.OnInteract();
             curInteractable = null;
             curInteractable = null;
-            curInteractable.HideInteractUI();
         }
     }
 }

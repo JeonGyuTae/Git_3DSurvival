@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public interface IDamageble
@@ -50,7 +48,7 @@ public class PlayerCondition : MonoBehaviour, IDamageble
             stamina.Sub(controller.useRunStamina * Time.deltaTime);
             if (stamina.curValue <= 0)
             {
-                controller.isRunningFalse();
+                controller.runInputHoldFalse();
             }
         }
 

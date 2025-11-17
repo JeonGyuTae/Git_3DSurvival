@@ -2405,6 +2405,7 @@ MonoBehaviour:
   crossHair: {fileID: 4737594126778786112}
   snapToGroundDistance: 0.1
   snapForce: 5
+  maxSlopeAngle: 90
 --- !u!114 &3364914057795878449
 MonoBehaviour:
   m_ObjectHideFlags: 0
