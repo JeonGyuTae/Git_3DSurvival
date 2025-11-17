@@ -297,7 +297,7 @@ GameObject:
   - component: {fileID: 754067458700530390}
   - component: {fileID: 4588134815713113107}
   m_Layer: 5
-  m_Name: ScriptText (TMP)
+  m_Name: DialogueText (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -655,7 +655,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4381073641820532943}
   m_Layer: 5
-  m_Name: ScriptWindow
+  m_Name: DialoguePanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
