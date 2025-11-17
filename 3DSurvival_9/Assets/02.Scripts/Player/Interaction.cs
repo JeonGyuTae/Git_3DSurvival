@@ -24,7 +24,7 @@ public class Interaction : MonoBehaviour
 
     private void Update()
     {
-        if(Time.time - lastCheckTime > checkRate)
+        /*if(Time.time - lastCheckTime > checkRate)
         {
             lastCheckTime = Time.time;
 
@@ -47,7 +47,7 @@ public class Interaction : MonoBehaviour
                 curInteractGameObj = null;
                 curInteractable = null;
             }
-        }
+        }*/
     }
 
     private void SetPromptText()
