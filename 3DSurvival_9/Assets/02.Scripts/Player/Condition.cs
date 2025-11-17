@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Condition : MonoBehaviour
 {
-    public float curValue;
-    public float startValue;
-    public float maxValue;
-    public float passiveValue;
+    [SerializeField] private float curValue;
+    [SerializeField] private float startValue;
+    [SerializeField] private float maxValue;
+    [SerializeField] private float passiveValue;
     // public Image uiBar;
 
     void Start()

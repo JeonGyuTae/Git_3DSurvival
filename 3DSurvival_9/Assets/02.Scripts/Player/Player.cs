@@ -3,13 +3,13 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    /*public PlayerController controller;
-    public PlayerCondition condition;
+    /*private PlayerController controller;
+    private PlayerCondition condition;
 
-    public ItemBlahBlah blahblah;
-    public Action blah;
+    private ItemBlahBlah blahblah;
+    private Action blah;
 
-    public Transform dropPosition;
+    [SerializeField] private Transform dropPosition;
 
     private void Awake()
     {
