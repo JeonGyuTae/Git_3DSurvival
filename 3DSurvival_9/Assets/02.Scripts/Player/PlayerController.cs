@@ -28,7 +28,7 @@ public class PlayerController : MonoBehaviour
     private bool canLook;
     [SerializeField] private Image crossHair;
 
-    // ¾ÆÁ÷ Á¤»óÀÛµ¿ x
+    // ì•„ì§ ì •ìƒì‘ë™ x
     [Header("Ground Snapping")]
     [SerializeField] private float snapToGroundDistance;
     [SerializeField] private float snapForce;
@@ -59,7 +59,7 @@ public class PlayerController : MonoBehaviour
         condition = GetComponent<PlayerCondition>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
 
-        // ¿õÅ©¸®±â½Ã Äİ¶óÀÌ´õ¿Í ½ÃÁ¡ Á¶Àı
+        // ì›…í¬ë¦¬ê¸°ì‹œ ì½œë¼ì´ë”ì™€ ì‹œì  ì¡°ì ˆ
         if (_capsuleCollider != null )
         {
             originalColliderHeight = _capsuleCollider.height;
@@ -204,7 +204,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ¿ÜºÎ Á¢±Ù¿ë(PlayerCondition.cs)
+    // ì™¸ë¶€ ì ‘ê·¼ìš©(PlayerCondition.cs)
     public void runInputHoldFalse()
     {
         if (runInputHold)
@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // °æ»ç¸é ÀÌµ¿ ½Ã (¾ÆÁ÷ Á¤»óÀÛµ¿x)
+    // ê²½ì‚¬ë©´ ì´ë™ ì‹œ (ì•„ì§ ì •ìƒì‘ë™x)
     void ApplyGroundSnapping()
     {
         if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
