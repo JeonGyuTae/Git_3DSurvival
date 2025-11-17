@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sneakingSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float fallingForce;
     [SerializeField] public float useRunStamina;
     [SerializeField] private float useJumpStamina;
     private Vector2 curMovementInput;
@@ -27,14 +28,20 @@ public class PlayerController : MonoBehaviour
     private bool canLook;
     [SerializeField] private Image crossHair;
 
+    // 아직 정상작동 x
     [Header("Ground Snapping")]
     [SerializeField] private float snapToGroundDistance;
     [SerializeField] private float snapForce;
+
+    [Header("Slope Handling")]
+    [SerializeField] private float maxSlopeAngle;
 
     private Rigidbody _rigidbody;
     private bool isMoving;
     private bool isSneaking;
     public bool isRunning { get; private set; }
+    private bool isJumping;
+    private bool runInputHold;
 
     private CapsuleCollider _capsuleCollider;
     private float originalColliderHeight;
@@ -52,6 +59,7 @@ public class PlayerController : MonoBehaviour
         condition = GetComponent<PlayerCondition>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
 
+        // 웅크리기시 콜라이더와 시점 조절
         if (_capsuleCollider != null )
         {
             originalColliderHeight = _capsuleCollider.height;
@@ -75,12 +83,14 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         isMoving = curMovementInput.magnitude > 0.1f;
-        
+        isRunning = runInputHold && isMoving && !isSneaking;
     }
 
     private void FixedUpdate()
     {
         Move();
+        GravityEffect();
+        HandleSlopeSliding();
     }
 
     private void LateUpdate()
@@ -114,6 +124,11 @@ public class PlayerController : MonoBehaviour
         dir.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = dir;
+
+        if (isJumping && _rigidbody.velocity.y <= 0.01f)
+        {
+            isJumping = false;
+        }
     }
 
     void PlayerLook()
@@ -129,10 +144,12 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
+            isMoving = true;
             curMovementInput = context.ReadValue<Vector2>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
+            isMoving = false;
             curMovementInput = Vector2.zero;
         }
     }
@@ -173,26 +190,26 @@ public class PlayerController : MonoBehaviour
     {
         if (isSneaking)
         {
-            isRunning = false;
+            runInputHold = false;
             return;
         }
 
-        if (context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed && isMoving)
         {
-            isRunning = true;
+            runInputHold = true;
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            isRunning = false;
+            runInputHold = false;
         }
     }
 
-    // �ܺ� ���ٿ�(PlayerCondition.cs)
-    public void isRunningFalse()
+    // 외부 접근용(PlayerCondition.cs)
+    public void runInputHoldFalse()
     {
-        if (isRunning)
+        if (runInputHold)
         {
-            isRunning = false;
+            runInputHold = false;
         }
     }
 
@@ -207,12 +224,22 @@ public class PlayerController : MonoBehaviour
         {
             if(IsGrounded() && condition.UseStamina(useJumpStamina))
             {
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
                 _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+                isJumping = true;
             }
         }
     }
 
-    // ���� �̵� �� 
+    void GravityEffect()
+    {
+        if (!IsGrounded() && _rigidbody.velocity.y < 0)
+        {
+            _rigidbody.AddForce(Vector3.up * Physics.gravity.y * (fallingForce - 1) * _rigidbody.mass, ForceMode.Force);
+        }
+    }
+
+    // 경사면 이동 시 (아직 정상작동x)
     void ApplyGroundSnapping()
     {
         if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
@@ -234,34 +261,69 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        /*Vector3 sphereOrigin = transform.position + _capsuleCollider.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius);
-        float checkRadius = _capsuleCollider.radius * 0.9f;
+        float capsuleBottomY = _capsuleCollider.bounds.center.y - _capsuleCollider.bounds.extents.y;
 
-        Vector3 point1 = _capsuleCollider.bounds.center;
-        point1.y -= (_capsuleCollider.height / 2f) - _capsuleCollider.radius + 0.1f;
+        float rayStartYOffset = 0.01f;
+        Vector3 rayStartBase = new Vector3(transform.position.x, capsuleBottomY + rayStartYOffset, transform.position.z);
 
-        return Physics.CheckCapsule(
-        _capsuleCollider.bounds.center,
-        _capsuleCollider.bounds.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius), // ĸ�� �Ʒ��� ���� �߽�
-        _capsuleCollider.radius * 0.9f,
-        groundLayerMask);*/
+        float rayLength = 0.2f;
+        float offsetFromEdge = _capsuleCollider.radius * 0.9f;
+
         Ray[] rays = new Ray[4]
         {
-            new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (-transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down),
-            new Ray(transform.position + (-transform.right * 0.2f) + (transform.up * 0.01f), Vector3.down)
+            new Ray(rayStartBase + transform.forward * offsetFromEdge, Vector3.down),
+            new Ray(rayStartBase - transform.forward * offsetFromEdge, Vector3.down),
+            new Ray(rayStartBase + transform.right * offsetFromEdge, Vector3.down),
+            new Ray(rayStartBase - transform.right * offsetFromEdge, Vector3.down)
         };
 
+        bool grounded = false;
         for (int i = 0; i < rays.Length; i++)
         {
-            if (Physics.Raycast(rays[i], 0.1f, groundLayerMask))
+            Debug.DrawRay(rays[i].origin, rays[i].direction * rayLength, Color.green, Time.fixedDeltaTime);
+
+            if (Physics.Raycast(rays[i], rayLength, groundLayerMask))
             {
-                return true;
+                grounded = true;
             }
         }
+        return grounded;
+    }
 
-        return false;
+    private void HandleSlopeSliding()
+    {
+        if (!IsGrounded()) { Debug.Log("Not Grounded"); return; }
+        if (isMoving) { Debug.Log("Is Moving"); return; }
+        if (isJumping) { Debug.Log("Is Jumping"); return; }
+        if (_rigidbody.velocity.magnitude >= 0.1f) { Debug.Log($"Velocity too high: {_rigidbody.velocity.magnitude}"); return; }
+
+        if (IsGrounded() && !isMoving && !isJumping && _rigidbody.velocity.magnitude < 0.1f)
+        {
+            RaycastHit hit;
+            Vector3 rayOrigin = transform.position + _capsuleCollider.center;
+            rayOrigin.y -= (_capsuleCollider.height / 2f - 0.05f);
+
+            Debug.DrawRay(rayOrigin, Vector3.down * 0.2f, Color.magenta, Time.fixedDeltaTime);
+
+            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 0.2f, groundLayerMask))
+            {
+                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
+
+                if(slopeAngle <= maxSlopeAngle)
+                {
+                    _rigidbody.velocity = Vector3.zero;
+                    _rigidbody.angularVelocity = Vector3.zero;
+                }
+                else
+                {
+                    Debug.Log($"Slope too steep: {slopeAngle} > {maxSlopeAngle}");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("HandleSlopeSliding: Raycast did not hit ground!");
+        }
     }
 
     public void OnInventory(InputAction.CallbackContext context)

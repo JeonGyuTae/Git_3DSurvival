@@ -24,7 +24,7 @@ public class Interaction : MonoBehaviour
 
     private void Update()
     {
-        /*if(Time.time - lastCheckTime > checkRate)
+        if(Time.time - lastCheckTime > checkRate)
         {
             lastCheckTime = Time.time;
 
@@ -43,27 +43,32 @@ public class Interaction : MonoBehaviour
             }
             else
             {
-                curInteractable.HideInteractUI();
+                // curInteractable.HideInteractUI(); // 정보 UI활성화 하는거 여기서 관리해야할듯
                 curInteractGameObj = null;
                 curInteractable = null;
+                interactionText.gameObject.SetActive(false);
+                promptText.gameObject.SetActive(false);
             }
-        }*/
+        }
     }
 
     private void SetPromptText()
     {
-        curInteractable.ShowInteractUI();
+        // curInteractable.ShowInteractUI();
+        interactionText.gameObject.SetActive(true);
+        promptText.gameObject.SetActive(true);
+        // interactionText.text = curInteractable.GetInteractPrompt(); // 아이템, 적에 따라서 상호작용 텍스트 변경되어야함
         promptText.text = curInteractable.GetInteractPrompt();
     }
 
+    // 아이템 습득하는 키
     public void OnInteractInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && curInteractable != null)
+        if(context.phase == InputActionPhase.Started && curInteractable != null) // 아이템만 검사하는 로직 추가할 것
         {
             curInteractable.OnInteract();
             curInteractable = null;
             curInteractable = null;
-            curInteractable.HideInteractUI();
         }
     }
 }
