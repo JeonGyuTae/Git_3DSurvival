@@ -10,12 +10,15 @@ public interface IDamageble
 public class PlayerCondition : MonoBehaviour, IDamageble
 {
     private PlayerController controller;
+    public UICondition uiCondition;
 
-    Condition health; //{ get {  return } }
-    Condition hunger;
-    Condition thirsty;
-    Condition stamina;
+    Condition health { get { return uiCondition.health; } }
+    Condition hunger { get { return uiCondition.hunger; } }
+    Condition thirsty { get { return uiCondition.thirsty; } }
+    Condition stamina { get { return uiCondition.stamina; } }
 
+    // 배고픔과 목마름이 0일 때 체력 소모
+    // 플레이어가 공격등의 데미지를 입었을 때 표현할 데미지 이벤트 액션
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
@@ -23,7 +26,12 @@ public class PlayerCondition : MonoBehaviour, IDamageble
 
     void Update()
     {
-        
+        stamina.Add(stamina.passiveValue * Time.deltaTime);
+
+        if(health.curValue == 0f)
+        {
+            Die();
+        }
     }
 
     void Heal(float amount)
