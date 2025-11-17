@@ -10,7 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sneakingSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
-    [SerializeField] private float useRunStamina;
+    [SerializeField] public float useRunStamina;
     [SerializeField] private float useJumpStamina;
     private Vector2 curMovementInput;
     [SerializeField] private LayerMask groundLayerMask;
@@ -27,10 +27,14 @@ public class PlayerController : MonoBehaviour
     private bool canLook;
     [SerializeField] private Image crossHair;
 
+    [Header("Ground Snapping")]
+    [SerializeField] private float snapToGroundDistance;
+    [SerializeField] private float snapForce;
+
     private Rigidbody _rigidbody;
     private bool isMoving;
     private bool isSneaking;
-    private bool isRunning;
+    public bool isRunning { get; private set; }
 
     private CapsuleCollider _capsuleCollider;
     private float originalColliderHeight;
@@ -71,6 +75,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         isMoving = curMovementInput.magnitude > 0.1f;
+        
     }
 
     private void FixedUpdate()
@@ -182,6 +187,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 외부 접근용(PlayerCondition.cs)
+    public void isRunningFalse()
+    {
+        if (isRunning)
+        {
+            isRunning = false;
+        }
+    }
+
     public void OnLook(InputAction.CallbackContext context)
     {
         mouseDelta = context.ReadValue<Vector2>();
@@ -198,8 +212,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // 경사면 이동 시 
+    void ApplyGroundSnapping()
+    {
+        if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
+        {
+            return;
+        }
+
+        RaycastHit hit;
+
+        Vector3 rayStart = transform.position + _capsuleCollider.center;
+        rayStart.y = transform.position.y + _capsuleCollider.center.y - _capsuleCollider.height / 2f + 0.1f;
+
+        if (Physics.Raycast(rayStart, Vector3.down, out hit, snapToGroundDistance, groundLayerMask))
+        {
+            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
+            _rigidbody.AddForce(Vector3.down * snapForce, ForceMode.Force);
+        }
+    }
+
     bool IsGrounded()
     {
+        /*Vector3 sphereOrigin = transform.position + _capsuleCollider.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius);
+        float checkRadius = _capsuleCollider.radius * 0.9f;
+
+        Vector3 point1 = _capsuleCollider.bounds.center;
+        point1.y -= (_capsuleCollider.height / 2f) - _capsuleCollider.radius + 0.1f;
+
+        return Physics.CheckCapsule(
+        _capsuleCollider.bounds.center,
+        _capsuleCollider.bounds.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius), // 캡슐 아래쪽 구의 중심
+        _capsuleCollider.radius * 0.9f,
+        groundLayerMask);*/
         Ray[] rays = new Ray[4]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),

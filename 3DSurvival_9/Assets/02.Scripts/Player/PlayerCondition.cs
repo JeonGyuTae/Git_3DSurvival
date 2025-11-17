@@ -28,6 +28,14 @@ public class PlayerCondition : MonoBehaviour, IDamageble
     {
         stamina.Add(stamina.passiveValue * Time.deltaTime);
 
+        if (controller != null && controller.isRunning)
+        {
+            stamina.Sub(controller.useRunStamina * Time.deltaTime);
+            if (stamina.curValue <= 0)
+            {
+                controller.isRunningFalse();
+            }
+        }
         if(health.curValue == 0f)
         {
             Die();
