@@ -37,6 +37,7 @@ public class PlayerController : MonoBehaviour
     private bool isSneaking;
     public bool isRunning { get; private set; }
     private bool isJumping;
+    private bool runInputHold;
 
     private CapsuleCollider _capsuleCollider;
     private float originalColliderHeight;
@@ -77,6 +78,7 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         isMoving = curMovementInput.magnitude > 0.1f;
+        isRunning = runInputHold && isMoving && !isSneaking;
     }
 
     private void FixedUpdate()
@@ -136,10 +138,12 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Performed)
         {
+            isMoving = true;
             curMovementInput = context.ReadValue<Vector2>();
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
+            isMoving = false;
             curMovementInput = Vector2.zero;
         }
     }
@@ -180,17 +184,17 @@ public class PlayerController : MonoBehaviour
     {
         if (isSneaking)
         {
-            isRunning = false;
+            runInputHold = false;
             return;
         }
 
-        if (context.phase == InputActionPhase.Performed)
+        if (context.phase == InputActionPhase.Performed && isMoving)
         {
-            isRunning = true;
+            runInputHold = true;
         }
         else if (context.phase == InputActionPhase.Canceled)
         {
-            isRunning = false;
+            runInputHold = false;
         }
     }
 
