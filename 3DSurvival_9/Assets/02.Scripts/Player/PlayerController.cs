@@ -42,7 +42,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalCamLocalPos;
     private float sneakingColliderCenterY;
 
-    public Action inventory;
+    public System.Action inventory;
 
     private PlayerCondition condition;
 
@@ -187,7 +187,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // ¿ÜºÎ Á¢±Ù¿ë(PlayerCondition.cs)
+    // ï¿½Üºï¿½ ï¿½ï¿½ï¿½Ù¿ï¿½(PlayerCondition.cs)
     public void isRunningFalse()
     {
         if (isRunning)
@@ -212,7 +212,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // °æ»ç¸é ÀÌµ¿ ½Ã 
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ ï¿½ï¿½ 
     void ApplyGroundSnapping()
     {
         if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
@@ -242,7 +242,7 @@ public class PlayerController : MonoBehaviour
 
         return Physics.CheckCapsule(
         _capsuleCollider.bounds.center,
-        _capsuleCollider.bounds.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius), // Ä¸½¶ ¾Æ·¡ÂÊ ±¸ÀÇ Áß½É
+        _capsuleCollider.bounds.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius), // Ä¸ï¿½ï¿½ ï¿½Æ·ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ß½ï¿½
         _capsuleCollider.radius * 0.9f,
         groundLayerMask);*/
         Ray[] rays = new Ray[4]
