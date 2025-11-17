@@ -10,6 +10,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float sneakingSpeed;
     [SerializeField] private float runSpeed;
     [SerializeField] private float jumpForce;
+    [SerializeField] private float fallingForce;
     [SerializeField] public float useRunStamina;
     [SerializeField] private float useJumpStamina;
     private Vector2 curMovementInput;
@@ -35,6 +36,7 @@ public class PlayerController : MonoBehaviour
     private bool isMoving;
     private bool isSneaking;
     public bool isRunning { get; private set; }
+    private bool isJumping;
 
     private CapsuleCollider _capsuleCollider;
     private float originalColliderHeight;
@@ -75,12 +77,12 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         isMoving = curMovementInput.magnitude > 0.1f;
-        
     }
 
     private void FixedUpdate()
     {
         Move();
+        GravityEffect();
     }
 
     private void LateUpdate()
@@ -114,6 +116,11 @@ public class PlayerController : MonoBehaviour
         dir.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = dir;
+
+        if (isJumping && _rigidbody.velocity.y <= 0.01f)
+        {
+            isJumping = false;
+        }
     }
 
     void PlayerLook()
@@ -207,12 +214,22 @@ public class PlayerController : MonoBehaviour
         {
             if(IsGrounded() && condition.UseStamina(useJumpStamina))
             {
+                _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
                 _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
+                isJumping = true;
             }
         }
     }
 
-    // 경사면 이동 시 
+    void GravityEffect()
+    {
+        if (!IsGrounded() && _rigidbody.velocity.y < 0)
+        {
+            _rigidbody.AddForce(Vector3.up * Physics.gravity.y * (fallingForce - 1) * _rigidbody.mass, ForceMode.Force);
+        }
+    }
+
+    // 경사면 이동 시 (아직 정상작동x)
     void ApplyGroundSnapping()
     {
         if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
@@ -234,17 +251,6 @@ public class PlayerController : MonoBehaviour
 
     bool IsGrounded()
     {
-        /*Vector3 sphereOrigin = transform.position + _capsuleCollider.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius);
-        float checkRadius = _capsuleCollider.radius * 0.9f;
-
-        Vector3 point1 = _capsuleCollider.bounds.center;
-        point1.y -= (_capsuleCollider.height / 2f) - _capsuleCollider.radius + 0.1f;
-
-        return Physics.CheckCapsule(
-        _capsuleCollider.bounds.center,
-        _capsuleCollider.bounds.center + Vector3.down * (_capsuleCollider.height / 2f - _capsuleCollider.radius), // 캡슐 아래쪽 구의 중심
-        _capsuleCollider.radius * 0.9f,
-        groundLayerMask);*/
         Ray[] rays = new Ray[4]
         {
             new Ray(transform.position + (transform.forward * 0.2f) + (transform.up * 0.01f), Vector3.down),
