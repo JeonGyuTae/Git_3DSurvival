@@ -10,22 +10,22 @@ using UnityEngine.AI;
 /// BehaviorTree 구조로 움직임을 구현하며
 /// AI Navigation을 연동하여 활동 지역을 지정함
 /// </summary>
-public class AIController : MonoBehaviour
+public abstract class AIController : MonoBehaviour
 {
     [Header("AI")]
-    [SerializeField] private NavMeshAgent agent;
-    [SerializeField] private float moveSpeed = 5.0f;
-    [SerializeField] private float maxMoveDistance = -10.0f;
-    [SerializeField] private float minMoveDistance = 10.0f;
-    [SerializeField] private float decisionDuration = 5f;
+    [SerializeField] protected NavMeshAgent agent;
+    [SerializeField] protected float moveSpeed = 5.0f;
+    [SerializeField] protected float maxMoveDistance = -10.0f;
+    [SerializeField] protected float minMoveDistance = 10.0f;
+    [SerializeField] protected float decisionDuration = 5f;
 
-    private BehaviorTree tree;
-    private float decisionStartTime = -1f;
-    private Vector3 targetDestination;
-    private Vector3 currentDestination;
+    protected BehaviorTree tree;
+    protected float decisionStartTime = -1f;
+    protected Vector3 targetDestination;
+    protected Vector3 currentDestination;
 
     // CreatureMover mover 추가
-    private CreatureMover mover;
+    protected CreatureMover mover;
 
     private void Awake()
     {
@@ -33,108 +33,20 @@ public class AIController : MonoBehaviour
         mover = GetComponent<CreatureMover>();
     }
 
-    private void Start()
+    protected virtual void Start()
     {
-        // BehaviorTree 설정
-        SetBehavior();
 
-        ResetDecisionStartTime();
     }
 
-    private void SetBehavior()
-    {
-        // Leaf Node 생성
-        Action setDecisionNextPosition = new Action("Decision Next Position", SetDecisionPosition);
-        Action move = new Action("Move Next Position", Move);
+    protected abstract void SetBehavior();
 
-        // Sequence Node 생성
-        Sequence patrol = new Sequence("Patrol Around", setDecisionNextPosition, move);
-
-        tree = new BehaviorTree(patrol);
-    }
-
-    private NodeState SetDecisionPosition()
-    {
-        // targetDestination이 지정이 되었다면 Move로 이동
-        if(targetDestination != Vector3.zero)
-        {
-            return NodeState.SUCCESS;
-        }
-
-        if(decisionStartTime < 0f)
-        {
-            // 처음 노드 진입 시 초기화
-            targetDestination = Vector3.zero;
-            decisionStartTime = Time.time;
-            return NodeState.RUNNING;
-        }
-
-        if(Time.time < decisionStartTime + decisionDuration)
-        {
-            // 고민 중인 상태 일때는 RUNNING 반환
-            //Debug.Log("다음 포지션 고민 중...");
-            return NodeState.RUNNING;
-        }
-        else
-        {
-            Vector3 randomDirection = Random.onUnitSphere * Random.Range(minMoveDistance, maxMoveDistance);
-            Vector3 randomPosition = transform.position + randomDirection;
-
-            // 목표 설정
-            if(NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, maxMoveDistance, NavMesh.AllAreas))
-            {
-                // 목표가 탐지되면 targetDestination 설정
-                targetDestination = hit.position;
-
-                // 타이머 리셋
-                ResetDecisionStartTime();
-                return NodeState.SUCCESS;
-            }
-
-            // 목표가 설정되지 못하면 다시 고민하고 목표 찾기
-            ResetDecisionStartTime();
-            return NodeState.RUNNING;
-        }
-    }
-
-    private NodeState Move()
-    {
-        // 목표가 설정되지 않으면 return
-        if(!agent.enabled || targetDestination == Vector3.zero) return NodeState.RUNNING;
-
-        agent.SetDestination(targetDestination);
-
-        // 이동 시작
-        if (Vector3.Distance(currentDestination, targetDestination) < 0.1f)
-        {
-            Debug.Log("목표지점 도달");
-            return NodeState.SUCCESS;
-        }
-        else
-        {
-            // CreatureMover로 이동하기 
-
-            bool isJump = false;
-            bool isRun = false;
-
-            Vector2 axis = Vector2.zero;
-            Vector3 targetPosition = Vector3.zero;
-
-            mover.SetInput(axis, targetPosition, isRun, isJump);
-
-            Debug.Log("목표까지 거리: " + Vector3.Distance(currentDestination, targetDestination));
-            return NodeState.RUNNING;
-        }
-    }
-
-
-    private void Update()
+    protected virtual void Update()
     {
         // BehaviorTree 실행
         tree.RunTree();
     }
 
-    private void ResetDecisionStartTime()
+    protected void ResetDecisionStartTime()
     {
         decisionStartTime = -1f;
     }
