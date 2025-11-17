@@ -14,12 +14,16 @@ using UnityEngine.AI;
 /// </summary>
 public class ChickentAIController : AIController
 {
+    private bool isMovingToTarget = false; // 플래그 설정
+
     protected override void Start()
     {
         // BehaviorTree 설정
         SetBehavior();
 
         ResetDecisionStartTime();
+
+        currentDestination = transform.position;
     }
 
     protected override void SetBehavior()
@@ -44,6 +48,7 @@ public class ChickentAIController : AIController
 
         if (decisionStartTime < 0f)
         {
+            Debug.Log("목표 설정 시작");
             // 처음 노드 진입 시 초기화
             targetDestination = Vector3.zero;
             decisionStartTime = Time.time;
@@ -66,6 +71,13 @@ public class ChickentAIController : AIController
             {
                 // 목표가 탐지되면 targetDestination 설정
                 targetDestination = hit.position;
+                Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
+                Debug.Log("목표 위치:" + targetDestination);
+
+                agent.SetDestination(targetDestination);
+                agent.isStopped = false;
+
+                isMovingToTarget = true; // 플래그 설정
 
                 // 타이머 리셋
                 ResetDecisionStartTime();
@@ -85,29 +97,20 @@ public class ChickentAIController : AIController
     private NodeState Move()
     {
         // 목표가 설정되지 않으면 return
-        if (!agent.enabled || targetDestination == Vector3.zero) return NodeState.RUNNING;
+        if (!agent.enabled || targetDestination == Vector3.zero || !isMovingToTarget) return NodeState.SUCCESS;
 
-        agent.SetDestination(targetDestination);
 
         // 이동 시작
-        if (Vector3.Distance(currentDestination, targetDestination) < 0.1f)
+        if (agent.remainingDistance <= agent.stoppingDistance)
         {
+            agent.isStopped = true;
+            targetDestination = Vector3.zero;
+            isMovingToTarget = false;
             Debug.Log("목표지점 도달");
             return NodeState.SUCCESS;
         }
         else
         {
-            // CreatureMover로 이동하기 
-
-            bool isJump = false;
-            bool isRun = false;
-
-            Vector2 axis = Vector2.zero;
-            Vector3 targetPosition = Vector3.zero;
-
-            mover.SetInput(axis, targetPosition, isRun, isJump);
-
-            Debug.Log("목표까지 거리: " + Vector3.Distance(currentDestination, targetDestination));
             return NodeState.RUNNING;
         }
     }

@@ -24,13 +24,9 @@ public abstract class AIController : MonoBehaviour
     protected Vector3 targetDestination;
     protected Vector3 currentDestination;
 
-    // CreatureMover mover 추가
-    protected CreatureMover mover;
-
     private void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
-        mover = GetComponent<CreatureMover>();
     }
 
     protected virtual void Start()
