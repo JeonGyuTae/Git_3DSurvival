@@ -180,11 +180,11 @@ public class Action : Node
 /// Condition 노드
 /// 특정 조건을 만족하는지 확인하는 노드
 /// </summary>
-public class Condition : Node
+public class ConditionNode : Node
 {
     private Func<NodeState> condictionFunc;     // 조건을 판별할 메서드
 
-    public Condition(string name, Func<NodeState> func)
+    public ConditionNode(string name, Func<NodeState> func)
     {
         this.name = name;
         condictionFunc = func;
