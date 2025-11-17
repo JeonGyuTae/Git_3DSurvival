@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 originalCamLocalPos;
     private float sneakingColliderCenterY;
 
-    public Action inventory;
+    public System.Action inventory;
 
     private PlayerCondition condition;
 
@@ -121,18 +121,10 @@ public class PlayerController : MonoBehaviour
         }
 
         dir *= speed;
-
-        // 경사면을 올라갈 때 불필요한 Y 가속도 방지 (이전 논의에서 결정된 로직)
-        float currentYVelocity = _rigidbody.velocity.y;
-        if (IsGrounded() && !isJumping && currentYVelocity > 0.01f)
-        {
-            currentYVelocity = 0f;
-        }
-        dir.y = currentYVelocity; // Rigidbody의 현재 Y 속도 유지 또는 위에서 조정한 값 적용
+        dir.y = _rigidbody.velocity.y;
 
         _rigidbody.velocity = dir;
 
-        // 점프 최고점 도달 후 isJumping 플래그 해제 로직
         if (isJumping && _rigidbody.velocity.y <= 0.01f)
         {
             isJumping = false;
