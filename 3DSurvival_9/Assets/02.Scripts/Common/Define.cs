@@ -19,7 +19,7 @@ public static class Define
 
     #region AI
 
-
+    public const int MAX_COUNT_CHICKIEN = 10;
 
     #endregion
 }
