@@ -61,4 +61,9 @@ public abstract class AIController : MonoBehaviour
     {
         agent.speed = speed;
     }
+
+    protected void SetStoppingDistance(float distance)
+    {
+        agent.stoppingDistance = distance;
+    }
 }
