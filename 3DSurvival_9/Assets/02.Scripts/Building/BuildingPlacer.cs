@@ -3,17 +3,22 @@
 public class BuildingPlacer : MonoBehaviour
 {
     [Header("Camera")]
-    [SerializeField] private Camera playerCamera;   // 조준에 사용할 카메라 (필수로 넣기!)
+    [SerializeField] private Camera playerCamera;   // 플레이어 카메라
 
     [Header("Preview Visual")]
     public Material validMaterial;      // 설치 가능(초록)
     public Material invalidMaterial;    // 설치 불가(빨강)
 
     [Header("Raycast Settings")]
-    public LayerMask placeMask;         // Ground, Terrain 등 (비어 있으면 전체)
+    public LayerMask placeMask;         // Ground, Terrain 등 (없으면 전체)
 
-    private GameObject buildingPrefab;  // 실제 건물
-    private GameObject previewPrefab;   // 프리뷰
+    [Header("Rotation")]
+    [SerializeField] private float rotationStep = 45f; // R키 한 번당 회전 각도
+    private float currentYRotation = 0f;               // 현재 회전 값
+    private Quaternion baseRotation;                   // 프리뷰 기본 회전값
+
+    private GameObject buildingPrefab;  // 실제 건물 프리팹
+    private GameObject previewPrefab;   // 프리뷰 프리팹
 
     private GameObject currentPreview;
     private Renderer[] previewRenderers;
@@ -21,12 +26,23 @@ public class BuildingPlacer : MonoBehaviour
     private bool isPlacing = false;
     private bool canPlace = false;
 
+    void Awake()
+    {
+        if (playerCamera == null)
+            playerCamera = Camera.main;
+    }
+
     void Update()
     {
         if (!isPlacing || currentPreview == null)
             return;
 
         UpdatePreviewPosition();
+
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            RotatePreview();
+        }
 
         if (Input.GetMouseButtonDown(0))
         {
@@ -39,7 +55,6 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
-    // UI에서 건물 선택 시 호출
     public void StartPlacing(GameObject build, GameObject preview)
     {
         buildingPrefab = build;
@@ -59,11 +74,16 @@ public class BuildingPlacer : MonoBehaviour
         currentPreview = Instantiate(previewPrefab);
         previewRenderers = currentPreview.GetComponentsInChildren<Renderer>();
 
+        // 회전값 초기화
+        baseRotation = currentPreview.transform.rotation;
+        currentYRotation = 0f;
+        ApplyRotation();
+
         canPlace = false;
         UpdatePreviewColor();
     }
 
-    // 화면 중앙(조준점) 기준으로 Ray 쏴서 프리뷰 위치 갱신
+    // 화면 중앙(조준점) 기준으로 레이 쏴서 프리뷰 위치 갱신
     void UpdatePreviewPosition()
     {
         if (playerCamera == null)
@@ -72,12 +92,10 @@ public class BuildingPlacer : MonoBehaviour
             return;
         }
 
-        // 화면 정중앙 좌표 (조준점)
         Vector3 center = new Vector3(Screen.width / 2f, Screen.height / 2f, 0f);
         Ray ray = playerCamera.ScreenPointToRay(center);
         RaycastHit hit;
 
-        // placeMask 가 비어 있으면 전체 대상으로 Raycast
         int mask = placeMask.value == 0 ? ~0 : placeMask.value;
 
         if (Physics.Raycast(ray, out hit, 500f, mask))
@@ -105,6 +123,19 @@ public class BuildingPlacer : MonoBehaviour
             rend.sharedMaterial = target;
         }
     }
+    void RotatePreview()
+    {
+        currentYRotation += rotationStep;
+        if (currentYRotation >= 360f) currentYRotation -= 360f;
+
+        ApplyRotation();
+    }
+
+    void ApplyRotation()
+    {
+        if (currentPreview == null) return;
+        currentPreview.transform.rotation = baseRotation * Quaternion.Euler(0f, currentYRotation, 0f);
+    }
 
     void PlaceBuilding()
     {
@@ -114,10 +145,9 @@ public class BuildingPlacer : MonoBehaviour
         Instantiate(
             buildingPrefab,
             currentPreview.transform.position,
-            currentPreview.transform.rotation
+            currentPreview.transform.rotation   // 프리뷰 방향 그대로 설치
         );
     }
-
     public void CancelPlacing()
     {
         isPlacing = false;
