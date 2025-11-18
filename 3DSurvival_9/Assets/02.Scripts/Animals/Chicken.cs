@@ -10,11 +10,9 @@ public class Chicken : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
-    private ChickentAIController controller;
-
-    private void Awake()
+    public InteractableType GetInteractableType()
     {
-        controller = GetComponent<ChickentAIController>();
+        return InteractableType.Animal;
     }
 
     public string GetInteractPrompt()

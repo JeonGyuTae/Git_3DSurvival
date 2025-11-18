@@ -409,6 +409,6 @@ public class PlayerController : MonoBehaviour
 
     private void EquipItemSlot(int slotNumber)
     {
-        Debug.Log($"{slotNumber} 장착했음");
+        Debug.Log($"{slotNumber}번 인벤토리 슬롯 장착했음");
     }
 }

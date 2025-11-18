@@ -6,7 +6,7 @@ public class Interaction : MonoBehaviour
 {
     private float checkRate = 0.05f;
     private float lastCheckTime;
-    private float maxCheckDistance;
+    [SerializeField] private float maxCheckDistance;
     public LayerMask layerMask;
 
     public GameObject curInteractGameObj;
@@ -21,7 +21,10 @@ public class Interaction : MonoBehaviour
 
     private void Start()
     {
-        maxCheckDistance = Define.PLAYER_MAX_CHECK_RAY_DISTANCE;
+        if(camera == null)
+        {
+            camera = Camera.main;
+        }
     }
 
     private void Update()
@@ -55,21 +58,47 @@ public class Interaction : MonoBehaviour
 
     private void SetPromptText()
     {
-        interactionText.gameObject.SetActive(true);
-        promptText.gameObject.SetActive(true);
-        // 상호작용이 가능한 개체만 InteractionText.gameObject.SetActive(true);
-        // interactionText.text = curInteractable.GetInteractPrompt(); // 고정된 텍스트만 띄울 것
-        promptText.text = curInteractable.GetInteractPrompt();
+        switch (curInteractable.GetInteractableType())
+        {
+            case InteractableType.Item:
+                interactionText.gameObject.SetActive(true);
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+            case InteractableType.Animal:
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+            case InteractableType.NPC:
+                interactionText.gameObject.SetActive(true);
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+        }
     }
 
-    // 아이템 습득하는 키
+    // 상호작용 하는 키
     public void OnInteractInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && curInteractable != null) // 아이템만 인식하는 로직 추가
+        if(context.phase == InputActionPhase.Started && curInteractable != null)
         {
-            curInteractable.OnInteract();
-            curInteractable = null;
-            curInteractable = null;
+            switch (curInteractable.GetInteractableType())
+            {
+                case InteractableType.Item:
+                    curInteractable.OnInteract();
+                    curInteractGameObj = null;
+                    curInteractable = null;
+                    promptText.gameObject.SetActive(false);
+                    break;
+                case InteractableType.Animal:
+                    Debug.Log("동물과 상호작용 했습니다.");
+                    break;
+                case InteractableType.NPC:
+                    curInteractable.OnInteract();   // NPC클래스에서 구현
+                    Debug.Log("NPC와 상호작용 했습니다.");
+                    break;
+            }
+            
         }
     }
 }
