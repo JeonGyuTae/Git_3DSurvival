@@ -4,17 +4,23 @@ using UnityEngine;
 
 public class AnimalConditionHandler : MonoBehaviour
 {
-    Condition health { get { return health; } }
+    [SerializeField] private float health;
+    public float Health {  get { return health; } }
+
+    public void SetHealth(float health)
+    {
+        this.health = health;
+    }
 
     public void TakeDamage(int damage)
     {
-        health.Sub(damage);
+        health -= damage;
         CheckHealth();
     }
 
     private void CheckHealth()
     {
-        if (health.curValue <= 0)
+        if (health <= 0)
             Die();
     }
 

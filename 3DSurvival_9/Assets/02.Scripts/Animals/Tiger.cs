@@ -7,10 +7,20 @@ public class Tiger : MonoBehaviour, IInteractable
     [SerializeField] private AnimalData data;
 
     private CarnivoreAIController controller;
+    private AnimalConditionHandler conditionHandler;
 
     private void Awake()
     {
         controller = GetComponent<CarnivoreAIController>();
+        conditionHandler = GetComponent<AnimalConditionHandler>();
+
+        Init();
+    }
+
+    private void Init()
+    {
+        // 체력 설정
+        conditionHandler.SetHealth(data.maxHp);
     }
 
     public InteractableType GetInteractableType()

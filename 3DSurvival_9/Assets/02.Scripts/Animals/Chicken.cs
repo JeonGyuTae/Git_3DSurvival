@@ -11,10 +11,20 @@ public class Chicken : MonoBehaviour, IInteractable
     [SerializeField] private AnimalData data;
 
     private HerbivoreAIController controller;
+    private AnimalConditionHandler conditionHandler;
 
     private void Awake()
     {
         controller = GetComponent<HerbivoreAIController>();
+        conditionHandler = GetComponent<AnimalConditionHandler>();
+
+        Init();
+    }
+
+    private void Init()
+    {
+        // 체력 설정
+        conditionHandler.SetHealth(data.maxHp);
     }
 
     public InteractableType GetInteractableType()
