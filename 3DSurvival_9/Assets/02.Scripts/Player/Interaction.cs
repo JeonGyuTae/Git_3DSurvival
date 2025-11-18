@@ -15,11 +15,11 @@ public class Interaction : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText;
     [SerializeField] private TextMeshProUGUI promptText;
 
-    private Camera camera;
+    [SerializeField] private Camera camera;
 
     private void Start()
     {
-        camera = Camera.main;
+        maxCheckDistance = Define.PLAYER_MAX_CHECK_RAY_DISTANCE;
     }
 
     private void Update()

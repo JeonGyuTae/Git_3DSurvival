@@ -2741,6 +2741,7 @@ MonoBehaviour:
   curInteractGameObj: {fileID: 0}
   interactionText: {fileID: 1695374527625168149}
   promptText: {fileID: 7379133827722528115}
+  camera: {fileID: 7460353393859652387}
 --- !u!1 &8921315017628256006
 GameObject:
   m_ObjectHideFlags: 0

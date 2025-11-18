@@ -27,6 +27,8 @@ public class Chicken : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-
+        // Test 공격 판정
+        // Raycast로 hit 된 Position 값을 얻어와야 함
+        Debug.Log("공격");
     }
 }
