@@ -19,6 +19,6 @@ public class ResourceData : ScriptableObject
     public int maxStack = 99;
 
     [Header("Spawn")]
-    [Tooltip("ÀÌ ÀÚ¿øÀÌ ´Ù½Ã ½ºÆùµÇ±â±îÁö °É¸®´Â ½Ã°£(ÃÊ)")]
-    public float respawnSeconds = 600f;   // 10ºÐ
+    [Tooltip("ï¿½ï¿½ ï¿½Ú¿ï¿½ï¿½ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ç±ï¿½ï¿½ï¿½ï¿½ ï¿½É¸ï¿½ï¿½ï¿½ ï¿½Ã°ï¿½(ï¿½ï¿½)")]
+    public float respawnSeconds = 600f;   // 10ï¿½ï¿½
 }
