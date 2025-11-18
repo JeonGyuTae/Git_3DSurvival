@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.LightAnchor;
 
 /// <summary>
 /// 닭 행동 AI Behavior
@@ -16,6 +17,9 @@ public class ChickentAIController : AIController
 {
     private bool isMovingToTarget = false; // 플래그 설정
     private AnimalAnimationHandler animationHandler;
+
+    private Vector3 hitPosition;
+    private const float OFFSET_RUN_ANGLE = 5.0f;
 
     protected override void Awake()
     {
@@ -36,16 +40,26 @@ public class ChickentAIController : AIController
     protected override void SetBehavior()
     {
         // Leaf Node 생성
-        Action setDecisionNextPosition = new Action("Decision Next Position", SetDecisionPosition);
-        Action move = new Action("Move Next Position", Move);
+        Action setPatrolTargetPosition = new Action("Decision Next Position", SetPatrolTargetPosition);
+        Action moveToTarget = new Action("Move Next Position", MoveToTarget);
+        ConditionNode checkDamage = new ConditionNode("Check Damage From Player", CheckDamage);
+        Action setRunTargetPosition = new Action("Set Run Position", SetRunTargetPosition);
 
-        // Sequence Node 생성
-        Sequence patrol = new Sequence("Patrol Around", setDecisionNextPosition, move);
+        // Sequence Patrol 생성
+        Sequence patrol = new Sequence("Patrol Around", setPatrolTargetPosition, moveToTarget);
+
+        // Sequence RunAway 생성
+        Sequence runAway = new Sequence("RunAway", checkDamage, setRunTargetPosition, moveToTarget);
+
+        // Selector Root 생성
+        Selector root = new Selector("Chicken Root", runAway, patrol);
 
         tree = new BehaviorTree(patrol);
     }
 
-    private NodeState SetDecisionPosition()
+    #region Sequence : Patrol
+
+    private NodeState SetPatrolTargetPosition()
     {
         // targetDestination이 지정이 되었다면 Move로 이동
         if (targetDestination != Vector3.zero)
@@ -55,8 +69,6 @@ public class ChickentAIController : AIController
 
         if (decisionStartTime < 0f)
         {
-            Debug.Log("목표 설정 시작");
-
             // 처음 노드 진입 시 초기화
             targetDestination = Vector3.zero;
             decisionStartTime = Time.time;
@@ -79,24 +91,11 @@ public class ChickentAIController : AIController
             Vector3 randomPosition = transform.position + randomDirection;
 
             // 목표 설정
-            if (NavMesh.SamplePosition(randomPosition, out NavMeshHit hit, maxMoveDistance, NavMesh.AllAreas))
+            if (CheckTargetPositionOnNavMesh(randomPosition, maxMoveDistance, NavMesh.AllAreas))
             {
-                // 목표가 탐지되면 targetDestination 설정
-                targetDestination = hit.position;
-                Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
-
-                agent.SetDestination(targetDestination);
-                agent.isStopped = false;
-
-                isMovingToTarget = true; // 플래그 설정
-
                 // 타이머 리셋
                 ResetDecisionStartTime();
                 return NodeState.SUCCESS;
-            }
-            else
-            {
-                Debug.Log("탐지 못함!");
             }
 
             // 목표가 설정되지 못하면 다시 고민하고 목표 찾기
@@ -105,7 +104,7 @@ public class ChickentAIController : AIController
         }
     }
 
-    private NodeState Move()
+    private NodeState MoveToTarget()
     {
         // 목표가 설정되지 않으면 return
         if (!agent.enabled || targetDestination == Vector3.zero || !isMovingToTarget) return NodeState.SUCCESS;
@@ -117,13 +116,70 @@ public class ChickentAIController : AIController
             agent.isStopped = true;
             targetDestination = Vector3.zero;
             isMovingToTarget = false;
-            Debug.Log("목표지점 도달");
             return NodeState.SUCCESS;
         }
         else
         {
             return NodeState.RUNNING;
         }
+    }
+
+    #endregion
+
+    #region Sequence : Run Away
+
+    private NodeState CheckDamage()
+    {
+        // 플레이어로부터 데미지를 받았는지 체크
+        return NodeState.FAILURE;
+    }
+
+    private NodeState SetRunTargetPosition()
+    {
+        if(hitPosition == Vector3.zero) return NodeState.FAILURE;
+
+        // 도망갈 포지션 세팅
+
+        // hit 된 포지션 반대방향으로 설정
+        Vector3 backDirection = transform.position - hitPosition;
+        backDirection.y = 0;
+        Vector3 backDirectionNormalized = backDirection.normalized;
+
+        // 도망거리
+        float distance = Random.Range(minMoveDistance, maxMoveDistance);
+
+        Vector3 runDirection = transform.position + backDirectionNormalized * distance;
+
+        // 목표 설정 : 도망가는것 경로를 찾을때까지 반복
+        do
+        {
+            bool isFind = CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas);
+            if (isFind) Debug.Log("한번에 못찾음");
+        }
+        while(CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas)==false);
+
+
+        return NodeState.SUCCESS;
+    }
+
+    #endregion
+
+    private bool CheckTargetPositionOnNavMesh(Vector3 sourcePosition, float maxDistance, int areaMask)
+    {
+        if(NavMesh.SamplePosition(sourcePosition, out NavMeshHit hit, maxDistance, areaMask))
+        {
+            targetDestination = hit.position;
+            Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
+
+            agent.SetDestination(targetDestination);
+            agent.isStopped = false;
+
+            isMovingToTarget = true; // 플래그 설정
+
+            return true;
+        }
+
+        return false;
     }
 
     protected override void Update()

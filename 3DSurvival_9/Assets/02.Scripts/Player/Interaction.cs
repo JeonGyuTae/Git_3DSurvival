@@ -6,7 +6,7 @@ public class Interaction : MonoBehaviour
 {
     private float checkRate = 0.05f;
     private float lastCheckTime;
-    private float maxCheckDistance;
+    [SerializeField] private float maxCheckDistance;
     public LayerMask layerMask;
 
     public GameObject curInteractGameObj;
@@ -15,11 +15,14 @@ public class Interaction : MonoBehaviour
     [SerializeField] private TextMeshProUGUI interactionText;
     [SerializeField] private TextMeshProUGUI promptText;
 
-    private Camera camera;
+    [SerializeField] private Camera camera;
 
     private void Start()
     {
-        camera = Camera.main;
+        if(camera == null)
+        {
+            camera = Camera.main;
+        }
     }
 
     private void Update()
@@ -37,13 +40,11 @@ public class Interaction : MonoBehaviour
                 {
                     curInteractGameObj = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
-                    // IInteractable ±¸Çö ¼¼ºÎ»çÇ×´ë·Î ÇÁ·ÒÇÁÆ® È°¼º/ºñÈ°¼ºÈ­ ¼öÁ¤
                     SetPromptText();
                 }
             }
             else
             {
-                // curInteractable.HideInteractUI(); // Á¤º¸ UIÈ°¼ºÈ­ ÇÏ´Â°Å ¿©±â¼­ °ü¸®ÇØ¾ßÇÒµí
                 curInteractGameObj = null;
                 curInteractable = null;
                 interactionText.gameObject.SetActive(false);
@@ -54,21 +55,47 @@ public class Interaction : MonoBehaviour
 
     private void SetPromptText()
     {
-        // curInteractable.ShowInteractUI();
-        interactionText.gameObject.SetActive(true);
-        promptText.gameObject.SetActive(true);
-        // interactionText.text = curInteractable.GetInteractPrompt(); // ¾ÆÀÌÅÛ, Àû¿¡ µû¶ó¼­ »óÈ£ÀÛ¿ë ÅØ½ºÆ® º¯°æµÇ¾î¾ßÇÔ
-        promptText.text = curInteractable.GetInteractPrompt();
+        switch (curInteractable.GetInteractableType())
+        {
+            case InteractableType.Item:
+                interactionText.gameObject.SetActive(true);
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+            case InteractableType.Animal:
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+            case InteractableType.NPC:
+                interactionText.gameObject.SetActive(true);
+                promptText.gameObject.SetActive(true);
+                promptText.text = curInteractable.GetInteractPrompt();
+                break;
+        }
     }
 
-    // ¾ÆÀÌÅÛ ½ÀµæÇÏ´Â Å°
+    // ìƒí˜¸ì‘ìš© í•˜ëŠ” í‚¤
     public void OnInteractInput(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started && curInteractable != null) // ¾ÆÀÌÅÛ¸¸ °Ë»çÇÏ´Â ·ÎÁ÷ Ãß°¡ÇÒ °Í
+        if(context.phase == InputActionPhase.Started && curInteractable != null)
         {
-            curInteractable.OnInteract();
-            curInteractable = null;
-            curInteractable = null;
+            switch (curInteractable.GetInteractableType())
+            {
+                case InteractableType.Item:
+                    curInteractable.OnInteract();
+                    curInteractGameObj = null;
+                    curInteractable = null;
+                    promptText.gameObject.SetActive(false);
+                    break;
+                case InteractableType.Animal:
+                    Debug.Log("ë™ë¬¼ê³¼ ìƒí˜¸ì‘ìš© í–ˆìŠµë‹ˆë‹¤.");
+                    break;
+                case InteractableType.NPC:
+                    curInteractable.OnInteract();   // NPCí´ë˜ìŠ¤ì—ì„œ êµ¬í˜„
+                    Debug.Log("NPCì™€ ìƒí˜¸ì‘ìš© í–ˆìŠµë‹ˆë‹¤.");
+                    break;
+            }
+            
         }
     }
 }

@@ -10,6 +10,11 @@ public class Chicken : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
+    public InteractableType GetInteractableType()
+    {
+        return InteractableType.Animal;
+    }
+
     public string GetInteractPrompt()
     {
         return data.animalName;
@@ -27,6 +32,8 @@ public class Chicken : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-
+        // Test 공격 판정
+        // Raycast로 hit 된 Position 값을 얻어와야 함
+        Debug.Log("공격");
     }
 }

@@ -13,7 +13,7 @@ public static class Define
 
     #region Player
 
-
+    public const float PLAYER_MAX_CHECK_RAY_DISTANCE = 5.0f;
 
     #endregion
 
