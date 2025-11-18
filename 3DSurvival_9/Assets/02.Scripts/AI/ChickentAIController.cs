@@ -24,6 +24,8 @@ public class ChickentAIController : AIController
     [SerializeField] private bool isHit = false;
     public bool IsHit { get { return isHit; } set { isHit = value; } }
 
+    private AnimalConditionHandler conditionHandler;
+
     protected override void Awake()
     {
         base.Awake();
@@ -142,6 +144,7 @@ public class ChickentAIController : AIController
     {
         // 피격 이펙트 표시
         Debug.Log("데미지 받음");
+
         return NodeState.SUCCESS;
     }
 
@@ -217,6 +220,12 @@ public class ChickentAIController : AIController
     {
         this.hitPosition = hitPosition;
         isHit = true;
+    }
+
+    public void OnTakeDamage(int damage)
+    {
+        isHit = true;
+        conditionHandler.TakeDamage(damage);
     }
 
     private void ResetSetting()

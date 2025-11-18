@@ -17,6 +17,8 @@ public class Interaction : MonoBehaviour
 
     [SerializeField] private Camera camera;
 
+    public Vector3 hitPosition;
+
     private void Start()
     {
         maxCheckDistance = Define.PLAYER_MAX_CHECK_RAY_DISTANCE;
@@ -35,6 +37,7 @@ public class Interaction : MonoBehaviour
             {
                 if (hit.collider.gameObject != curInteractGameObj)
                 {
+                    hitPosition = hit.point;
                     curInteractGameObj = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
                     SetPromptText();

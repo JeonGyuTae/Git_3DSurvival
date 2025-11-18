@@ -10,6 +10,13 @@ public class Chicken : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
+    private ChickentAIController controller;
+
+    private void Awake()
+    {
+        controller = GetComponent<ChickentAIController>();
+    }
+
     public string GetInteractPrompt()
     {
         return data.animalName;
@@ -29,6 +36,8 @@ public class Chicken : MonoBehaviour, IInteractable
     {
         // Test 공격 판정
         // Raycast로 hit 된 Position 값을 얻어와야 함
-        Debug.Log("공격");
+
+        Interaction interact = GameObject.FindAnyObjectByType<Interaction>();
+        controller.OnHit(interact.hitPosition);
     }
 }
