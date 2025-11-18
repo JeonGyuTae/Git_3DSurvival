@@ -17,14 +17,16 @@ public abstract class AIController : MonoBehaviour
     [SerializeField] protected float moveSpeed = 5.0f;
     [SerializeField] protected float maxMoveDistance = -10.0f;
     [SerializeField] protected float minMoveDistance = 10.0f;
-    [SerializeField] protected float decisionDuration = 5f;
+    [SerializeField] protected float maxDecisionDuration = 2f;
+    [SerializeField] protected float minDecisionDuration = 5f;
+    protected float decisionDuration = 3f;
 
     protected BehaviorTree tree;
     protected float decisionStartTime = -1f;
     protected Vector3 targetDestination;
     protected Vector3 currentDestination;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
@@ -44,6 +46,13 @@ public abstract class AIController : MonoBehaviour
 
     protected void ResetDecisionStartTime()
     {
+        // 타이머 초기화
         decisionStartTime = -1f;
+    }
+
+    protected void SetDecisionDuration()
+    {
+        // 고민하는 시간은 랜덤으로 설정
+        decisionDuration = Random.Range(minDecisionDuration, maxDecisionDuration);
     }
 }
