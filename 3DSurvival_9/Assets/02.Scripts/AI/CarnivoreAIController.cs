@@ -239,19 +239,19 @@ public class CarnivoreAIController : AIController
 
     private NodeState CheckDamage()
     {
+        // 플레이어로부터 데미지를 받았는지 체크
+        if (isHit) return NodeState.SUCCESS;
+
         // RUN 모드면 SUCCESS
         if (isRunMode) return NodeState.SUCCESS;
 
-        // 플레이어로부터 데미지를 받았는지 체크
-        NodeState state = (isHit) ? NodeState.SUCCESS : NodeState.FAILURE;
-
-        return state;
+        return NodeState.FAILURE;
     }
 
     private NodeState Hit()
     {
         // 피격 이펙트 표시
-        StartDamageEffectCoroutine();
+        if(isHit) StartDamageEffectCoroutine();
 
         return NodeState.SUCCESS;
     }
@@ -313,6 +313,7 @@ public class CarnivoreAIController : AIController
 
         AnimationHandle();
         UpdateAttackCoolTime();
+        UpdateRunMode();
     }
 
     private void AnimationHandle()
@@ -335,7 +336,7 @@ public class CarnivoreAIController : AIController
         isHit = true;
 
         conditionHandler.TakeDamage(30);
-        if (conditionHandler.Health > threadHoldRunHp) isRunMode = true;
+        if (conditionHandler.Health < threadHoldRunHp) isRunMode = true;
     }
 
     public void OnTakeDamage(int damage)
@@ -389,6 +390,14 @@ public class CarnivoreAIController : AIController
         {
             currentAttackCoolTime = attackCoolTime;
             canAttack = true;
+        }
+    }
+
+    private void UpdateRunMode()
+    {
+        if(Vector3.Distance(player.transform.position, transform.position) > 20.0f)
+        {
+            isRunMode = false;
         }
     }
 }
