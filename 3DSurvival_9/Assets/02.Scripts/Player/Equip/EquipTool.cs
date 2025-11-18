@@ -15,12 +15,15 @@ public class EquipTool : Equip
     public int damage;
 
     private Animator animator;
-    private Camera camera;
+    [SerializeField] private Camera camera;
 
     void Start()
     {
         animator = GetComponent<Animator>();
-        camera = Camera.main;
+        if (camera == null)
+        {
+            camera = Camera.main;
+        }
     }
 
     public override void OnAttackInput()

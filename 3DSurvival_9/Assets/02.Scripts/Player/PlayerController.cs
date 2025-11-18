@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -25,12 +24,8 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     [SerializeField] float lookSensitivity;
     private Vector2 mouseDelta;
-    private bool canLook;
+    public bool canLook { get; private set; }
     [SerializeField] private Image crossHair;
-
-    [Header("Attack")]
-    [SerializeField] private float attackCooldown;
-    private float lastAttackTime;
 
     private Rigidbody _rigidbody;
     private bool isMoving;
@@ -46,14 +41,17 @@ public class PlayerController : MonoBehaviour
     private float sneakingColliderCenterY;
 
     public System.Action inventory;
+    public System.Action throwItem;
 
     private PlayerCondition condition;
+    private Equipment equipment;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         condition = GetComponent<PlayerCondition>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        equipment = GetComponent<Equipment>();
 
         // 웅크리기시 콜라이더와 시점 조절
         if (_capsuleCollider != null )
@@ -74,6 +72,10 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         canLook = true;
+        if (crossHair != null)
+        {
+            crossHair.gameObject.SetActive(true);
+        }
     }
 
     private void Update()
@@ -293,21 +295,10 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
-    }
-
-    public void OnAttack(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Started && Time.time >= lastAttackTime + attackCooldown) 
+        if (crossHair != null)
         {
-            lastAttackTime = Time.time;
-            Debug.Log("공격 시도");
-            Attack();
+            crossHair.gameObject.SetActive(canLook);
         }
-    }
-
-    private void Attack()
-    {
-        Debug.Log("공격 했음");
     }
 
     public void OnUseItem(InputAction.CallbackContext context)
@@ -409,6 +400,33 @@ public class PlayerController : MonoBehaviour
 
     private void EquipItemSlot(int slotNumber)
     {
-        Debug.Log($"{slotNumber}번 인벤토리 슬롯 장착했음");
+        PlayerInventory inventory = PlayerManager.Instance.Player.GetComponent<PlayerInventory>();
+        if (inventory != null)
+        {
+            // TODO: PlayerInventory에서 slotNumber에 해당하는 ItemData를 가져오는 로직 추가
+            // ItemData itemToEquip = inventory.GetItemDataInSlot(slotNumber);
+            // if (itemToEquip != null && itemToEquip.type == ItemType.Equipable)
+            // {
+            //     equipment.EquipNew(itemToEquip);
+            //     Debug.Log($"{slotNumber}번 인벤토리 슬롯 아이템 장착했음: {itemToEquip.itemname}");
+            // }
+            // else
+            // {
+            //     equipment.UnEquip(); // 장착 불가능한 아이템이거나 슬롯이 비었으면 해제
+            //     Debug.Log($"{slotNumber}번 슬롯에 장착 가능한 아이템이 없거나 슬롯이 비었습니다.");
+            // }
+        }
+        else
+        {
+            Debug.Log("인벤토리 없음");
+        }
+    }
+
+    public void OnThrow(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            throwItem?.Invoke();
+        }
     }
 }

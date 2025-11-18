@@ -8,7 +8,7 @@ public class Player : MonoBehaviour
     public ItemData itemData;
     public System.Action addItem;
 
-    [SerializeField] private Transform dropPosition;
+    public Transform dropPosition;
 
     private void Awake()
     {
