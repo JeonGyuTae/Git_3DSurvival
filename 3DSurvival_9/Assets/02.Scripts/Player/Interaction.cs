@@ -17,11 +17,13 @@ public class Interaction : MonoBehaviour
 
     [SerializeField] private Camera camera;
 
+    public Vector3 hitPosition;
+
     private void Start()
     {
         if(camera == null)
         {
-            camera = Camera.main;
+            //camera = Camera.main;
         }
     }
 
@@ -34,10 +36,11 @@ public class Interaction : MonoBehaviour
             Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
 
-            if(Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
                 if (hit.collider.gameObject != curInteractGameObj)
                 {
+                    hitPosition = hit.point;
                     curInteractGameObj = hit.collider.gameObject;
                     curInteractable = hit.collider.GetComponent<IInteractable>();
                     SetPromptText();
@@ -89,6 +92,9 @@ public class Interaction : MonoBehaviour
                     break;
                 case InteractableType.Animal:
                     Debug.Log("동물과 상호작용 했습니다.");
+                    curInteractable.OnInteract();
+                    curInteractGameObj = null;
+                    curInteractable = null;
                     break;
                 case InteractableType.NPC:
                     curInteractable.OnInteract();   // NPC클래스에서 구현

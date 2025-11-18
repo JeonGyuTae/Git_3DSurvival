@@ -19,6 +19,6 @@ public class ResourceData : ScriptableObject
     public int maxStack = 99;
 
     [Header("Spawn")]
-    [Tooltip("�� �ڿ��� �ٽ� �����Ǳ���� �ɸ��� �ð�(��)")]
-    public float respawnSeconds = 600f;   // 10��
+    [Tooltip("이 자원이 다시 스폰되기까지 걸리는 시간(초)")]
+    public float respawnSeconds = 600f;   // 10초
 }
