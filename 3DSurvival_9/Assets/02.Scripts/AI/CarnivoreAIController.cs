@@ -251,7 +251,10 @@ public class CarnivoreAIController : AIController
     private NodeState Hit()
     {
         // 피격 이펙트 표시
-        if(isHit) StartDamageEffectCoroutine();
+        if (isHit)
+        {
+            StartDamageEffectCoroutine();
+        }
 
         return NodeState.SUCCESS;
     }
@@ -336,7 +339,11 @@ public class CarnivoreAIController : AIController
         isHit = true;
 
         conditionHandler.TakeDamage(30);
-        if (conditionHandler.Health < threadHoldRunHp) isRunMode = true;
+        if (conditionHandler.Health < threadHoldRunHp)
+        {
+            isAttackMode = false;
+            isRunMode = true;
+        }
     }
 
     public void OnTakeDamage(int damage)
@@ -352,6 +359,10 @@ public class CarnivoreAIController : AIController
         agent.isStopped = true;
         targetDestination = Vector3.zero;
         isMovingToTarget = false;
+
+        // 피격 당할 시 자동으로 플레이어 쫓기
+        if (isHit && !isRunMode) isAttackMode = true;
+
         isHit = false;
     }
 
