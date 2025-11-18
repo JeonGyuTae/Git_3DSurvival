@@ -905,6 +905,7 @@ GameObject:
   - component: {fileID: 4261480874438372924}
   - component: {fileID: 7047759480149885278}
   - component: {fileID: 6807997121205527559}
+  - component: {fileID: 8886185100378528869}
   m_Layer: 8
   m_Name: AI_Chicken
   m_TagString: Untagged
@@ -1052,6 +1053,19 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &8886185100378528869
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865765865287956085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d830efd8ac09642a82b294756fdbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 69db97a7048450d478cb28a9f7f5bec0, type: 2}
 --- !u!1 &7964844094719423088
 GameObject:
   m_ObjectHideFlags: 0
