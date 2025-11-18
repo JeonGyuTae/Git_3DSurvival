@@ -38,7 +38,6 @@ public class Interaction : MonoBehaviour
 
             if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
-                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject != curInteractGameObj)
                 {
                     hitPosition = hit.point;
