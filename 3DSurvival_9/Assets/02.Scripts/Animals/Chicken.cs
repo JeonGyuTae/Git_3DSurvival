@@ -10,11 +10,11 @@ public class Chicken : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
-    private ChickentAIController controller;
+    private HerbivoreAIController controller;
 
     private void Awake()
     {
-        controller = GetComponent<ChickentAIController>();
+        controller = GetComponent<HerbivoreAIController>();
     }
 
     public InteractableType GetInteractableType()
