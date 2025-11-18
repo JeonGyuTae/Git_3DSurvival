@@ -25,11 +25,17 @@ public class ChickentAIController : AIController
     public bool IsHit { get { return isHit; } set { isHit = value; } }
 
     private AnimalConditionHandler conditionHandler;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
+    private Rigidbody _rigidbody;
+
+    private Coroutine damageEffectCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
         animationHandler = GetComponent<AnimalAnimationHandler>();
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     protected override void Start()
@@ -143,7 +149,7 @@ public class ChickentAIController : AIController
     private NodeState Hit()
     {
         // 피격 이펙트 표시
-        Debug.Log("데미지 받음");
+        StartDamageEffectCoroutine();
 
         return NodeState.SUCCESS;
     }
@@ -234,5 +240,28 @@ public class ChickentAIController : AIController
         targetDestination = Vector3.zero;
         isMovingToTarget = false;
         isHit = false;
+    }
+
+    /// <summary>
+    /// 피격 효과
+    /// </summary>
+    /// <returns></returns>
+    private void StartDamageEffectCoroutine()
+    {
+        if (damageEffectCoroutine != null) StopCoroutine(damageEffectCoroutine);
+        damageEffectCoroutine = StartCoroutine(DamageEffect());
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        Material mat = skinnedMeshRenderer.material;
+        mat.color = Color.red;
+
+        skinnedMeshRenderer.material = mat;
+
+        yield return new WaitForSeconds(0.5f);
+
+        mat.color = Color.white;
+        skinnedMeshRenderer.material = mat;
     }
 }

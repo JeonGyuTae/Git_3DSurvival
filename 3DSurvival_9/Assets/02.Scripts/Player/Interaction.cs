@@ -23,7 +23,7 @@ public class Interaction : MonoBehaviour
     {
         if(camera == null)
         {
-            camera = Camera.main;
+            //camera = Camera.main;
         }
     }
 
@@ -36,8 +36,9 @@ public class Interaction : MonoBehaviour
             Ray ray = camera.ScreenPointToRay(new Vector3(Screen.width / 2, Screen.height / 2));
             RaycastHit hit;
 
-            if(Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
+            if (Physics.Raycast(ray, out hit, maxCheckDistance, layerMask))
             {
+                Debug.Log(hit.collider.gameObject.name);
                 if (hit.collider.gameObject != curInteractGameObj)
                 {
                     hitPosition = hit.point;
@@ -92,6 +93,9 @@ public class Interaction : MonoBehaviour
                     break;
                 case InteractableType.Animal:
                     Debug.Log("동물과 상호작용 했습니다.");
+                    curInteractable.OnInteract();
+                    curInteractGameObj = null;
+                    curInteractable = null;
                     break;
                 case InteractableType.NPC:
                     curInteractable.OnInteract();   // NPC클래스에서 구현
