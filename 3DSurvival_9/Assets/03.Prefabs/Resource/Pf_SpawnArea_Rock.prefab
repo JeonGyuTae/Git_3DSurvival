@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b5408ee52e7ec9641a7b6a68cfe21cc7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 20, y: 1, z: 20}
+  size: {x: 40, y: 1, z: 40}
   spawnEntries:
   - resourceData: {fileID: 11400000, guid: 8099927271e3815488c87974c09ebbbd, type: 2}
     resourcePrefab: {fileID: 6992045614693076487, guid: 7b4c3e0277428004e817ce04ec020f30,
