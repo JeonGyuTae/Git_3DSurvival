@@ -321,7 +321,6 @@ public class PlayerController : MonoBehaviour
         if(context.phase == InputActionPhase.Started)
         {
             Debug.Log("1번 선택");
-            EquipItemSlot(1);
         }
     }
 
@@ -330,7 +329,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("2번 선택");
-            EquipItemSlot(2);
         }
     }
 
@@ -339,7 +337,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("3번 선택");
-            EquipItemSlot(3);
         }
     }
 
@@ -348,7 +345,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("4번 선택");
-            EquipItemSlot(4);
         }
     }
 
@@ -357,7 +353,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("5번 선택");
-            EquipItemSlot(5);
         }
     }
 
@@ -366,7 +361,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("6번 선택");
-            EquipItemSlot(6);
         }
     }
 
@@ -375,7 +369,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("7번 선택");
-            EquipItemSlot(7);
         }
     }
 
@@ -384,7 +377,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("8번 선택");
-            EquipItemSlot(8);
         }
     }
 
@@ -393,35 +385,9 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("9번 선택");
-            EquipItemSlot(9);
         }
     }
     #endregion
-
-    private void EquipItemSlot(int slotNumber)
-    {
-        PlayerInventory inventory = PlayerManager.Instance.Player.GetComponent<PlayerInventory>();
-        if (inventory != null)
-        {
-            // TODO: PlayerInventory에서 slotNumber에 해당하는 ItemData를 가져오는 로직 추가
-            // ItemData itemToEquip = inventory.GetItemDataInSlot(slotNumber);
-            // if (itemToEquip != null && itemToEquip.type == ItemType.Equipable)
-            // {
-            //     equipment.EquipNew(itemToEquip);
-            //     Debug.Log($"{slotNumber}번 인벤토리 슬롯 아이템 장착했음: {itemToEquip.itemname}");
-            // }
-            // else
-            // {
-            //     equipment.UnEquip(); // 장착 불가능한 아이템이거나 슬롯이 비었으면 해제
-            //     Debug.Log($"{slotNumber}번 슬롯에 장착 가능한 아이템이 없거나 슬롯이 비었습니다.");
-            // }
-        }
-        else
-        {
-            Debug.Log("인벤토리 없음");
-        }
-    }
-
     public void OnThrow(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Started)

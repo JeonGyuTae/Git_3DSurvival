@@ -143,8 +143,8 @@ public class PlayerInventory : MonoBehaviour
 
         selectedItemName.text = selectedItem.itemname;
 
-        useButton.SetActive(selectedItem.type == ItemType.Consumable);
-        equipButton.SetActive(selectedItem.type == ItemType.Equipable);
+        /*useButton.SetActive(selectedItem.type == ItemType.Consumable);
+        equipButton.SetActive(selectedItem.type == ItemType.Equipable);*/
     }
 
     public void OnDropItem()
@@ -167,5 +167,31 @@ public class PlayerInventory : MonoBehaviour
         }
 
         UpdateUI();
+    }
+
+    private void EquipItemSlot(int slotNumber)
+    {
+        if (slots != null && slotNumber <= 9)
+        {
+            slotNumber -= 1;
+
+            
+            SelectItem(slotNumber);
+            // 1~9번을 눌렀을 때 해당 슬롯의 아이템을 장착하는 로직
+        }
+        else
+        {
+            Debug.Log("인벤토리 없음");
+        }
+    }
+    void UnEquip(int index)
+    {
+        slots[index].equipped = false;
+        PlayerManager.Instance.Player.equip.UnEquip();
+
+        if (selectedItemIndex == index)
+        {
+            SelectItem(selectedItemIndex);
+        }
     }
 }
