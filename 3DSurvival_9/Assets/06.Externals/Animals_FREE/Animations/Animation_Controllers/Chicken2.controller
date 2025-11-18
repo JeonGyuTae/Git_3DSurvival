@@ -11,7 +11,7 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 3107537866447757979}
-    m_Position: {x: 260, y: 70, z: 0}
+    m_Position: {x: 270, y: 100, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -31,7 +31,8 @@ BlendTree:
   m_Name: BlendTree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: 3158070147111159031, guid: 605d0caffe3b2fe489bc37e772cb7496, type: 3}
+    m_Motion: {fileID: 3158070147111159031, guid: 605d0caffe3b2fe489bc37e772cb7496,
+      type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -39,7 +40,8 @@ BlendTree:
     m_DirectBlendParameter: State
     m_Mirror: 0
   - serializedVersion: 2
-    m_Motion: {fileID: -948669717926809901, guid: 605d0caffe3b2fe489bc37e772cb7496, type: 3}
+    m_Motion: {fileID: -948669717926809901, guid: 605d0caffe3b2fe489bc37e772cb7496,
+      type: 3}
     m_Threshold: 1
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -62,7 +64,8 @@ BlendTree:
   m_Name: Blend Tree
   m_Childs:
   - serializedVersion: 2
-    m_Motion: {fileID: -4410364115441826551, guid: 605d0caffe3b2fe489bc37e772cb7496, type: 3}
+    m_Motion: {fileID: -4410364115441826551, guid: 605d0caffe3b2fe489bc37e772cb7496,
+      type: 3}
     m_Threshold: 0
     m_Position: {x: 0, y: 0}
     m_TimeScale: 1
@@ -77,11 +80,11 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: State
     m_Mirror: 0
-  m_BlendParameter: Vert
+  m_BlendParameter: State
   m_BlendParameterY: State
   m_MinThreshold: 0
   m_MaxThreshold: 1
-  m_UseAutomaticThresholds: 1
+  m_UseAutomaticThresholds: 0
   m_NormalizedBlendValues: 0
   m_BlendType: 0
 --- !u!91 &9100000
@@ -90,7 +93,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Chicken
+  m_Name: Chicken2
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: State

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEditor.Searcher.SearcherWindow.Alignment;
 
 
 /// <summary>
@@ -12,6 +13,9 @@ using UnityEngine.AI;
 public class AnimalAnimationHandler : MonoBehaviour
 {
     private Animator _animator;
+    private static readonly int IsMoving = Animator.StringToHash("IsMove");
+    private static readonly int IsRunning = Animator.StringToHash("IsRun");
+
     private readonly string VerticalID = "Vert";
     private readonly string StateID = "State";
 
@@ -22,6 +26,29 @@ public class AnimalAnimationHandler : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponent<Animator>();
+    }
+
+    public void AnimationStopOrPlay(bool stop)
+    {
+        _animator.speed = stop ? 0 : 1;
+    }
+
+    public void Idle()
+    {
+        _animator.SetBool(IsMoving, false);
+        _animator.SetBool(IsRunning, false);
+    }
+
+    public void Move()
+    {
+        _animator.SetBool(IsMoving, true);
+        _animator.SetBool(IsRunning, false);
+    }
+
+    public void Run()
+    {
+        _animator.SetBool(IsMoving, false);
+        _animator.SetBool(IsRunning, true);
     }
 
     public void Animate(in Vector2 axis, float state, float deltaTime)
@@ -38,6 +65,6 @@ public class AnimalAnimationHandler : MonoBehaviour
 
         // 애니메이터에 값 설정
         _animator.SetFloat(VerticalID, flowAxis.magnitude);
-        _animator.SetFloat(StateID, flowState); 
+        _animator.SetFloat(StateID, flowState);
     }
 }
