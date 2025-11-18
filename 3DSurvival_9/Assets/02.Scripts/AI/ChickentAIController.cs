@@ -49,9 +49,14 @@ public class ChickentAIController : AIController
         if (decisionStartTime < 0f)
         {
             Debug.Log("목표 설정 시작");
+
             // 처음 노드 진입 시 초기화
             targetDestination = Vector3.zero;
             decisionStartTime = Time.time;
+
+            // 고민하는 시간 랜덤으로 부여
+            SetDecisionDuration();
+
             return NodeState.RUNNING;
         }
 
@@ -72,7 +77,6 @@ public class ChickentAIController : AIController
                 // 목표가 탐지되면 targetDestination 설정
                 targetDestination = hit.position;
                 Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
-                Debug.Log("목표 위치:" + targetDestination);
 
                 agent.SetDestination(targetDestination);
                 agent.isStopped = false;
