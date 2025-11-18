@@ -1046,6 +1046,7 @@ MonoBehaviour:
   detectDistance: 10
   attackDistance: 2
   attackCoolTime: 1
+  threadHoldRunHp: 30
   isHit: 0
 --- !u!114 &7567028488977538265
 MonoBehaviour:
@@ -1084,6 +1085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae0905ab27ce564ea98e5c2972f0094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
 --- !u!195 &5227597163499462571
 NavMeshAgent:
   m_ObjectHideFlags: 0
