@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using static UnityEngine.LightAnchor;
 
 /// <summary>
-/// 닭 행동 AI Behavior
+/// 초식동물 행동 AI Behavior
 /// 
 ///                                       <Selector(Root)>
 ///             
@@ -13,7 +13,7 @@ using static UnityEngine.LightAnchor;
 /// <Condition(피격)>       <Action(RunAway)>       <Action(SetPosition)>       <Action(Move)> 
 /// 
 /// </summary>
-public class ChickentAIController : AIController
+public class HerbivoreAIController : AIController
 {
     private bool isMovingToTarget = false; // 플래그 설정
     private AnimalAnimationHandler animationHandler;
@@ -105,6 +105,9 @@ public class ChickentAIController : AIController
             // 목표 설정
             if (CheckTargetPositionOnNavMesh(randomPosition, maxMoveDistance, NavMesh.AllAreas))
             {
+                // 속도 세팅
+                SetSpeed(runSpeed);
+
                 // 타이머 리셋
                 ResetDecisionStartTime();
                 return NodeState.SUCCESS;
@@ -159,6 +162,9 @@ public class ChickentAIController : AIController
         if(hitPosition == Vector3.zero) return NodeState.FAILURE;
 
         // 도망갈 포지션 세팅
+
+        // 속도 세팅
+        SetSpeed(runSpeed);
 
         // hit 된 포지션 반대방향으로 설정
         Vector3 backDirection = transform.position - hitPosition;
