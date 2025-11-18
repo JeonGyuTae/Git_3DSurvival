@@ -5,7 +5,7 @@ using UnityEngine.AI;
 using static UnityEngine.LightAnchor;
 
 /// <summary>
-/// 닭 행동 AI Behavior
+/// 초식동물 행동 AI Behavior
 /// 
 ///                                       <Selector(Root)>
 ///             
@@ -13,7 +13,7 @@ using static UnityEngine.LightAnchor;
 /// <Condition(피격)>       <Action(RunAway)>       <Action(SetPosition)>       <Action(Move)> 
 /// 
 /// </summary>
-public class ChickentAIController : AIController
+public class HerbivoreAIController : AIController
 {
     private bool isMovingToTarget = false; // 플래그 설정
     private AnimalAnimationHandler animationHandler;
@@ -21,10 +21,21 @@ public class ChickentAIController : AIController
     private Vector3 hitPosition;
     private const float OFFSET_RUN_ANGLE = 5.0f;
 
+    [SerializeField] private bool isHit = false;
+    public bool IsHit { get { return isHit; } set { isHit = value; } }
+
+    private AnimalConditionHandler conditionHandler;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
+    private Rigidbody _rigidbody;
+
+    private Coroutine damageEffectCoroutine;
+
     protected override void Awake()
     {
         base.Awake();
         animationHandler = GetComponent<AnimalAnimationHandler>();
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        _rigidbody = GetComponent<Rigidbody>();
     }
 
     protected override void Start()
@@ -43,18 +54,19 @@ public class ChickentAIController : AIController
         Action setPatrolTargetPosition = new Action("Decision Next Position", SetPatrolTargetPosition);
         Action moveToTarget = new Action("Move Next Position", MoveToTarget);
         ConditionNode checkDamage = new ConditionNode("Check Damage From Player", CheckDamage);
+        Action hit = new Action("Hit", Hit);
         Action setRunTargetPosition = new Action("Set Run Position", SetRunTargetPosition);
 
         // Sequence Patrol 생성
         Sequence patrol = new Sequence("Patrol Around", setPatrolTargetPosition, moveToTarget);
 
         // Sequence RunAway 생성
-        Sequence runAway = new Sequence("RunAway", checkDamage, setRunTargetPosition, moveToTarget);
+        Sequence runAway = new Sequence("RunAway", checkDamage, hit, setRunTargetPosition, moveToTarget);
 
         // Selector Root 생성
         Selector root = new Selector("Chicken Root", runAway, patrol);
 
-        tree = new BehaviorTree(patrol);
+        tree = new BehaviorTree(root);
     }
 
     #region Sequence : Patrol
@@ -93,6 +105,9 @@ public class ChickentAIController : AIController
             // 목표 설정
             if (CheckTargetPositionOnNavMesh(randomPosition, maxMoveDistance, NavMesh.AllAreas))
             {
+                // 속도 세팅
+                SetSpeed(runSpeed);
+
                 // 타이머 리셋
                 ResetDecisionStartTime();
                 return NodeState.SUCCESS;
@@ -113,9 +128,7 @@ public class ChickentAIController : AIController
         // 이동 시작
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            agent.isStopped = true;
-            targetDestination = Vector3.zero;
-            isMovingToTarget = false;
+            ResetSetting();
             return NodeState.SUCCESS;
         }
         else
@@ -131,7 +144,17 @@ public class ChickentAIController : AIController
     private NodeState CheckDamage()
     {
         // 플레이어로부터 데미지를 받았는지 체크
-        return NodeState.FAILURE;
+        NodeState state = (isHit) ? NodeState.SUCCESS : NodeState.FAILURE;
+
+        return state;
+    }
+
+    private NodeState Hit()
+    {
+        // 피격 이펙트 표시
+        StartDamageEffectCoroutine();
+
+        return NodeState.SUCCESS;
     }
 
     private NodeState SetRunTargetPosition()
@@ -139,6 +162,9 @@ public class ChickentAIController : AIController
         if(hitPosition == Vector3.zero) return NodeState.FAILURE;
 
         // 도망갈 포지션 세팅
+
+        // 속도 세팅
+        SetSpeed(runSpeed);
 
         // hit 된 포지션 반대방향으로 설정
         Vector3 backDirection = transform.position - hitPosition;
@@ -154,7 +180,6 @@ public class ChickentAIController : AIController
         do
         {
             bool isFind = CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas);
-            if (isFind) Debug.Log("한번에 못찾음");
         }
         while(CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas)==false);
 
@@ -201,5 +226,48 @@ public class ChickentAIController : AIController
 
         // 애니메이션 적용
         animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
+    }
+
+    public void OnHit(Vector3 hitPosition)
+    {
+        this.hitPosition = hitPosition;
+        isHit = true;
+    }
+
+    public void OnTakeDamage(int damage)
+    {
+        isHit = true;
+        conditionHandler.TakeDamage(damage);
+    }
+
+    private void ResetSetting()
+    {
+        agent.isStopped = true;
+        targetDestination = Vector3.zero;
+        isMovingToTarget = false;
+        isHit = false;
+    }
+
+    /// <summary>
+    /// 피격 효과
+    /// </summary>
+    /// <returns></returns>
+    private void StartDamageEffectCoroutine()
+    {
+        if (damageEffectCoroutine != null) StopCoroutine(damageEffectCoroutine);
+        damageEffectCoroutine = StartCoroutine(DamageEffect());
+    }
+
+    private IEnumerator DamageEffect()
+    {
+        Material mat = skinnedMeshRenderer.material;
+        mat.color = Color.red;
+
+        skinnedMeshRenderer.material = mat;
+
+        yield return new WaitForSeconds(0.5f);
+
+        mat.color = Color.white;
+        skinnedMeshRenderer.material = mat;
     }
 }
