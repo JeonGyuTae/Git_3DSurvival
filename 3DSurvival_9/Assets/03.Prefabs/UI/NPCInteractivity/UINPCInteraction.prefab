@@ -556,7 +556,7 @@ GameObject:
   - component: {fileID: 5022015007320336735}
   - component: {fileID: 5751540221388588432}
   m_Layer: 5
-  m_Name: UINPCInteractivity
+  m_Name: UINPCInteraction
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
