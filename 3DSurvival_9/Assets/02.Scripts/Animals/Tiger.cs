@@ -2,20 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Chicken 스크립트
-/// 닭에 대한 Interact를 처리하는 스크립트이다.
-/// </summary>
-public class Chicken : MonoBehaviour, IInteractable
+public class Tiger : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
-    private HerbivoreAIController controller;
+    private CarnivoreAIController controller;
     private AnimalConditionHandler conditionHandler;
 
     private void Awake()
     {
-        controller = GetComponent<HerbivoreAIController>();
+        controller = GetComponent<CarnivoreAIController>();
         conditionHandler = GetComponent<AnimalConditionHandler>();
 
         Init();
@@ -44,7 +40,7 @@ public class Chicken : MonoBehaviour, IInteractable
 
     public void HideInteractUI()
     {
-        
+
     }
 
     public void OnInteract()

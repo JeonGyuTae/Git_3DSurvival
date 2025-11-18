@@ -906,6 +906,7 @@ GameObject:
   - component: {fileID: 7047759480149885278}
   - component: {fileID: 6807997121205527559}
   - component: {fileID: 8886185100378528869}
+  - component: {fileID: 4756083018023136526}
   m_Layer: 8
   m_Name: AI_Chicken
   m_TagString: Untagged
@@ -966,10 +967,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   agent: {fileID: 0}
   moveSpeed: 5
+  runSpeed: 10
   maxMoveDistance: 2
   minMoveDistance: 5
   maxDecisionDuration: 2
   minDecisionDuration: 5
+  isHit: 0
 --- !u!54 &2180197926247737454
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1066,6 +1069,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: 69db97a7048450d478cb28a9f7f5bec0, type: 2}
+--- !u!114 &4756083018023136526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865765865287956085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fae0905ab27ce564ea98e5c2972f0094, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7964844094719423088
 GameObject:
   m_ObjectHideFlags: 0

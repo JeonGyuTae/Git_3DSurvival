@@ -15,6 +15,7 @@ public abstract class AIController : MonoBehaviour
     [Header("AI")]
     [SerializeField] protected NavMeshAgent agent;
     [SerializeField] protected float moveSpeed = 5.0f;
+    [SerializeField] protected float runSpeed = 10.0f;
     [SerializeField] protected float maxMoveDistance = -10.0f;
     [SerializeField] protected float minMoveDistance = 10.0f;
     [SerializeField] protected float maxDecisionDuration = 2f;
@@ -54,5 +55,15 @@ public abstract class AIController : MonoBehaviour
     {
         // 고민하는 시간은 랜덤으로 설정
         decisionDuration = Random.Range(minDecisionDuration, maxDecisionDuration);
+    }
+
+    protected void SetSpeed(float speed)
+    {
+        agent.speed = speed;
+    }
+
+    protected void SetStoppingDistance(float distance)
+    {
+        agent.stoppingDistance = distance;
     }
 }
