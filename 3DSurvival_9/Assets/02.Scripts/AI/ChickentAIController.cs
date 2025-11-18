@@ -15,6 +15,13 @@ using UnityEngine.AI;
 public class ChickentAIController : AIController
 {
     private bool isMovingToTarget = false; // 플래그 설정
+    private AnimalAnimationHandler animationHandler;
+
+    protected override void Awake()
+    {
+        base.Awake();
+        animationHandler = GetComponent<AnimalAnimationHandler>();
+    }
 
     protected override void Start()
     {
@@ -122,5 +129,21 @@ public class ChickentAIController : AIController
     protected override void Update()
     {
         base.Update();
+
+        MoveAnimation();
+    }
+
+    private void MoveAnimation()
+    {
+        // Axis 계산
+        Vector3 velocity = agent.velocity;
+        Vector3 localVelocity = transform.InverseTransformDirection(velocity);
+        Vector2 desiredAxis = new Vector2(localVelocity.x, localVelocity.z);
+
+        // run 상태 계산
+        float desiredState = (velocity.sqrMagnitude > Mathf.Epsilon) ? 1f : 0f;
+
+        // 애니메이션 적용
+        animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 }

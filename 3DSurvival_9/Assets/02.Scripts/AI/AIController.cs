@@ -26,7 +26,7 @@ public abstract class AIController : MonoBehaviour
     protected Vector3 targetDestination;
     protected Vector3 currentDestination;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         agent = GetComponent<NavMeshAgent>();
     }
