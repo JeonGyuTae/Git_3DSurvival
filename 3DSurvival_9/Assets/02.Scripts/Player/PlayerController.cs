@@ -28,13 +28,9 @@ public class PlayerController : MonoBehaviour
     private bool canLook;
     [SerializeField] private Image crossHair;
 
-    // 아직 정상작동 x
-    [Header("Ground Snapping")]
-    [SerializeField] private float snapToGroundDistance;
-    [SerializeField] private float snapForce;
-
-    [Header("Slope Handling")]
-    [SerializeField] private float maxSlopeAngle;
+    [Header("Attack")]
+    [SerializeField] private float attackCooldown;
+    private float lastAttackTime;
 
     private Rigidbody _rigidbody;
     private bool isMoving;
@@ -90,7 +86,6 @@ public class PlayerController : MonoBehaviour
     {
         Move();
         GravityEffect();
-        HandleSlopeSliding();
     }
 
     private void LateUpdate()
@@ -101,6 +96,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    #region 이동
     void Move()
     {
         Vector3 dir = transform.forward * curMovementInput.y + transform.right * curMovementInput.x;
@@ -129,8 +125,10 @@ public class PlayerController : MonoBehaviour
         {
             isJumping = false;
         }
-    }
+    } 
+    #endregion
 
+    #region 마우스 시점
     void PlayerLook()
     {
         camCurXRot += mouseDelta.y * lookSensitivity;
@@ -138,8 +136,10 @@ public class PlayerController : MonoBehaviour
         camObj.localEulerAngles = new Vector3(-camCurXRot, 0, 0);
 
         transform.eulerAngles += new Vector3(0, mouseDelta.x * lookSensitivity, 0);
-    }
+    } 
+    #endregion
 
+    #region 이동입력
     public void OnMove(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -152,8 +152,10 @@ public class PlayerController : MonoBehaviour
             isMoving = false;
             curMovementInput = Vector2.zero;
         }
-    }
+    } 
+    #endregion
 
+    #region 웅크리기
     public void OnSneaking(InputAction.CallbackContext context)
     {
         if (context.phase == InputActionPhase.Performed)
@@ -185,7 +187,9 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region 달리기
     public void OnRun(InputAction.CallbackContext context)
     {
         if (isSneaking)
@@ -202,7 +206,8 @@ public class PlayerController : MonoBehaviour
         {
             runInputHold = false;
         }
-    }
+    } 
+    #endregion
 
     // 외부 접근용(PlayerCondition.cs)
     public void runInputHoldFalse()
@@ -218,18 +223,20 @@ public class PlayerController : MonoBehaviour
         mouseDelta = context.ReadValue<Vector2>();
     }
 
+    #region 점프
     public void OnJump(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (context.phase == InputActionPhase.Started)
         {
-            if(IsGrounded() && condition.UseStamina(useJumpStamina))
+            if (IsGrounded() && condition.UseStamina(useJumpStamina))
             {
                 _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
                 _rigidbody.AddForce(Vector2.up * jumpForce, ForceMode.Impulse);
                 isJumping = true;
             }
         }
-    }
+    } 
+    #endregion
 
     void GravityEffect()
     {
@@ -239,26 +246,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    // 경사면 이동 시 (아직 정상작동x)
-    void ApplyGroundSnapping()
-    {
-        if (IsGrounded() || _rigidbody.velocity.y > 0.1f)
-        {
-            return;
-        }
-
-        RaycastHit hit;
-
-        Vector3 rayStart = transform.position + _capsuleCollider.center;
-        rayStart.y = transform.position.y + _capsuleCollider.center.y - _capsuleCollider.height / 2f + 0.1f;
-
-        if (Physics.Raycast(rayStart, Vector3.down, out hit, snapToGroundDistance, groundLayerMask))
-        {
-            _rigidbody.velocity = new Vector3(_rigidbody.velocity.x, 0f, _rigidbody.velocity.z);
-            _rigidbody.AddForce(Vector3.down * snapForce, ForceMode.Force);
-        }
-    }
-
+    #region 땅 감지
     bool IsGrounded()
     {
         float capsuleBottomY = _capsuleCollider.bounds.center.y - _capsuleCollider.bounds.extents.y;
@@ -288,43 +276,8 @@ public class PlayerController : MonoBehaviour
             }
         }
         return grounded;
-    }
-
-    private void HandleSlopeSliding()
-    {
-        if (!IsGrounded()) { Debug.Log("Not Grounded"); return; }
-        if (isMoving) { Debug.Log("Is Moving"); return; }
-        if (isJumping) { Debug.Log("Is Jumping"); return; }
-        if (_rigidbody.velocity.magnitude >= 0.1f) { Debug.Log($"Velocity too high: {_rigidbody.velocity.magnitude}"); return; }
-
-        if (IsGrounded() && !isMoving && !isJumping && _rigidbody.velocity.magnitude < 0.1f)
-        {
-            RaycastHit hit;
-            Vector3 rayOrigin = transform.position + _capsuleCollider.center;
-            rayOrigin.y -= (_capsuleCollider.height / 2f - 0.05f);
-
-            Debug.DrawRay(rayOrigin, Vector3.down * 0.2f, Color.magenta, Time.fixedDeltaTime);
-
-            if (Physics.Raycast(rayOrigin, Vector3.down, out hit, 0.2f, groundLayerMask))
-            {
-                float slopeAngle = Vector3.Angle(hit.normal, Vector3.up);
-
-                if(slopeAngle <= maxSlopeAngle)
-                {
-                    _rigidbody.velocity = Vector3.zero;
-                    _rigidbody.angularVelocity = Vector3.zero;
-                }
-                else
-                {
-                    Debug.Log($"Slope too steep: {slopeAngle} > {maxSlopeAngle}");
-                }
-            }
-        }
-        else
-        {
-            Debug.Log("HandleSlopeSliding: Raycast did not hit ground!");
-        }
-    }
+    } 
+    #endregion
 
     public void OnInventory(InputAction.CallbackContext context)
     {
@@ -340,5 +293,122 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started && Time.time >= lastAttackTime + attackCooldown) 
+        {
+            lastAttackTime = Time.time;
+            Debug.Log("공격 시도");
+            Attack();
+        }
+    }
+
+    private void Attack()
+    {
+        Debug.Log("공격 했음");
+    }
+
+    public void OnUseItem(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("우클릭 했음");
+            UseEquippedItem();
+        }
+    }
+
+    private void UseEquippedItem()
+    {
+        Debug.Log("아이템 사용 했음");
+    }
+
+    #region 아이템 슬롯 선택
+    public void OnSelectSlot1(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("1번 선택");
+            EquipItemSlot(1);
+        }
+    }
+
+    public void OnSelectSlot2(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("2번 선택");
+            EquipItemSlot(2);
+        }
+    }
+
+    public void OnSelectSlot3(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("3번 선택");
+            EquipItemSlot(3);
+        }
+    }
+
+    public void OnSelectSlot4(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("4번 선택");
+            EquipItemSlot(4);
+        }
+    }
+
+    public void OnSelectSlot5(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("5번 선택");
+            EquipItemSlot(5);
+        }
+    }
+
+    public void OnSelectSlot6(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("6번 선택");
+            EquipItemSlot(6);
+        }
+    }
+
+    public void OnSelectSlot7(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("7번 선택");
+            EquipItemSlot(7);
+        }
+    }
+
+    public void OnSelectSlot8(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("8번 선택");
+            EquipItemSlot(8);
+        }
+    }
+
+    public void OnSelectSlot9(InputAction.CallbackContext context)
+    {
+        if (context.phase == InputActionPhase.Started)
+        {
+            Debug.Log("9번 선택");
+            EquipItemSlot(9);
+        }
+    }
+    #endregion
+
+    private void EquipItemSlot(int slotNumber)
+    {
+        Debug.Log($"{slotNumber} 장착했음");
     }
 }
