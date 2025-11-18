@@ -10,6 +10,11 @@ public class Chicken : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
+    public InteractableType GetInteractableType()
+    {
+        return InteractableType.Animal;
+    }
+
     public string GetInteractPrompt()
     {
         return data.animalName;

@@ -5,8 +5,8 @@ public class Player : MonoBehaviour
     public PlayerController controller {get; private set;}
     public PlayerCondition condition {get; private set;}
 
-    //private ItemBlahBlah blahblah;
-    //private Action blah;
+    public ItemData itemData;
+    public System.Action addItem;
 
     [SerializeField] private Transform dropPosition;
 

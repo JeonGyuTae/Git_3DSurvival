@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Item_Wood
   m_EditorClassIdentifier: 
   itemname: "\uD1B5\uB098\uBB34"
-  description: "\uB098\uBB34\uC5D0\uC11C \uCC44\uCDE8\uD558\uB294 \uD1B5\uB098\uBB34"
   type: 2
   icon: {fileID: 0}
-  dropPrefab: {fileID: 0}
+  dropPrefab: {fileID: 450627955773213691, guid: 081f4a77328c01c47a655da1fddb1dfc,
+    type: 3}
   canStack: 1
   maxStack: 99
   consumables: []

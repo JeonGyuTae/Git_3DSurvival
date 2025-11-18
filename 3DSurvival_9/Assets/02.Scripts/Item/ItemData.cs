@@ -29,7 +29,6 @@ public class ItemData : ScriptableObject
 {
     [Header("Info")]
     public string itemname;
-    public string description;
     public ItemType type;
     public Sprite icon;
     public GameObject dropPrefab;

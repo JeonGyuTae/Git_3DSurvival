@@ -2,6 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum InteractableType
+{
+    Item,
+    Animal,
+    NPC,
+}
 
 /// <summary>
 /// Interactable 오브젝트 인터페이스
@@ -11,6 +17,7 @@ using UnityEngine;
 /// </summary>
 public interface IInteractable
 {
+    InteractableType GetInteractableType();
     public string GetInteractPrompt();      // 상호작용 오브젝트 정보 전달
     public void ShowInteractUI();           // 오브젝트 정보 UI 활성화
     public void HideInteractUI();           // 오브젝트 정보 UI 비활성화
