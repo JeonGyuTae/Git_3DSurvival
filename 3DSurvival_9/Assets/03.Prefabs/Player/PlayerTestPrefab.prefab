@@ -2737,7 +2737,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   layerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   curInteractGameObj: {fileID: 0}
   interactionText: {fileID: 1695374527625168149}
   promptText: {fileID: 7379133827722528115}

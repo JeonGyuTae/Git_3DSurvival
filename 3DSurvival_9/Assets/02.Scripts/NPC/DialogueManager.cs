@@ -1,24 +1,24 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using TMPro;
-// using UnityEngine.UI;        // ÀÌ¹ÌÁö ÆÄÀÏÀÌ µé¾î°¥ °æ¿ì Àû¿ë
+// using UnityEngine.UI;        // ì´ë¯¸ì§€ íŒŒì¼ì´ ë“¤ì–´ê°ˆ ê²½ìš° ì ìš©
 
 public class DialogueManager : MonoBehaviour
 {
     public static DialogueManager Instance;
 
     [Header("UI")]
-    public GameObject dialogueUI;   // ´ëÈ­ UI ÆĞ³Î
+    public GameObject dialogueUI;   // ëŒ€í™” UI íŒ¨ë„
     public TMP_Text nameText;
     public TMP_Text dialogueText;
 
     [Header("Player")]
-    public Transform playerTransform;     // ÇÃ·¹ÀÌ¾î Transform ¿¬°á
-    public float rotateSpeed = 5f;        // ÇÃ·¹ÀÌ¾î È¸Àü ¼Óµµ
+    public Transform playerTransform;     // í”Œë ˆì´ì–´ Transform ì—°ê²°
+    public float rotateSpeed = 5f;        // í”Œë ˆì´ì–´ íšŒì „ ì†ë„
 
     private string[] currentDialogues;
     private int index;
 
-    private Transform lookTargetNPC;      // ÇöÀç ¹Ù¶óºÁ¾ß ÇÒ NPC Transform
+    private Transform lookTargetNPC;      // í˜„ì¬ ë°”ë¼ë´ì•¼ í•  NPC Transform
 
     void Awake()
     {
@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    // -- -- -- -- -- ´ëÈ­ ½ÃÀÛ -- -- -- -- --
+    // -- -- -- -- -- ëŒ€í™” ì‹œì‘ -- -- -- -- --
 
     public void StartDialogue(NPCData data, Transform npcTransform)
     {
@@ -38,14 +38,14 @@ public class DialogueManager : MonoBehaviour
         currentDialogues = data.dialogues;
         index = 0;
 
-        lookTargetNPC = npcTransform;     // NPC Transform ÀúÀå (È¸Àü Å¸°Ù)
+        lookTargetNPC = npcTransform;     // NPC Transform ì €ì¥ (íšŒì „ íƒ€ê²Ÿ)
 
         ShowSentence();
     }
 
 
 
-    // -- -- -- -- -- ´ÙÀ½ ¹®Àå -- -- -- -- --
+    // -- -- -- -- -- ë‹¤ìŒ ë¬¸ì¥ -- -- -- -- --
 
     public void Next()
     {
@@ -59,7 +59,7 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    // -- -- -- -- -- ¹®Àå Ãâ·Â -- -- -- -- --
+    // -- -- -- -- -- ë¬¸ì¥ ì¶œë ¥ -- -- -- -- --
 
     private void ShowSentence()
     {
@@ -68,18 +68,19 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    // -- -- -- -- -- ´ëÈ­ Á¾·á -- -- -- -- --
+    // -- -- -- -- -- ëŒ€í™” ì¢…ë£Œ -- -- -- -- --
 
     public void EndDialogue()
     {
         dialogueUI.SetActive(false);
 
-        lookTargetNPC = null;       // È¸Àü Á¾·á
+        lookTargetNPC = null;       // íšŒì „ ì¢…ë£Œ
     }
 
 
 
-    // -- -- -- -- -- Update_Player È¸Àü Ã³¸® -- -- -- -- --
+    // -- -- -- -- -- Update_Player íšŒì „ ì²˜ë¦¬ -- -- -- -- --
+
     private void Update()
     {
         RotatePlayerSmoothly();
@@ -87,15 +88,16 @@ public class DialogueManager : MonoBehaviour
 
 
 
-    // -- -- -- -- -- ºÎµå·¯¿î È¸Àü (Slerp) -- -- -- -- --
+    // -- -- -- -- -- ë¶€ë“œëŸ¬ìš´ íšŒì „ (Slerp) -- -- -- -- --
+
     private void RotatePlayerSmoothly()
     {
         if (lookTargetNPC == null) return;
 
         Vector3 direction = (lookTargetNPC.position - playerTransform.position);
-        direction.y = 0f; // À§¾Æ·¡ °¢µµ´Â ¹«½Ã
+        direction.y = 0f; // ìœ„ì•„ë˜ ê°ë„ëŠ” ë¬´ì‹œ
 
-        if (direction.sqrMagnitude < 0.001f) return; // 0¿¡ °¡±î¿î °æ¿ì È¸Àü ¾øÀ½
+        if (direction.sqrMagnitude < 0.001f) return; // 0ì— ê°€ê¹Œìš´ ê²½ìš° íšŒì „ ì—†ìŒ
 
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         playerTransform.rotation =
