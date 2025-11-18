@@ -21,6 +21,9 @@ public class ChickentAIController : AIController
     private Vector3 hitPosition;
     private const float OFFSET_RUN_ANGLE = 5.0f;
 
+    [SerializeField] private bool isHit = false;
+    public bool IsHit { get { return isHit; } set { isHit = value; } }
+
     protected override void Awake()
     {
         base.Awake();
@@ -43,18 +46,19 @@ public class ChickentAIController : AIController
         Action setPatrolTargetPosition = new Action("Decision Next Position", SetPatrolTargetPosition);
         Action moveToTarget = new Action("Move Next Position", MoveToTarget);
         ConditionNode checkDamage = new ConditionNode("Check Damage From Player", CheckDamage);
+        Action hit = new Action("Hit", Hit);
         Action setRunTargetPosition = new Action("Set Run Position", SetRunTargetPosition);
 
         // Sequence Patrol 생성
         Sequence patrol = new Sequence("Patrol Around", setPatrolTargetPosition, moveToTarget);
 
         // Sequence RunAway 생성
-        Sequence runAway = new Sequence("RunAway", checkDamage, setRunTargetPosition, moveToTarget);
+        Sequence runAway = new Sequence("RunAway", checkDamage, hit, setRunTargetPosition, moveToTarget);
 
         // Selector Root 생성
         Selector root = new Selector("Chicken Root", runAway, patrol);
 
-        tree = new BehaviorTree(patrol);
+        tree = new BehaviorTree(root);
     }
 
     #region Sequence : Patrol
@@ -113,9 +117,7 @@ public class ChickentAIController : AIController
         // 이동 시작
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            agent.isStopped = true;
-            targetDestination = Vector3.zero;
-            isMovingToTarget = false;
+            ResetSetting();
             return NodeState.SUCCESS;
         }
         else
@@ -131,7 +133,16 @@ public class ChickentAIController : AIController
     private NodeState CheckDamage()
     {
         // 플레이어로부터 데미지를 받았는지 체크
-        return NodeState.FAILURE;
+        NodeState state = (isHit) ? NodeState.SUCCESS : NodeState.FAILURE;
+
+        return state;
+    }
+
+    private NodeState Hit()
+    {
+        // 피격 이펙트 표시
+        Debug.Log("데미지 받음");
+        return NodeState.SUCCESS;
     }
 
     private NodeState SetRunTargetPosition()
@@ -154,7 +165,6 @@ public class ChickentAIController : AIController
         do
         {
             bool isFind = CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas);
-            if (isFind) Debug.Log("한번에 못찾음");
         }
         while(CheckTargetPositionOnNavMesh(runDirection, maxMoveDistance, NavMesh.AllAreas)==false);
 
@@ -201,5 +211,19 @@ public class ChickentAIController : AIController
 
         // 애니메이션 적용
         animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
+    }
+
+    public void OnHit(Vector3 hitPosition)
+    {
+        this.hitPosition = hitPosition;
+        isHit = true;
+    }
+
+    private void ResetSetting()
+    {
+        agent.isStopped = true;
+        targetDestination = Vector3.zero;
+        isMovingToTarget = false;
+        isHit = false;
     }
 }
