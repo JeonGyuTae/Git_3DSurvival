@@ -45,7 +45,8 @@ public abstract class AIController : MonoBehaviour
     public void Init()
     {
         // 활성화 시 세팅
-
+        currentDeadCoolTime = 0.0f;
+        canDestory = false;
     }
 
     protected virtual void Start()
@@ -78,14 +79,16 @@ public abstract class AIController : MonoBehaviour
 
         if (canDestory)
         {
+            // 터지는 이펙트 적용
+            animal.FX_Dead.Play();
+
             canDestory = false;
             SetAgentStop(false);
             animal.SkinnedMeshRenderer.enabled = false;
 
-            // 터지는 이펙트 적용
-            animal.FX_Dead.Play();
-
             Invoke("DisableObject", deadCoolTime);
+
+            return NodeState.SUCCESS;
         }
 
         return NodeState.RUNNING;
@@ -99,7 +102,7 @@ public abstract class AIController : MonoBehaviour
         currentDeadCoolTime += Time.deltaTime;
         if (currentDeadCoolTime >= deadCoolTime)
         {
-            currentDeadCoolTime = deadCoolTime;
+            currentDeadCoolTime = 0.0f;
             canDestory = true;
         }
     }
