@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 3626260402301917734}
   - component: {fileID: 3952478059649655720}
   - component: {fileID: 940205729341810636}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: NPC001
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 2448805136936913018}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: -190, y: 2.5, z: -180}
+  m_LocalScale: {x: 1, y: 2, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
