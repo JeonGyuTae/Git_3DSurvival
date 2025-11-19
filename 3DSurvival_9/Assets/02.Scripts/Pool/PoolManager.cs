@@ -13,7 +13,7 @@ public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance { get; private set; }
 
-    private Dictionary<string, ObjectPool> objectPools;
+    private Dictionary<string, ObjectPool> objectPools = new Dictionary<string, ObjectPool>();
 
     private void Awake()
     {
@@ -24,17 +24,8 @@ public class PoolManager : MonoBehaviour
         }
         else
         {
-            if(this != null)
-                Destroy(gameObject);
+            Destroy(gameObject);
         }
-    }
-
-    /// <summary>
-    /// 게임에서 사용할 모든 종류의 ObjectPool 생성
-    /// </summary>
-    public void Init()
-    {
-        
     }
 
     /// <summary>
