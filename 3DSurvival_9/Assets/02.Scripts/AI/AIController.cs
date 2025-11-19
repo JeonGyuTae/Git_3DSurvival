@@ -32,10 +32,6 @@ public abstract class AIController : MonoBehaviour
     private float currentDeadCoolTime = 0.0f;
     private bool canDestory = false;
 
-    protected AnimalAnimationHandler animationHandler;
-    protected AnimalConditionHandler conditionHandler;
-    protected SkinnedMeshRenderer skinnedMeshRenderer;
-    protected Rigidbody _rigidbody;
     protected Animal animal;
     protected Coroutine deadCoroutine;
     protected WaitForSeconds waitForSeconds;
@@ -44,10 +40,12 @@ public abstract class AIController : MonoBehaviour
     {
         agent = GetComponent<NavMeshAgent>();
         animal = GetComponent<Animal>();
-        animationHandler = GetComponent<AnimalAnimationHandler>();
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-        conditionHandler = GetComponent<AnimalConditionHandler>();
-        _rigidbody = GetComponent<Rigidbody>();
+    }
+
+    public void Init()
+    {
+        // 활성화 시 세팅
+
     }
 
     protected virtual void Start()
@@ -69,7 +67,7 @@ public abstract class AIController : MonoBehaviour
 
     protected NodeState IsDead()
     {
-        NodeState state = (conditionHandler.Health <= 0) ? NodeState.SUCCESS : NodeState.FAILURE;
+        NodeState state = (animal.ConditionHandler.Health <= 0) ? NodeState.SUCCESS : NodeState.FAILURE;
         return state;
     }
 
@@ -82,11 +80,12 @@ public abstract class AIController : MonoBehaviour
         {
             canDestory = false;
             SetAgentStop(false);
+            animal.SkinnedMeshRenderer.enabled = false;
 
-            // 오브젝트 비활성화
-            string key = animal.Data.animalName;
-            GameObject obj = this.gameObject;
-            AnimalSpawnManager.Instance.Release(key, obj);
+            // 터지는 이펙트 적용
+            animal.FX_Dead.Play();
+
+            Invoke("DisableObject", deadCoolTime);
         }
 
         return NodeState.RUNNING;
@@ -94,7 +93,7 @@ public abstract class AIController : MonoBehaviour
 
     private void UpdateDeadCoolTime()
     {
-        if (conditionHandler.Health > 0) return;
+        if (animal.ConditionHandler.Health > 0) return;
 
         // 죽었을 경우만 상태 쿨타임 업데이트
         currentDeadCoolTime += Time.deltaTime;
@@ -103,6 +102,14 @@ public abstract class AIController : MonoBehaviour
             currentDeadCoolTime = deadCoolTime;
             canDestory = true;
         }
+    }
+
+    private void DisableObject()
+    {
+        // 오브젝트 비활성화
+        string key = animal.Data.animalName;
+        GameObject obj = this.gameObject;
+        AnimalSpawnManager.Instance.Release(key, obj);
     }
 
     #endregion
