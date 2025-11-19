@@ -88,6 +88,9 @@ public abstract class AIController : MonoBehaviour
 
             Invoke("DisableObject", deadCoolTime);
 
+            // 리스폰 할 수 있도록 설정
+            AnimalSpawnManager.Instance.Respawn(animal);
+
             return NodeState.SUCCESS;
         }
 

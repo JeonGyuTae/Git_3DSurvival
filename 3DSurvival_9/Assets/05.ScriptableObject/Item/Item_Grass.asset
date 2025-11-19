@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ce5a4e7aee519468516b04c0450725, type: 3}
   m_Name: Item_Grass
   m_EditorClassIdentifier: 
-  itemname: 
-  type: 0
+  itemname: "\uD480"
+  type: 2
   icon: {fileID: 0}
   dropPrefab: {fileID: 0}
-  canStack: 0
-  maxStack: 0
+  canStack: 1
+  maxStack: 99
   consumables: []
   equipPrefab: {fileID: 0}
