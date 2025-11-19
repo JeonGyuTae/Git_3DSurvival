@@ -7,19 +7,15 @@ public class EquipTool : Equip
     public float attackDistance;
     public float useStamina;
 
-    [Header("Resource Gathering")]
-    public bool doesGatherResources;
-
     [Header("Combat")]
-    public bool doesDealDamage;
     public int damage;
 
-    //private Animator animator;
+    private Animator animator;
     [SerializeField] private Camera camera;
 
     void Start()
     {
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         if (camera == null)
         {
             camera = Camera.main;
@@ -33,7 +29,7 @@ public class EquipTool : Equip
             if (PlayerManager.Instance.Player.condition.UseStamina(useStamina))
             {
                 attacking = true;
-                //animator.SetTrigger("Attack");
+                animator.SetTrigger("Attack");
                 Invoke("OnCanAttack", attackRate);
             }
         }
@@ -51,10 +47,12 @@ public class EquipTool : Equip
 
         if (Physics.Raycast(ray, out hit, attackDistance))
         {
-            /*if (doesGatherResources && hit.collider.TryGetComponent(out Resource resource))
+            IDamageable damageable = hit.collider.GetComponent<IDamageable>();
+
+            if(damageable != null)
             {
-                resource.Gather(hit.point, hit.normal);
-            }*/
+                damageable.TakeDamage((int)damage);
+            }
         }
     }
 }

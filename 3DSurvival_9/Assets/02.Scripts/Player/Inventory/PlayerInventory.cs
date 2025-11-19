@@ -36,6 +36,7 @@ public class PlayerInventory : MonoBehaviour
 
         controller.inventory += ToggleInventory;
         controller.throwItem += OnDropItem;
+        controller.useItem += OnUseItem;
         PlayerManager.Instance.Player.addItem += AddItem;
 
         inventoryUI.SetActive(false);
@@ -207,5 +208,36 @@ public class PlayerInventory : MonoBehaviour
             targetSlot.equipped = true;
 
         UpdateUI();
+    }
+
+    public void OnUseItem()
+    {
+        if (selectedItem == null)
+        {
+            return;
+        }
+
+        if(selectedItem.type == ItemType.Consumable)
+        {
+            for (int i = 0; i < selectedItem.consumables.Length; i++)
+            {
+                switch (selectedItem.consumables[i].type)
+                {
+                    case ConsumableType.Health:
+                        condition.Heal(selectedItem.consumables[i].value);
+                        break;
+                    case ConsumableType.Hunger:
+                        condition.Eat(selectedItem.consumables[i].value); 
+                        break;
+                    case ConsumableType.Thirsty:
+                        condition.Drink(selectedItem.consumables[i].value);
+                        break;
+                    case ConsumableType.Stamina:
+                        condition.Rest(selectedItem.consumables[i].value);
+                        break;
+                }
+            }
+            RemoveSelectedItem();
+        }
     }
 }
