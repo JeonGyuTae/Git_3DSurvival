@@ -309,7 +309,7 @@ GameObject:
   - component: {fileID: 6971023916529845989}
   - component: {fileID: 4458086321288928036}
   - component: {fileID: 3904654129706894003}
-  - component: {fileID: 905204264457349557}
+  - component: {fileID: -7181751081494244143}
   m_Layer: 0
   m_Name: AI_Dog
   m_TagString: Untagged
@@ -475,7 +475,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health: 0
---- !u!114 &905204264457349557
+--- !u!114 &-7181751081494244143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -484,7 +484,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1601339452394189622}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0f619595aaf2144aae01a8ca3a9c6bc, type: 3}
+  m_Script: {fileID: 11500000, guid: 31d830efd8ac09642a82b294756fdbc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c9a0a4acae64db343b7006f062a60203, type: 2}

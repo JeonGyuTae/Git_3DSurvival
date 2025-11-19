@@ -14,5 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animalName: "\uB2ED"
   description: "\uD3C9\uBC94\uD55C \uB2ED\uC774\uB2E4."
+  type: 1
   maxHp: 100
   atk: 10
+  prefab: {fileID: 7865765865287956085, guid: 705c4001ea4d6934aa5630845d0b973b, type: 3}
