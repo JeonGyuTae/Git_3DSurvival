@@ -24,7 +24,8 @@ public class PoolManager : MonoBehaviour
         }
         else
         {
-            Destroy(gameObject);
+            if(this != null)
+                Destroy(gameObject);
         }
     }
 
