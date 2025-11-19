@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2647037805151978931}
   - component: {fileID: 2730286614428321851}
   m_Layer: 8
-  m_Name: LowPolyEquipAxe
+  m_Name: Axe
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
