@@ -22,4 +22,7 @@ public class AnimalData : ScriptableObject
     [Header("Stat Info")]
     public float maxHp;
     public float atk;
+
+    [Header("Spawn Info")]
+    public GameObject prefab;
 }
