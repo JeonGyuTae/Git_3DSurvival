@@ -171,13 +171,17 @@ public class PlayerInventory : MonoBehaviour
 
     private void EquipItemSlot(int slotNumber)
     {
-        if (slots != null && slotNumber <= 9)
+        if (slots != null)
         {
-            slotNumber -= 1;
+            if (slotNumber <= 9)
+            {
+                slotNumber -= 1;
+                slots[slotNumber].equipped = true;
+                PlayerManager.Instance.Player.equip.EquipNew(selectedItem);
 
-            
-            SelectItem(slotNumber);
-            // 1~9번을 눌렀을 때 해당 슬롯의 아이템을 장착하는 로직
+                SelectItem(slotNumber);
+                // 1~9번을 눌렀을 때 해당 슬롯의 아이템을 장착하는 로직
+            }
         }
         else
         {
