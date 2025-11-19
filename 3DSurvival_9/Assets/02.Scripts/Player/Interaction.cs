@@ -19,6 +19,7 @@ public class Interaction : MonoBehaviour
 
     public Vector3 hitPosition;
 
+
     private void Start()
     {
         if(camera == null)
