@@ -2,16 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Tiger : MonoBehaviour, IInteractable
+/// <summary>
+/// Animal 스크립트
+/// Animal에 대한 Interact를 처리하는 스크립트이다.
+/// </summary>
+public class Animal : MonoBehaviour, IInteractable
 {
     [SerializeField] private AnimalData data;
 
-    private CarnivoreAIController controller;
+    private AIController controller;
     private AnimalConditionHandler conditionHandler;
 
     private void Awake()
     {
-        controller = GetComponent<CarnivoreAIController>();
+        controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
         conditionHandler = GetComponent<AnimalConditionHandler>();
 
         Init();
@@ -40,7 +44,7 @@ public class Tiger : MonoBehaviour, IInteractable
 
     public void HideInteractUI()
     {
-
+        
     }
 
     public void OnInteract()
@@ -51,4 +55,10 @@ public class Tiger : MonoBehaviour, IInteractable
         Interaction interact = GameObject.FindAnyObjectByType<Interaction>();
         controller.OnHit(interact.hitPosition);
     }
+
+    #region 프로퍼티
+
+    public AnimalData Data { get { return data; } }
+
+    #endregion
 }
