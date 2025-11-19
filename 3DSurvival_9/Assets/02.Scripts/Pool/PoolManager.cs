@@ -13,7 +13,7 @@ public class PoolManager : MonoBehaviour
 {
     public static PoolManager Instance { get; private set; }
 
-    private Dictionary<string, object> objectPools;
+    private Dictionary<string, ObjectPool> objectPools;
 
     private void Awake()
     {
@@ -40,16 +40,15 @@ public class PoolManager : MonoBehaviour
     /// <summary>
     /// ObjectPool 생성 및 Dictonary 추가
     /// </summary>
-    /// <typeparam name="T">오브젝트의 타입</typeparam>
     /// <param name="key">Pool이름</param>
     /// <param name="prefab">원본 데이터</param>
     /// <param name="initialSize">생성 개수</param>
-    public void CreatePool<T>(string key, T prefab, int initialSize) where T : MonoBehaviour
+    public void CreatePool(string key, GameObject prefab, int initialSize) 
     {
         // 이미 존재하는지 확인
         if(objectPools.ContainsKey(key))
         {
-            Debug.Log($"{key} Pool은 이미 존재하는 ObjectPool 입니다.");
+            Debug.Log($"해당 {key}값 ObjectPool은 이미 존재합니다.");
             return;
         }
 
@@ -58,30 +57,21 @@ public class PoolManager : MonoBehaviour
         poolParent.transform.SetParent(this.transform);
 
         // ObjectPool 생성
-        ObjectPool<T> pool = new ObjectPool<T>(prefab, initialSize, poolParent.transform);
+        ObjectPool pool = new ObjectPool(prefab, initialSize, poolParent.transform);
         objectPools.Add(key, pool);
     }
 
     /// <summary>
     /// ObjectPool에서 오브젝트 가져오기
     /// </summary>
-    /// <typeparam name="T">오브젝트의 타입</typeparam>
     /// <param name="key">Pool이름</param>
     /// <returns>해당 오브젝트 or null</returns>
-    public T GetObject<T>(string key) where T : MonoBehaviour
+    public GameObject GetObject(string key) 
     {
-        if (objectPools.TryGetValue(key, out object poolObject))
+        // Dictionary에서 key에 해당하는 ObjectPool을 가져옴
+        if (objectPools.TryGetValue(key, out ObjectPool pool))
         {
-            // object를 ObjectPool<T> 타입으로 변환 (캐스팅)
-            if (poolObject is ObjectPool<T> pool)
-            {
-                return pool.Get();
-            }
-            else
-            {
-                Debug.Log($"해당 {key}값을 가지고 있는 ObjectPool이 존재하지 않습니다.");
-                return null;
-            }
+            return pool.Get(); 
         }
 
         Debug.Log($"해당 {key}값을 가지고 있는 ObjectPool이 존재하지 않습니다.");
@@ -91,26 +81,23 @@ public class PoolManager : MonoBehaviour
     /// <summary>
     /// ObjectPool Release 및 비활성화
     /// </summary>
-    /// <typeparam name="T">오브젝트의 타입</typeparam>
     /// <param name="key">Pool이름</param>
     /// <param name="obj">오브젝트</param>
-    public void ReleasePool<T>(string key, T obj) where T : MonoBehaviour
+    public void ReleasePool(string key, GameObject obj) 
     {
-        if(objectPools.TryGetValue(key, out object poolObj))
+        // Dictionary에서 key에 해당하는 ObjectPool을 가져옴
+        if (objectPools.TryGetValue(key, out ObjectPool pool))
         {
-            if (poolObj is ObjectPool<T> pool)
-            {
-                pool.Release(obj);
-            }
-            else
-            {
-                Debug.Log("해당 key값을 가지고 있는 ObjectPool이 존재하지 않습니다.");
-            }
+            pool.Release(obj); // ObjectPool의 Release() 메서드 호출
         }
         else
         {
-            obj.gameObject.SetActive(false);
-            Debug.Log("해당 key값을 가지고 있는 ObjectPool이 존재하지 않습니다.");
+            // Pool이 없으면 오브젝트를 강제로 비활성화하고 로그 출력
+            if (obj != null)
+            {
+                obj.gameObject.SetActive(false);
+            }
+            Debug.LogError($"해당 {key}값을 가지고 있는 ObjectPool이 존재하지 않습니다.");
         }
     }
 }
