@@ -333,7 +333,7 @@ public class CarnivoreAIController : AIController
         animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
-    public void OnHit(Vector3 hitPosition)
+    public override void OnHit(Vector3 hitPosition)
     {
         this.hitPosition = hitPosition;
         isHit = true;

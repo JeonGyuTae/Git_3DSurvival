@@ -7,6 +7,13 @@ public class AnimalConditionHandler : MonoBehaviour
     [SerializeField] private float health;
     public float Health {  get { return health; } }
 
+    private Animal animal;
+
+    private void Start()
+    {
+        animal = GetComponent<Animal>();
+    }
+
     public void SetHealth(float health)
     {
         this.health = health;
@@ -27,6 +34,12 @@ public class AnimalConditionHandler : MonoBehaviour
     public void Die()
     {
         Debug.Log("주금");
-        // 플레이어 죽음 코드
+
+
+        // AnimalSpawnManager에게 자신이 죽었음을 알림
+        string key = animal.Data.animalName;
+        GameObject obj = this.gameObject;
+
+        AnimalSpawnManager.Instance.Release(key, obj);
     }
 }

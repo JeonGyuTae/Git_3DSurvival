@@ -972,12 +972,12 @@ GameObject:
   - component: {fileID: 2466529763951905753}
   - component: {fileID: 5992535346234026377}
   - component: {fileID: 4391127964984453402}
-  - component: {fileID: 7567028488977538265}
   - component: {fileID: 2114298757606568781}
   - component: {fileID: 7972344882528378615}
   - component: {fileID: 5227597163499462571}
   - component: {fileID: 2505294589256146158}
   - component: {fileID: 7766721506504601114}
+  - component: {fileID: 6486756077768734837}
   m_Layer: 8
   m_Name: AI_Tiger
   m_TagString: Untagged
@@ -1048,19 +1048,6 @@ MonoBehaviour:
   attackCoolTime: 1
   threadHoldRunHp: 30
   isHit: 0
---- !u!114 &7567028488977538265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7865206443394632347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 76b7fb471f47efe419a3c298069e1267, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 990c0f47fe12d3f41914f58441bbfefc, type: 2}
 --- !u!114 &2114298757606568781
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1156,6 +1143,19 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.7, y: 1.2, z: 2}
   m_Center: {x: 0, y: 0.6, z: 0.3}
+--- !u!114 &6486756077768734837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7865206443394632347}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d830efd8ac09642a82b294756fdbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 990c0f47fe12d3f41914f58441bbfefc, type: 2}
 --- !u!1 &8279150982443916277
 GameObject:
   m_ObjectHideFlags: 0
