@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using TMPro;
 
 public class DialogueManager : MonoBehaviour
@@ -12,11 +13,13 @@ public class DialogueManager : MonoBehaviour
 
     [Header("Player")]
     public Transform playerTransform;
+    private PlayerController playerController;
+    private PlayerInput playerInput;
+    private Transform lookTargetNPC;
     public float rotateSpeed = 5f;
 
     private string[] currentDialogues;
     private int index;
-    private Transform lookTargetNPC;
 
     void Awake()
     {
@@ -28,41 +31,9 @@ public class DialogueManager : MonoBehaviour
         Player player = PlayerManager.Instance.Player;
         if (player != null)
             playerTransform = player.transform;
-    }
 
-    // 대화 시작
-    public void StartDialogue(NPCData data, Transform npcTransform)
-    {
-        dialogueUI.SetActive(true);
-        nameText.text = data.npcName;
-        currentDialogues = data.dialogues;
-        index = 0;
-        lookTargetNPC = npcTransform;
-
-        ShowSentence();
-    }
-
-    // 다음 문장
-    public void Next()
-    {
-        index++;
-        if (index < currentDialogues.Length)
-            ShowSentence();
-        else
-            EndDialogue();
-    }
-
-    // 문장 출력
-    private void ShowSentence()
-    {
-        dialogueText.text = currentDialogues[index];
-    }
-
-    // 대화 종료
-    public void EndDialogue()
-    {
-        dialogueUI.SetActive(false);
-        lookTargetNPC = null;
+        playerController = PlayerManager.Instance.Player.GetComponent<PlayerController>();
+        playerInput = PlayerManager.Instance.Player.GetComponent<PlayerInput>();
     }
 
     // Update: 회전 + 입력 처리
@@ -89,5 +60,55 @@ public class DialogueManager : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         float step = rotateSpeed * Time.deltaTime;
         playerTransform.rotation = Quaternion.RotateTowards(playerTransform.rotation, targetRotation, step);
+    }
+
+    // 대화 시작
+    public void StartDialogue(NPCData data, Transform npcTransform)
+    {
+        dialogueUI.SetActive(true);
+
+        // 플레이어 조작 차단
+        if (playerController != null)
+            playerController.enabled = false;
+
+        if (playerInput != null)
+            playerInput.enabled = false;
+
+        nameText.text = data.npcName;
+        currentDialogues = data.dialogues;
+        index = 0;
+        lookTargetNPC = npcTransform;
+
+        ShowSentence();
+    }
+
+    // 문장 출력
+    private void ShowSentence()
+    {
+        dialogueText.text = currentDialogues[index];
+    }
+
+    // 다음 문장
+    public void Next()
+    {
+        index++;
+        if (index < currentDialogues.Length)
+            ShowSentence();
+        else
+            EndDialogue();
+    }
+
+    // 대화 종료
+    public void EndDialogue()
+    {
+        dialogueUI.SetActive(false);
+        lookTargetNPC = null;
+
+        // 플레이어 조작 다시 활성화
+        if (playerController != null)
+            playerController.enabled = true;
+
+        if (playerInput != null)
+            playerInput.enabled = true;
     }
 }
