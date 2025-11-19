@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4244474768293172267}
   - component: {fileID: 6656656070700272754}
+  - component: {fileID: 1066740875764906202}
   m_Layer: 9
   m_Name: Equip_Wood
   m_TagString: Untagged
@@ -129,10 +130,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a1a5890bbe897c4f856fe4fd818a00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRate: 0.5
+  attackRate: 0.55
   attackDistance: 1
   useStamina: 10
-  doesGatherResources: 0
-  doesDealDamage: 1
   damage: 1
   camera: {fileID: 0}
+--- !u!95 &1066740875764906202
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3859881394929056588}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1fd99db5bbf97404ab67ce8311f5930e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

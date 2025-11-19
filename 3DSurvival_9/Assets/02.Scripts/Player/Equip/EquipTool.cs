@@ -10,12 +10,12 @@ public class EquipTool : Equip
     [Header("Combat")]
     public int damage;
 
-    //private Animator animator;
+    private Animator animator;
     [SerializeField] private Camera camera;
 
     void Start()
     {
-        //animator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
         if (camera == null)
         {
             camera = Camera.main;
@@ -29,7 +29,7 @@ public class EquipTool : Equip
             if (PlayerManager.Instance.Player.condition.UseStamina(useStamina))
             {
                 attacking = true;
-                //animator.SetTrigger("Attack");
+                animator.SetTrigger("Attack");
                 Invoke("OnCanAttack", attackRate);
             }
         }
