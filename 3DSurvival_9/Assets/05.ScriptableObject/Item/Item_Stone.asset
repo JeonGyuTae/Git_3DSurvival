@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 55ce5a4e7aee519468516b04c0450725, type: 3}
   m_Name: Item_Stone
   m_EditorClassIdentifier: 
-  itemname: 
-  type: 0
-  icon: {fileID: 0}
-  dropPrefab: {fileID: 0}
-  canStack: 0
-  maxStack: 0
+  itemname: "\uB3CC\uC870\uAC01"
+  type: 2
+  icon: {fileID: 21300000, guid: 048655785b0e28f4da3ba987960053bd, type: 3}
+  dropPrefab: {fileID: 6359112800851457702, guid: 3e61fda1753659f448a340ea8c7a3f73,
+    type: 3}
+  canStack: 1
+  maxStack: 99
   consumables: []
-  equipPrefab: {fileID: 0}
+  equipPrefab: {fileID: 5728430635097179198, guid: 54f0b0edfdd0ed3499712ed68b2a08b5,
+    type: 3}

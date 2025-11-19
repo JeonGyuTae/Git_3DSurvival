@@ -13,8 +13,6 @@ MonoBehaviour:
   m_Name: Item_Fruit
   m_EditorClassIdentifier: 
   itemname: "\uC5F4\uB9E4"
-  description: "\uBA39\uC73C\uBA74 \uCCB4\uB825\uACFC \uBC30\uACE0\uD514\uC744 \uD68C\uBCF5\uD558\uB294
-    \uC5F4\uB9E4"
   type: 1
   icon: {fileID: 0}
   dropPrefab: {fileID: 0}
@@ -22,5 +20,9 @@ MonoBehaviour:
   maxStack: 12
   consumables:
   - type: 0
-    value: 50
+    value: 20
+  - type: 1
+    value: 30
+  - type: 2
+    value: 40
   equipPrefab: {fileID: 0}

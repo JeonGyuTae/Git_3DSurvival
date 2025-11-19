@@ -1,11 +1,6 @@
 using UnityEngine;
 
-public interface IDamageble
-{
-    void TakeDamage(int damage);
-}
-
-public class PlayerCondition : MonoBehaviour, IDamageble
+public class PlayerCondition : MonoBehaviour, IDamageable
 {
     private PlayerController controller;
     public UICondition uiCondition;
@@ -59,22 +54,22 @@ public class PlayerCondition : MonoBehaviour, IDamageble
         }
     }
 
-    void Heal(float amount)
+    public void Heal(float amount)
     {
         health.Add(amount);
     }
 
-    void Eat(float amount)
+    public void Eat(float amount)
     {
         hunger.Add(amount);
     }
 
-    void Drink(float amount)
+    public void Drink(float amount)
     {
         thirsty.Add(amount);
     }
 
-    void Rest(float amount)
+    public void Rest(float amount)
     {
         stamina.Add(amount);
     }

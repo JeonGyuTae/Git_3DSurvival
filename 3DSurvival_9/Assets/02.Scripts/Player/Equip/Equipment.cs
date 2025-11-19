@@ -76,7 +76,7 @@ public class Equipment : MonoBehaviour
 
                 foreach (RaycastHit hit in hits)
                 {
-                    IDamageble damageable = hit.collider.GetComponent<IDamageble>();
+                    IDamageable damageable = hit.collider.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
                         damageable.TakeDamage((int)attackDamage);

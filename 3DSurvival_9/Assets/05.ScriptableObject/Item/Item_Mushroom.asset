@@ -10,13 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 55ce5a4e7aee519468516b04c0450725, type: 3}
-  m_Name: Item_Grass
+  m_Name: Item_Mushroom
   m_EditorClassIdentifier: 
-  itemname: "\uD480"
-  type: 2
-  icon: {fileID: 0}
-  dropPrefab: {fileID: 0}
+  itemname: "\uBC84\uC12F"
+  type: 1
+  icon: {fileID: 21300000, guid: 67babe36cee4c7f46a9a858d72f35b5a, type: 3}
+  dropPrefab: {fileID: 385491262653265843, guid: 073bbcbb44363734db231bb816eacc5f,
+    type: 3}
   canStack: 1
   maxStack: 99
-  consumables: []
-  equipPrefab: {fileID: 0}
+  consumables:
+  - type: 0
+    value: -5
+  - type: 1
+    value: 25
+  equipPrefab: {fileID: 8419709182265682508, guid: 8f6d6ff0912b8034fac7529a3385f0f1,
+    type: 3}
