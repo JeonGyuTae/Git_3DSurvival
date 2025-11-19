@@ -37,13 +37,25 @@ public class NodeSpawner : MonoBehaviour
         SpawnNow();
     }
 
+    public LayerMask groundMask = ~0;
+
     private void SpawnNow()
     {
         var entry = ChooseRandomEntry();
         if (entry == null || entry.nodePrefab == null)
             return;
 
-        _currentNode = Instantiate(entry.nodePrefab, transform.position, Quaternion.identity);
+        // 기본 스폰 위치 = 이 스폰포인트 위치
+        Vector3 spawnPos = transform.position;
+
+        // 위에서 아래로 레이캐스트 쏴서 바닥 찾기
+        Vector3 rayOrigin = spawnPos + Vector3.up * 5f;
+        if (Physics.Raycast(rayOrigin, Vector3.down, out RaycastHit hit, 100f, groundMask))
+        {
+            spawnPos = hit.point;
+        }
+
+        _currentNode = Instantiate(entry.nodePrefab, spawnPos, Quaternion.identity);
         _currentNode.transform.SetParent(transform);
         _timer = respawnDelay;
     }

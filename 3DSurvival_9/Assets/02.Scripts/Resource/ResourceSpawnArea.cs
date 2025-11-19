@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [Serializable]
 public class ResourceSpawnEntry
@@ -110,13 +111,35 @@ public class ResourceSpawnArea : MonoBehaviour
         return spawnEntries[spawnEntries.Count - 1];
     }
 
+
+    [Header("Ground")]
+    [Tooltip("자원이 올라앉을 바닥 레이어")]
+    public LayerMask groundMask = ~0;
     private Vector3 GetRandomPositionInArea()
     {
-        Vector3 c = transform.position;
+        // XZ는 기존 방식대로 랜덤
+        Vector3 center = transform.position;
+        float randX = Random.Range(-size.x / 2f, size.x / 2f);
+        float randZ = Random.Range(-size.z / 2f, size.z / 2f);
+
+        //대략적인 위치
+        Vector3 pos = new Vector3(
+            center.x + randX,
+            center.y + size.y / 2f + 5f,   // 박스 위 + 약간 위에서 쏘기
+            center.z + randZ
+        );
+
+        //위에서 아래로 레이캐스트 쏴서 바닥 찾기
+        if (Physics.Raycast(pos, Vector3.down, out RaycastHit hit, 100f, groundMask))
+        {
+            return hit.point;  // 바닥에 딱 붙이기
+        }
+
+        //바닥을 못 찾으면, 그냥 원래 높이로 반환
         return new Vector3(
-            c.x + UnityEngine.Random.Range(-size.x / 2f, size.x / 2f),
-            c.y,
-            c.z + UnityEngine.Random.Range(-size.z / 2f, size.z / 2f)
+            center.x + randX,
+            center.y,
+            center.z + randZ
         );
     }
 
