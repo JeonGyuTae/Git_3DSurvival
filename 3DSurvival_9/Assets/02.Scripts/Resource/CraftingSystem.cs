@@ -2,28 +2,34 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-/// 가공/제작 시스템의 뼈대임
-/// 지금은 구조만 잡아 두고, 실제 인벤토리 연동은 나중에 채워 넣으면 됨
+/// <summary>
+/// 가공/제작 시스템의 뼈대
+/// 실제 인벤토리에서 재료를 빼고, 결과 아이템을 넣는 부분은
+/// 인벤토리 담당과 협의하여 채워 넣기
+/// </summary>
 public class CraftingSystem : MonoBehaviour
 {
     [Header("Recipes")]
     public List<RecipeData> recipes = new List<RecipeData>();
 
-    public bool TryCraft(RecipeData recipe, Inventory inventory)
+    /// <summary>
+    /// 특정 레시피를 이용해 제작을 시도
+    /// 나중에 인벤토리 타입을 파라미터로 추가하면 된다.
+    /// 예: public bool TryCraft(RecipeData recipe, PlayerInventory inventory)
+    /// </summary>
+    public bool TryCraft(RecipeData recipe)
     {
-        if (recipe == null || inventory == null)
+        if (recipe == null)
         {
-            Debug.LogWarning("CraftingSystem: recipe 또는 inventory가 null");
+            Debug.LogWarning("CraftingSystem: recipe가 null");
             return false;
         }
 
-        // TODO:
-        // 1. inventory에 필요한 재료가 충분한지 확인
-        // 2. 재료 소모 후 output 아이템 AddItem
-        // 현재는 구조만 있는 상태
+        // 1. 인벤토리에 inputA / inputB가 충분한지 확인
+        // 2. 재료 소모
+        // 3. outputItem 지급
 
-        Debug.Log($"[CraftingSystem] {recipe.name} 제작 시도 (현재는 구조만 구현됨)");
+        Debug.Log($"[CraftingSystem] {recipe.name} 제작 시도 (인벤토리 연동 전)");
         return false;
     }
 }
-

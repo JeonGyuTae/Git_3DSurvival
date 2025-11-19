@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 88a82825a4dbfa543b7fd12b213737bd, type: 3}
+  m_Name: Recipe_Pickaxe
+  m_EditorClassIdentifier: 
+  inputA: {fileID: 11400000, guid: 2a91fe04d5a1aa841bf240856748f267, type: 2}
+  inputCountA: 2
+  inputB: {fileID: 11400000, guid: a1befcd42a1cc3e419f57db2fb531e12, type: 2}
+  inputCountB: 2
+  outputItem: {fileID: 11400000, guid: fc0082fdd67175e4ead4f4e97815f712, type: 2}
+  outputItemCount: 1

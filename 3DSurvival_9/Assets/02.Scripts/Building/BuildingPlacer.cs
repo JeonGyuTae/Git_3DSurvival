@@ -3,44 +3,71 @@
 public class BuildingPlacer : MonoBehaviour
 {
     [Header("Camera")]
-    [SerializeField] private Camera playerCamera;   // 비워두면 Update에서 Camera.main으로 자동 설정
+    [SerializeField] private Camera playerCamera;           // 비워두면 Camera.main 사용
 
     [Header("Preview Visual")]
-    [SerializeField] private Material validMaterial;    // 설치 가능일 때 색 (초록)
-    [SerializeField] private Material invalidMaterial;  // 설치 불가일 때 색 (빨강)
+    [SerializeField] private Material validMaterial;        // 설치 가능 (초록)
+    [SerializeField] private Material invalidMaterial;      // 설치 불가 (빨강)
 
     [Header("Raycast Settings")]
-    [SerializeField] private LayerMask placeMask;       // 땅, 설치 가능한 레이어들
+    [SerializeField] private LayerMask placeMask;           // Ground 등
+    [SerializeField] private float maxPlaceDistance = 6f;   // 설치 최대 거리
+
+    [Header("Inventory")]
+    [SerializeField] private PlayerInventory playerInventory; // 인벤토리 (비워둬도 자동 찾음)
 
     [Header("Rotation")]
-    [SerializeField] private float rotateStep = 15f;    // R 키 한 번 누를 때 회전 각도
+    [SerializeField] private float rotateStep = 15f;
+
+    // 현재 선택된 건물 옵션
+    private BuildingOption currentOption;
+
+    // 프리팹 관련
+    private GameObject buildingPrefab;
+    private GameObject previewPrefab;
+    private GameObject currentPreview;
+    private Renderer[] previewRenderers;
+
+    private bool isPlacing = false;
+    private bool canPlace = false;
+
     private float currentYRotation = 0f;
-    private float maxPlaceDistance = 8f;
     private Quaternion baseRotation = Quaternion.identity;
 
-    private GameObject buildingPrefab;      // 실제 설치될 프리팹
-    private GameObject previewPrefab;       // 프리뷰용 프리팹
-    private GameObject currentPreview;      // 현재 씬에 떠 있는 프리뷰 오브젝트
-    private Renderer[] previewRenderers;    // 프리뷰에 포함된 Renderer들
-
-    private bool isPlacing = false;         // 건축 모드 on/off
-    private bool canPlace = false;          // 현재 위치에 설치 가능한지 여부
+    // ──────────────────────────────────────────────
+    // PlayerInventory 자동 찾기
+    // ──────────────────────────────────────────────
+    private void TryGetInventory()
+    {
+        if (playerInventory == null)
+        {
+            playerInventory = FindObjectOfType<PlayerInventory>();
+            if (playerInventory != null)
+            {
+                Debug.Log("BuildingPlacer: PlayerInventory 자동 연결됨.");
+            }
+        }
+    }
 
     /// <summary>
-    /// UI에서 건축 버튼을 클릭했을 때 호출.
+    /// UI에서 건축 버튼을 눌렀을 때 호출.
     /// </summary>
-    public void StartPlacing(GameObject build, GameObject preview)
+    public void StartPlacing(BuildingOption option)
     {
-        buildingPrefab = build;
-        previewPrefab = preview;
+        if (option == null)
+            return;
+
+        currentOption = option;
+        buildingPrefab = option.prefab;
+        previewPrefab = option.previewPrefab;
 
         if (buildingPrefab == null || previewPrefab == null)
         {
-            Debug.LogWarning("BuildingPlacer: buildingPrefab 또는 previewPrefab 이 비었습니다.");
+            Debug.LogWarning("BuildingPlacer: prefab 또는 previewPrefab 이 비어 있습니다.");
             return;
         }
 
-        // 기존 프리뷰가 남아있다면 정리
+        // 기존 프리뷰 정리
         if (currentPreview != null)
         {
             Destroy(currentPreview);
@@ -52,7 +79,7 @@ public class BuildingPlacer : MonoBehaviour
         currentPreview = Instantiate(previewPrefab);
         previewRenderers = currentPreview.GetComponentsInChildren<Renderer>();
 
-        // 혹시 남아 있을지 모르는 물리/콜라이더는 안전하게 비활성화
+        // 프리뷰는 물리/콜라이더 꺼두기
         foreach (var rb in currentPreview.GetComponentsInChildren<Rigidbody>())
         {
             rb.isKinematic = true;
@@ -61,10 +88,9 @@ public class BuildingPlacer : MonoBehaviour
 
         foreach (var col in currentPreview.GetComponentsInChildren<Collider>())
         {
-            col.enabled = false;   // 프리뷰는 충돌 X
+            col.enabled = false;
         }
 
-        // 회전값 초기화
         currentYRotation = 0f;
         baseRotation = currentPreview.transform.rotation;
         ApplyRotation();
@@ -74,11 +100,15 @@ public class BuildingPlacer : MonoBehaviour
     }
 
     /// <summary>
-    /// 건축 모드 강제 종료(프리뷰 삭제).
+    /// 건축 모드 종료 (프리뷰 삭제)
     /// </summary>
     public void CancelPlacing()
     {
         isPlacing = false;
+        currentOption = null;
+        buildingPrefab = null;
+        previewPrefab = null;
+
         if (currentPreview != null)
         {
             Destroy(currentPreview);
@@ -88,33 +118,25 @@ public class BuildingPlacer : MonoBehaviour
 
     private void Update()
     {
+        // 먼저 인벤토리 자동 연결 시도
+        TryGetInventory();
+
         if (!isPlacing)
             return;
 
-        // 1. 카메라가 아직 설정되지 않았다면 계속 MainCamera를 찾는다.
+        // 카메라 자동 할당
         if (playerCamera == null)
         {
             playerCamera = Camera.main;
             if (playerCamera == null)
-            {
-                // 아직 Player가 스폰되지 않았으면 그냥 대기
                 return;
-            }
         }
 
-        // 2. 프리뷰 위치/색 업데이트
         UpdatePreviewPosition();
-
-        // 3. 회전 처리 (R 키)
         HandleRotationInput();
-
-        // 4. 설치 / 취소 입력 처리
         HandlePlaceInput();
     }
 
-    /// <summary>
-    /// 화면 중앙(조준점)에서 레이 쏴서 프리뷰 위치 업데이트.
-    /// </summary>
     private void UpdatePreviewPosition()
     {
         if (currentPreview == null)
@@ -123,23 +145,29 @@ public class BuildingPlacer : MonoBehaviour
         Vector3 screenCenter = new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
         Ray ray = playerCamera.ScreenPointToRay(screenCenter);
 
+        bool groundOk = false;
+
         if (Physics.Raycast(ray, out RaycastHit hit, maxPlaceDistance, placeMask))
         {
             currentPreview.transform.position = hit.point;
-            canPlace = true;
+
+            // 경사 각도 체크 (너무 가파르면 설치 불가)
+            float angle = Vector3.Angle(hit.normal, Vector3.up);
+            const float maxSlope = 50f;
+            groundOk = angle <= maxSlope;
         }
         else
         {
-            // 땅을 못 맞추면 설치 불가 상태로만 표시
-            canPlace = false;
+            groundOk = false;
         }
 
+        // 재료 조건 체크
+        bool resourceOk = HasRequiredResources();
+
+        canPlace = groundOk && resourceOk;
         UpdatePreviewColor();
     }
 
-    /// <summary>
-    /// R 키 입력으로 Y축 회전.
-    /// </summary>
     private void HandleRotationInput()
     {
         if (currentPreview == null)
@@ -161,39 +189,40 @@ public class BuildingPlacer : MonoBehaviour
             baseRotation * Quaternion.Euler(0f, currentYRotation, 0f);
     }
 
-    /// <summary>
-    /// 좌클릭으로 설치, ESC로 취소.
-    /// </summary>
     private void HandlePlaceInput()
     {
-        // 설치 취소
+        // ESC로 취소
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             CancelPlacing();
             return;
         }
 
-        // 설치 시도 (좌클릭)
+        // 좌클릭으로 설치 시도
         if (Input.GetMouseButtonDown(0))
         {
             if (!canPlace || currentPreview == null || buildingPrefab == null)
                 return;
 
-            // 실제 건물 설치
+            // 혹시 중간에 인벤에서 버렸을 수도 있으니 한 번 더 체크
+            if (!HasRequiredResources())
+            {
+                Debug.Log("건축 실패: 재료가 부족합니다.");
+                return;
+            }
+
+            // 실제 건물 설치 (※ 지금은 재료를 차감하지는 않음)
             Instantiate(
                 buildingPrefab,
                 currentPreview.transform.position,
                 currentPreview.transform.rotation
             );
 
-            // 한 번 설치 후 건축 모드 종료 (원하면 유지해도 됨)
+            // 한 번 설치 후 배치 모드 종료
             CancelPlacing();
         }
     }
 
-    /// <summary>
-    /// 설치 가능/불가에 따라 프리뷰 색 변경.
-    /// </summary>
     private void UpdatePreviewColor()
     {
         if (previewRenderers == null)
@@ -203,8 +232,43 @@ public class BuildingPlacer : MonoBehaviour
 
         foreach (var rend in previewRenderers)
         {
-            // 프리뷰 전용이라 sharedMaterial 사용해도 OK
             rend.sharedMaterial = targetMat;
         }
+    }
+
+    private bool HasRequiredResources()
+    {
+        if (playerInventory == null || currentOption == null ||
+            currentOption.cost == null || currentOption.cost.Length == 0)
+            return true;
+
+        var slots = playerInventory.slots;
+        if (slots == null) return true;
+
+        foreach (var c in currentOption.cost)
+        {
+            if (c == null || string.IsNullOrEmpty(c.resourceName) || c.amount <= 0)
+                continue;
+
+            int total = 0;
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                var data = slots[i].itemdata;
+                if (data == null) continue;
+
+                if (data.itemname == c.resourceName)
+                {
+                    total += slots[i].quantity;
+                }
+            }
+
+            // 하나라도 부족하면 실패
+            if (total < c.amount)
+                return false;
+        }
+
+        // 모든 재료가 충분
+        return true;
     }
 }

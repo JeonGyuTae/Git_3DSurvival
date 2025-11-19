@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &8436014739943472614
+--- !u!1 &4486065454854541678
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3538290534347128444}
-  - component: {fileID: 4116114353157609933}
+  - component: {fileID: 6314991281128738468}
+  - component: {fileID: 3046940711855077028}
   m_Layer: 7
-  m_Name: Pf_SpawnArea_Rock
+  m_Name: Pf_SpawnNodePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3538290534347128444
+--- !u!4 &6314991281128738468
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8436014739943472614}
+  m_GameObject: {fileID: 4486065454854541678}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -32,30 +32,26 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4116114353157609933
+--- !u!114 &3046940711855077028
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8436014739943472614}
+  m_GameObject: {fileID: 4486065454854541678}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5408ee52e7ec9641a7b6a68cfe21cc7, type: 3}
+  m_Script: {fileID: 11500000, guid: ecf32c7b8fbadce4c86a48eb6f41d1ae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: {x: 40, y: 1, z: 40}
   spawnEntries:
-  - resourceData: {fileID: 11400000, guid: 8099927271e3815488c87974c09ebbbd, type: 2}
-    resourcePrefab: {fileID: 6992045614693076487, guid: 7b4c3e0277428004e817ce04ec020f30,
+  - nodePrefab: {fileID: 6091938890221920170, guid: 8a42e54c51150d24c8e91838b7a51906,
       type: 3}
-    weight: 1
-  - resourceData: {fileID: 11400000, guid: 0d6f826eb8b0aa04cacc6d0e1bed9d92, type: 2}
-    resourcePrefab: {fileID: 6992045614693076487, guid: e38c8209581e48e459d75462f1e569c7,
+    weight: 0
+  - nodePrefab: {fileID: 977515659621658839, guid: fc72636e5272cc74ca35274b1c75d0c7,
       type: 3}
-    weight: 0.5
-  maxResourceCount: 10
-  checkIntervalSeconds: 5
+    weight: 0
+  respawnDelay: 5
   groundMask:
     serializedVersion: 2
     m_Bits: 4294967295

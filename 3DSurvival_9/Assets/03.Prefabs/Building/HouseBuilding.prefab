@@ -321,30 +321,38 @@ MonoBehaviour:
       type: 3}
     previewPrefab: {fileID: 7119815056854855301, guid: ded1ec9201c170744b2543a83cc85220,
       type: 3}
+    cost:
+    - resourceName: "\uD1B5\uB098\uBB34"
+      amount: 1
   - displayName: Log
     prefab: {fileID: 6823843196374119689, guid: 2c5c884cd59277c499ac6284e4dff75b,
       type: 3}
     previewPrefab: {fileID: 5622715027250817889, guid: ff71ad5d0e3e02c41a8c30b9d6505b66,
       type: 3}
+    cost: []
   - displayName: Chair
     prefab: {fileID: 2279265566618578994, guid: 044ca09a52fa66a4d8e5025d4e5db2aa,
       type: 3}
     previewPrefab: {fileID: 8169288530684990426, guid: 2add6c204805e85499016540121394a2,
       type: 3}
+    cost: []
   - displayName: Fence
     prefab: {fileID: 1025681519537117646, guid: aa99a810914c5b84b9bc5d51f95dd05c,
       type: 3}
     previewPrefab: {fileID: 2124423304353431322, guid: adbed8dbe83c4784f8a4299db221120a,
       type: 3}
+    cost: []
   - displayName: CampFire
     prefab: {fileID: 501295248943222296, guid: d6a5e2c4aefa6804b8f7d2af9a9676b5, type: 3}
     previewPrefab: {fileID: 1344937545588530064, guid: e113f6dc8ec1ec44f86ba379012f53c9,
       type: 3}
+    cost: []
   - displayName: Stairs
     prefab: {fileID: 4885501389981479253, guid: fc4f044bf67d473479d756437dcdad85,
       type: 3}
     previewPrefab: {fileID: 9205689054176204165, guid: 3ec615242d1cc7c4185469f1282312c7,
       type: 3}
+    cost: []
 --- !u!114 &1885512527094644112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,6 +371,8 @@ MonoBehaviour:
   placeMask:
     serializedVersion: 2
     m_Bits: 0
+  maxPlaceDistance: 6
+  playerInventory: {fileID: 0}
   rotateStep: 15
 --- !u!1 &1841716487108657678
 GameObject:
@@ -1208,7 +1218,9 @@ MonoBehaviour:
   invalidMaterial: {fileID: 2100000, guid: 595e1d3e068c2764eaad58b68156dd4f, type: 2}
   placeMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128
+  maxPlaceDistance: 6
+  playerInventory: {fileID: 0}
   rotateStep: 15
 --- !u!1 &5397545620979260618
 GameObject:

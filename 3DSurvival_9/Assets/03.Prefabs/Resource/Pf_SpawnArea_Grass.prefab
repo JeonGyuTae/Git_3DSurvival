@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3538290534347128444}
   - component: {fileID: 4116114353157609933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Pf_SpawnArea_Grass
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -56,3 +56,6 @@ MonoBehaviour:
     weight: 1
   maxResourceCount: 10
   checkIntervalSeconds: 5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295

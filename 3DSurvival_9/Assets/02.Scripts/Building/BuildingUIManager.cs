@@ -1,42 +1,77 @@
 using UnityEngine;
 
+#region Data classes
+
+[System.Serializable]
+public class BuildingCost
+{
+    public string resourceName;
+    public int amount = 1;
+}
+
 [System.Serializable]
 public class BuildingOption
 {
-    public string displayName;      // UI에서 구분용 이름 (안 써도 됨)
-    public GameObject prefab;       // 실제 건물 프리팹
-    public GameObject previewPrefab; // 프리뷰 프리팹
+    public string displayName;        // UI 표시용 이름
+    public GameObject prefab;         // 실제 설치될 프리팹
+    public GameObject previewPrefab;  // 프리뷰 프리팹
+
+    public BuildingCost[] cost;       // 이 건물에 필요한 재료들
 }
+
+#endregion
 
 public class BuildingUIManager : MonoBehaviour
 {
     [Header("Refs")]
-    public GameObject buildUI;             // Canvas (BuildUI)
-    public BuildingPlacer buildingPlacer;  // BuildingSystem에 붙은 스크립트
+    [SerializeField] private GameObject buildUI;
+    [SerializeField] private BuildingPlacer buildingPlacer;
 
     [Header("Building List")]
-    public BuildingOption[] buildingOptions; // 건축 옵션들 (최대 5개 넣으면 됨)
+    public BuildingOption[] buildingOptions;
 
-    void Start()
+    private bool isOpen = false;
+
+    private void Start()
     {
-        if (buildUI != null)
-            buildUI.SetActive(false);
-
-        // 평소엔 조준점 모드
-        SetCursorLocked(true);
+        SetUI(false);
     }
 
-    void Update()
+    private void Update()
     {
-        // Tab 키로 건축 UI 열기/닫기
         if (Input.GetKeyDown(KeyCode.T))
         {
             ToggleUI();
         }
     }
 
-    // 커서 잠금/해제
-    void SetCursorLocked(bool locked)
+    public void ToggleUI()
+    {
+        SetUI(!isOpen);
+    }
+
+    private void SetUI(bool open)
+    {
+        isOpen = open;
+
+        if (buildUI != null)
+            buildUI.SetActive(open);
+
+        if (open)
+        {
+            if (buildingPlacer != null)
+                buildingPlacer.CancelPlacing();
+
+            SetCursorLocked(false);
+        }
+        else
+        {
+
+            SetCursorLocked(true);
+        }
+    }
+
+    private void SetCursorLocked(bool locked)
     {
         if (locked)
         {
@@ -50,29 +85,6 @@ public class BuildingUIManager : MonoBehaviour
         }
     }
 
-    public void ToggleUI()
-    {
-        if (buildUI == null) return;
-
-        bool open = !buildUI.activeSelf;
-        buildUI.SetActive(open);
-
-        if (open)
-        {
-            // UI 열릴 때: 배치 모드 종료 + 마우스 보이게
-            if (buildingPlacer != null)
-                buildingPlacer.CancelPlacing();
-
-            SetCursorLocked(false);
-        }
-        else
-        {
-            // UI 닫으면 다시 조준점 모드
-            SetCursorLocked(true);
-        }
-    }
-
-    // 버튼에서 index를 넘겨서 호출할 함수
     public void SelectBuilding(int index)
     {
         if (buildingOptions == null || index < 0 || index >= buildingOptions.Length)
@@ -91,13 +103,9 @@ public class BuildingUIManager : MonoBehaviour
 
         Debug.Log("SelectBuilding: " + opt.displayName);
 
-        // UI 닫고 조준점 모드로 전환
-        if (buildUI != null)
-            buildUI.SetActive(false);
-
-        SetCursorLocked(true);
+        SetUI(false);
 
         if (buildingPlacer != null)
-            buildingPlacer.StartPlacing(opt.prefab, opt.previewPrefab);
+            buildingPlacer.StartPlacing(opt);
     }
 }

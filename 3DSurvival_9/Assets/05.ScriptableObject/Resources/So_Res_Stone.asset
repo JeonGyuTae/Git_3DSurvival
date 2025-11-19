@@ -17,3 +17,4 @@ MonoBehaviour:
   icon: {fileID: 0}
   maxStack: 99
   respawnSeconds: 600
+  itemData: {fileID: 11400000, guid: a1befcd42a1cc3e419f57db2fb531e12, type: 2}
