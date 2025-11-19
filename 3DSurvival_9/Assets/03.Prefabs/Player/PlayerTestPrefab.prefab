@@ -2374,7 +2374,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "[E]\uD0A4\uB97C \uB20C\uB7EC \uC2B5\uB4DD"
+  m_text: '[E]'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: afd34bd980d0fdf408706af639634c54, type: 2}
   m_sharedMaterial: {fileID: 7885643137857018272, guid: afd34bd980d0fdf408706af639634c54,

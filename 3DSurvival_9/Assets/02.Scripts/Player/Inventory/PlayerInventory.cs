@@ -210,6 +210,9 @@ public class PlayerInventory : MonoBehaviour
         UpdateUI();
     }
 
+    /// <summary>
+    /// 회복(사용) 아이템 메서드
+    /// </summary>
     public void OnUseItem()
     {
         if (selectedItem == null)
