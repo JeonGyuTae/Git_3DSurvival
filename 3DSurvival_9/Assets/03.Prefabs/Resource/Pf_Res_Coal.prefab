@@ -153,7 +153,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resourceData: {fileID: 11400000, guid: 0d6f826eb8b0aa04cacc6d0e1bed9d92, type: 2}
   amount: 1
-  inventoryBehaviour: {fileID: 0}
 --- !u!1001 &2813192745889111143
 PrefabInstance:
   m_ObjectHideFlags: 0

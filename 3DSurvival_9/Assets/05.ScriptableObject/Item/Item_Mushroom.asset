@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemname: "\uBC84\uC12F"
   type: 1
-  icon: {fileID: 21300000, guid: 67babe36cee4c7f46a9a858d72f35b5a, type: 3}
+  icon: {fileID: 21300000, guid: 6d1d7aa1e3263614688080b27c35dade, type: 3}
   dropPrefab: {fileID: 385491262653265843, guid: 073bbcbb44363734db231bb816eacc5f,
     type: 3}
   canStack: 1
