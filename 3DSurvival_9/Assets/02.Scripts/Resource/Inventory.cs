@@ -5,9 +5,11 @@ using UnityEngine;
 public interface Inventory
 {
     /// <summary>
-    /// �ڿ� �������� �κ��丮�� �߰�.
-    /// ���� ������ �κ��丮 ����� �Ѵ�.
+    /// 자원을 인벤토리에 추가.
+    /// 필요한 조건을 검사한 후 인벤토리에 넣는다.
     /// </summary>
-    /// <returns>�����ϸ� true, ����(���� �� ��)�� false</returns>
+    /// <returns>
+    /// 성공하면 true, 실패(공간이 부족할 때 등)하면 false
+    /// </returns>
     bool AddItem(ResourceData data, int amount);
 }

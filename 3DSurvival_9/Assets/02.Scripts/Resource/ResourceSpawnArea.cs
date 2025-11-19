@@ -10,10 +10,15 @@ public class ResourceSpawnEntry
     public float weight = 1f;           // 랜덤 비율
 }
 
-/// <summary>
+///
 /// 이 컴포넌트를 가진 오브젝트를 '스폰존 프리팹'으로 만들고
-/// 맵에 배치하면 size 박스 영역 안에서 자원들이 랜덤 위치로 스폰된다.
-/// </summary>
+/// 맵에 배치하면 size 박스 영역 안에서 자원들이 랜덤 위치로 스폰된다
+///
+/// - 씬 처음 시작할 때:
+///   → maxResourceCount까지 꽉 채워서 초기 스폰
+/// - 이후:
+///   → 자원이 줄어들면 checkIntervalSeconds마다 1개씩 랜덤 위치로 리스폰
+///   
 public class ResourceSpawnArea : MonoBehaviour
 {
     [Header("Area Size")]
@@ -28,25 +33,49 @@ public class ResourceSpawnArea : MonoBehaviour
 
     private float _timer;
 
+    private void Start()
+    {
+        // 처음 씬에 들어왔을 때, 영역 안을 maxResourceCount까지 꽉 채운다.
+        int current = CountCurrentResources();
+        int toSpawn = Mathf.Max(0, maxResourceCount - current);
+
+        for (int i = 0; i < toSpawn; i++)
+        {
+            SpawnOne();
+        }
+
+        _timer = checkIntervalSeconds;
+    }
+
     private void Update()
     {
+        // 이후에는 일정 주기마다 개수를 체크해서 부족하면 1개씩 리스폰
         _timer -= Time.deltaTime;
         if (_timer > 0f) return;
 
         _timer = checkIntervalSeconds;
 
-        // 현재 자식 오브젝트 중 active인 개수 세기
-        int current = 0;
-        foreach (Transform child in transform)
-        {
-            if (child.gameObject.activeInHierarchy)
-                current++;
-        }
-
+        int current = CountCurrentResources();
         if (current >= maxResourceCount)
             return;
 
+        // 개수가 부족하면 1개씩 천천히 채운다.
         SpawnOne();
+    }
+
+    /// 
+    /// 현재 스폰존 안에 살아있는 자원 개수 세기
+    /// (자식 오브젝트 기준)
+    /// 
+    private int CountCurrentResources()
+    {
+        int count = 0;
+        foreach (Transform child in transform)
+        {
+            if (child.gameObject.activeInHierarchy)
+                count++;
+        }
+        return count;
     }
 
     private void SpawnOne()

@@ -9,13 +9,13 @@ using UnityEngine;
 public class RecipeData : ScriptableObject
 {
     [Header("Inputs")]
-    public ResourceData inputA;
+    public ItemData inputA;
     public int inputCountA = 1;
 
-    public ResourceData inputB;
+    public ItemData inputB;
     public int inputCountB = 0;
 
     [Header("Output")]
-    public ResourceData output;
-    public int outputCount = 1;
+    public ItemData outputItem;      // µµ³¢, °î±ªÀÌ, °¡°ø ÀÚ¿ø µî
+    public int outputItemCount = 1;  // º¸Åë 1
 }

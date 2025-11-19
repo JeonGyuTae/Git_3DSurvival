@@ -9,10 +9,8 @@ using UnityEngine;
 public class ResourceData : ScriptableObject
 {
     [Header("Info")]
-    public string id;
-    public string displayName;
-
-    [Header("UI")]
+    public string id;              // "branch" 등
+    public string displayName;     // "나뭇가지"
     public Sprite icon;
 
     [Header("Stack")]
@@ -20,5 +18,9 @@ public class ResourceData : ScriptableObject
 
     [Header("Spawn")]
     [Tooltip("이 자원이 다시 스폰되기까지 걸리는 시간(초)")]
-    public float respawnSeconds = 600f;   // 10초
+    public float respawnSeconds = 600f;
+
+    [Header("Inventory Link")]
+    [Tooltip("이 자원을 주웠을 때 인벤토리에 들어갈 ItemData")]
+    public ItemData itemData;      
 }

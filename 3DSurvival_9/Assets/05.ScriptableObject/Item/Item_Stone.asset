@@ -9,12 +9,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 64afdb0e80909214cb447e35a86b04ba, type: 3}
-  m_Name: So_Res_Grass
+  m_Script: {fileID: 11500000, guid: 55ce5a4e7aee519468516b04c0450725, type: 3}
+  m_Name: Item_Stone
   m_EditorClassIdentifier: 
-  id: grass
-  displayName: "\uD480"
+  itemname: 
+  type: 0
   icon: {fileID: 0}
-  maxStack: 99
-  respawnSeconds: 400
-  itemData: {fileID: 11400000, guid: 3ce1a809dc17e60499b42472add8c633, type: 2}
+  dropPrefab: {fileID: 0}
+  canStack: 0
+  maxStack: 0
+  consumables: []
+  equipPrefab: {fileID: 0}
