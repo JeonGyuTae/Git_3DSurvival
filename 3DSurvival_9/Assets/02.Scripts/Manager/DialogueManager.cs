@@ -23,6 +23,13 @@ public class DialogueManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Start()
+    {
+        Player player = PlayerManager.Instance.Player;
+        if (player != null)
+            playerTransform = player.transform;
+    }
+
     // 대화 시작
     public void StartDialogue(NPCData data, Transform npcTransform)
     {
