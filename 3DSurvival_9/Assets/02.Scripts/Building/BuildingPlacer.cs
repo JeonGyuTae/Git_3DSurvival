@@ -15,7 +15,7 @@ public class BuildingPlacer : MonoBehaviour
     [Header("Rotation")]
     [SerializeField] private float rotateStep = 15f;    // R 키 한 번 누를 때 회전 각도
     private float currentYRotation = 0f;
-    private float maxPlaceDistance = 5f;
+    private float maxPlaceDistance = 8f;
     private Quaternion baseRotation = Quaternion.identity;
 
     private GameObject buildingPrefab;      // 실제 설치될 프리팹
