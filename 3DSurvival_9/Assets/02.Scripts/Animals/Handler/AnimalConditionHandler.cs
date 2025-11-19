@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class AnimalConditionHandler : MonoBehaviour
 {
@@ -8,10 +9,12 @@ public class AnimalConditionHandler : MonoBehaviour
     public float Health {  get { return health; } }
 
     private Animal animal;
+    private AIController controller;
 
     private void Start()
     {
         animal = GetComponent<Animal>();
+        controller = GetComponent<AIController>();
     }
 
     public void SetHealth(float health)
@@ -22,24 +25,5 @@ public class AnimalConditionHandler : MonoBehaviour
     public void TakeDamage(int damage)
     {
         health -= damage;
-        CheckHealth();
-    }
-
-    private void CheckHealth()
-    {
-        if (health <= 0)
-            Die();
-    }
-
-    public void Die()
-    {
-        Debug.Log("주금");
-
-
-        // AnimalSpawnManager에게 자신이 죽었음을 알림
-        string key = animal.Data.animalName;
-        GameObject obj = this.gameObject;
-
-        AnimalSpawnManager.Instance.Release(key, obj);
     }
 }
