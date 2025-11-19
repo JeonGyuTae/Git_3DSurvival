@@ -5,46 +5,36 @@
 /// 팀 공통 E키 상호작용 시스템에서 Interact()를 호출해 주면
 /// 해당 NPC와 대화가 가능하다.
 /// </summary>
-public class NPCBehaviour : MonoBehaviour
+public class NPCBehaviour : MonoBehaviour, IInteractable
 {
     public NPCData npcData;
 
-    // Player가 상호작용할 때 호출하는 함수
-    public NPCData GetNPCData()
+    // IInteractable 인터페이스 구현
+
+    public InteractableType GetInteractableType()
     {
-        return npcData;
+        return InteractableType.NPC; // 이 오브젝트는 NPC임
+    }
+
+    public string GetInteractPrompt()
+    {
+        return npcData.displayName; // NPC 이름
+    }
+
+    public void ShowInteractUI()
+    {
+
+    }
+
+    public void HideInteractUI()
+    {
+
+    }
+
+    public void OnInteract()
+    {
+        // NPC와 상호작용 시 대화 시작
+        DialogueManager.Instance.StartDialogue(npcData, transform);
+        Debug.Log("상호작용 시도됨");
     }
 }
-
-/*   상호작용 키를 직접 받는 버전
-public class NPCBehaviour : MonoBehaviour
-{
-    public NPCData npcData;     // ScriptableObject 데이터 연결
-    private bool isPlayerNearby;
-
-    void Update()
-    {
-        if (isPlayerNearby && Input.GetKeyDown(KeyCode.E))
-        {
-            Interact();
-        }
-    }
-
-    private void Interact()
-    {
-        DialogueManager.Instance.StartDialogue(npcData);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-            isPlayerNearby = true;
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.CompareTag("Player"))
-            isPlayerNearby = false;
-    }
-}
- */
