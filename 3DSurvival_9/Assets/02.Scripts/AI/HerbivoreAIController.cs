@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem.XR;
 using static UnityEngine.LightAnchor;
 
 /// <summary>
@@ -16,7 +17,6 @@ using static UnityEngine.LightAnchor;
 public class HerbivoreAIController : AIController
 {
     private bool isMovingToTarget = false; // 플래그 설정
-    private AnimalAnimationHandler animationHandler;
 
     private Vector3 hitPosition;
     private const float OFFSET_RUN_ANGLE = 5.0f;
@@ -24,23 +24,17 @@ public class HerbivoreAIController : AIController
     [SerializeField] private bool isHit = false;
     public bool IsHit { get { return isHit; } set { isHit = value; } }
 
-    private AnimalConditionHandler conditionHandler;
-    private SkinnedMeshRenderer skinnedMeshRenderer;
-    private Rigidbody _rigidbody;
-
     private Coroutine damageEffectCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
-        animationHandler = GetComponent<AnimalAnimationHandler>();
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-        conditionHandler = GetComponent<AnimalConditionHandler>();
-        _rigidbody = GetComponent<Rigidbody>();
     }
 
     protected override void Start()
     {
+        base.Start();
+
         // BehaviorTree 설정
         SetBehavior();
 
@@ -58,14 +52,20 @@ public class HerbivoreAIController : AIController
         Action hit = new Action("Hit", Hit);
         Action setRunTargetPosition = new Action("Set Run Position", SetRunTargetPosition);
 
+        ConditionNode isDead = new ConditionNode("IsDead", IsDead);
+        Action dead = new Action("Dead", Dead);
+
         // Sequence Patrol 생성
         Sequence patrol = new Sequence("Patrol Around", setPatrolTargetPosition, moveToTarget);
 
         // Sequence RunAway 생성
         Sequence runAway = new Sequence("RunAway", checkDamage, hit, setRunTargetPosition, moveToTarget);
 
+        // Sequence Dead 생성
+        Sequence checkDead = new Sequence("Check Dead", isDead, dead);
+
         // Selector Root 생성
-        Selector root = new Selector("Chicken Root", runAway, patrol);
+        Selector root = new Selector("Chicken Root", checkDead, runAway, patrol);
 
         tree = new BehaviorTree(root);
     }
@@ -190,6 +190,7 @@ public class HerbivoreAIController : AIController
 
     #endregion
 
+
     private bool CheckTargetPositionOnNavMesh(Vector3 sourcePosition, float maxDistance, int areaMask)
     {
         if(NavMesh.SamplePosition(sourcePosition, out NavMeshHit hit, maxDistance, areaMask))
@@ -198,7 +199,7 @@ public class HerbivoreAIController : AIController
             Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
 
             agent.SetDestination(targetDestination);
-            agent.isStopped = false;
+            SetAgentStop(false);
 
             isMovingToTarget = true; // 플래그 설정
 
@@ -226,7 +227,7 @@ public class HerbivoreAIController : AIController
         float desiredState = (velocity.sqrMagnitude > Mathf.Epsilon) ? 1f : 0f;
 
         // 애니메이션 적용
-        animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
+        animal.AnimationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
     public override void OnHit(Vector3 hitPosition)
@@ -234,18 +235,18 @@ public class HerbivoreAIController : AIController
         this.hitPosition = hitPosition;
         isHit = true;
 
-        conditionHandler.TakeDamage(30);
+        animal.ConditionHandler.TakeDamage(30);
     }
 
     public void OnTakeDamage(int damage)
     {
         isHit = true;
-        conditionHandler.TakeDamage(damage);
+        animal.ConditionHandler.TakeDamage(damage);
     }
 
     private void ResetSetting()
     {
-        agent.isStopped = true;
+        SetAgentStop(true);
         targetDestination = Vector3.zero;
         isMovingToTarget = false;
         isHit = false;
@@ -263,14 +264,14 @@ public class HerbivoreAIController : AIController
 
     private IEnumerator DamageEffect()
     {
-        Material mat = skinnedMeshRenderer.material;
+        Material mat = animal.SkinnedMeshRenderer.material;
         mat.color = Color.red;
 
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
 
         yield return new WaitForSeconds(0.5f);
 
         mat.color = Color.white;
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
     }
 }

@@ -11,20 +11,43 @@ public class Animal : MonoBehaviour, IInteractable
     [SerializeField] private AnimalData data;
 
     private AIController controller;
+
+    [Header("Compnent")]
+    private Rigidbody _rigidbody;
     private AnimalConditionHandler conditionHandler;
+    private AnimalAnimationHandler animationHandler;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
+    private ParticleSystem fx_dead;
 
     private void Awake()
     {
-        controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
-        conditionHandler = GetComponent<AnimalConditionHandler>();
+        _rigidbody = GetComponent<Rigidbody>();
+        animationHandler = GetComponent<AnimalAnimationHandler>();
+        conditionHandler = GetComponent<AnimalConditionHandler>();;
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
 
+        controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
+
+        fx_dead = GetComponentInChildren<ParticleSystem>();
+    }
+
+    private void OnEnable()
+    {
         Init();
+    }
+
+    private void OnDisable()
+    {
+        
     }
 
     private void Init()
     {
         // 체력 설정
         conditionHandler.SetHealth(data.maxHp);
+
+        // SkinnedMeshRenderer 설정
+        skinnedMeshRenderer.enabled = true;
     }
 
     public InteractableType GetInteractableType()
@@ -59,6 +82,11 @@ public class Animal : MonoBehaviour, IInteractable
     #region 프로퍼티
 
     public AnimalData Data { get { return data; } }
+    public AnimalAnimationHandler AnimationHandler { get { return animationHandler; } }
+    public AnimalConditionHandler ConditionHandler { get { return conditionHandler; } }
+    public Rigidbody Rb { get { return _rigidbody; } } 
+    public SkinnedMeshRenderer SkinnedMeshRenderer { get { return skinnedMeshRenderer; }}
+    public ParticleSystem FX_Dead { get { return fx_dead; } }
 
     #endregion
 }

@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 6314991281128738468}
   - component: {fileID: 3046940711855077028}
-  m_Layer: 0
-  m_Name: Pf_NodeSpawnPoint
+  m_Layer: 7
+  m_Name: Pf_SpawnNodePoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,10 +45,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnEntries:
-  - nodePrefab: {fileID: 977515659621658839, guid: fc72636e5272cc74ca35274b1c75d0c7,
-      type: 3}
-    weight: 0
   - nodePrefab: {fileID: 6091938890221920170, guid: 8a42e54c51150d24c8e91838b7a51906,
       type: 3}
     weight: 0
-  respawnDelay: 90
+  - nodePrefab: {fileID: 977515659621658839, guid: fc72636e5272cc74ca35274b1c75d0c7,
+      type: 3}
+    weight: 0
+  respawnDelay: 5
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 4294967295

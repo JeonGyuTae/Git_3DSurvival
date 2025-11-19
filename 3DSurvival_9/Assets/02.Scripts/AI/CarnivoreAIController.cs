@@ -20,7 +20,6 @@ public class CarnivoreAIController : AIController
     private float playerDistance;
 
     private bool isMovingToTarget = false; // 플래그 설정
-    private AnimalAnimationHandler animationHandler;
 
     private Vector3 hitPosition;
 
@@ -31,10 +30,6 @@ public class CarnivoreAIController : AIController
     private bool isAttack = false;
     private bool isRunMode = false;
 
-    private AnimalConditionHandler conditionHandler;
-    private SkinnedMeshRenderer skinnedMeshRenderer;
-    private Rigidbody _rigidbody;
-
     private Coroutine damageEffectCoroutine;
 
     private Player player;
@@ -42,10 +37,6 @@ public class CarnivoreAIController : AIController
     protected override void Awake()
     {
         base.Awake();
-        animationHandler = GetComponent<AnimalAnimationHandler>();
-        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
-        _rigidbody = GetComponent<Rigidbody>();
-        conditionHandler = GetComponent<AnimalConditionHandler>();
     }
 
     protected override void Start()
@@ -62,6 +53,10 @@ public class CarnivoreAIController : AIController
 
     protected override void SetBehavior()
     {
+        // Dead
+        ConditionNode isDead = new ConditionNode("IsDead", IsDead);
+        Action dead = new Action("Dead", Dead);
+
         // 순회
         Action moveToTarget = new Action("Move Next Position", MoveToTarget);
         Action setPatrolTargetPosition = new Action("Decision Next Position", SetPatrolTargetPosition);
@@ -88,8 +83,11 @@ public class CarnivoreAIController : AIController
         Selector attackMode = new Selector("Attack Mode", runAway, attackSequence);
         Sequence findMode = new Sequence("Find Mode", findPlayer, attackMode);
 
+        // Sequence Dead 생성
+        Sequence checkDead = new Sequence("Check Dead", isDead, dead);
+
         // Selector Root 생성
-        Selector root = new Selector("Root", findMode, patrolMode);
+        Selector root = new Selector("Root", checkDead, findMode, patrolMode);
 
         tree = new BehaviorTree(root);
     }
@@ -129,7 +127,7 @@ public class CarnivoreAIController : AIController
         SetSpeed(runSpeed);
 
         // 플레이어 
-        agent.isStopped = false;
+        SetAgentStop(false);
         NavMeshPath path = new NavMeshPath();
         if (agent.CalculatePath(player.transform.position, path))
         {
@@ -300,7 +298,7 @@ public class CarnivoreAIController : AIController
             Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
 
             agent.SetDestination(targetDestination);
-            agent.isStopped = false;
+            SetAgentStop(false);
 
             isMovingToTarget = true; // 플래그 설정
 
@@ -330,7 +328,7 @@ public class CarnivoreAIController : AIController
         float desiredState = (velocity.sqrMagnitude > Mathf.Epsilon) ? 1f : 0f;
 
         // 애니메이션 적용
-        animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
+        animal.AnimationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
     public override void OnHit(Vector3 hitPosition)
@@ -338,8 +336,8 @@ public class CarnivoreAIController : AIController
         this.hitPosition = hitPosition;
         isHit = true;
 
-        conditionHandler.TakeDamage(30);
-        if (conditionHandler.Health < threadHoldRunHp)
+        animal.ConditionHandler.TakeDamage(30);
+        if (animal.ConditionHandler.Health < threadHoldRunHp)
         {
             isAttackMode = false;
             isRunMode = true;
@@ -349,14 +347,14 @@ public class CarnivoreAIController : AIController
     public void OnTakeDamage(int damage)
     {
         isHit = true;
-        conditionHandler.TakeDamage(damage);
+        animal.ConditionHandler.TakeDamage(damage);
 
-        if(conditionHandler.Health > threadHoldRunHp) isRunMode = true;
+        if(animal.ConditionHandler.Health > threadHoldRunHp) isRunMode = true;
     }
 
     private void ResetSetting()
     {
-        agent.isStopped = true;
+        SetAgentStop(true);
         targetDestination = Vector3.zero;
         isMovingToTarget = false;
 
@@ -378,15 +376,15 @@ public class CarnivoreAIController : AIController
 
     private IEnumerator DamageEffect()
     {
-        Material mat = skinnedMeshRenderer.material;
+        Material mat = animal.SkinnedMeshRenderer.material;
         mat.color = Color.red;
 
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
 
         yield return new WaitForSeconds(0.5f);
 
         mat.color = Color.white;
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
     }
 
     private void UpdateAttackCoolTime()
