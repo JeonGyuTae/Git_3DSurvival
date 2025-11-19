@@ -60,13 +60,28 @@ public class AnimalSpawnManager : MonoBehaviour
             {
                 spawn.Release(obj);
                 Debug.Log($"{key} 제거");
-
-                // 리스폰 해야함 -> 코루틴 사용 (개별?)
-
                 return;
             }
         }
 
         Debug.Log($"{key} key 값에 해당하는 objectPool이 존재하지 않습니다.");
+    }
+
+    public void Respawn(Animal animal)
+    {
+        StartCoroutine(RespawnCoroutine(animal));
+    }
+
+    private IEnumerator RespawnCoroutine(Animal animal)
+    {
+        yield return new WaitForSeconds(animal.Data.respawnTime);
+
+        Debug.Log($"{animal.Data.animalName} 리스폰");
+        
+        // 초기화
+        animal.Init();
+
+        // 리스폰
+        Spawn(animal.Data.animalName);
     }
 }

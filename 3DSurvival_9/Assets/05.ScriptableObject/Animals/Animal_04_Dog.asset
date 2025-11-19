@@ -14,5 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animalName: "\uAC1C"
   description: "\uC0AC\uB098\uC6B4 \uAC1C\uC774\uB2E4"
+  type: 0
   maxHp: 100
   atk: 15
+  prefab: {fileID: 1601339452394189622, guid: 26a303c27fb1587448fcdec64ff4e705, type: 3}
+  respawnTime: 30

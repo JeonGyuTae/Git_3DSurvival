@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1552129738016026466
+--- !u!1 &118116477129425540
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1552129738016060226}
-  - component: {fileID: 1552129738018927458}
-  - component: {fileID: 1552129738017960354}
+  - component: {fileID: 118116477129465508}
+  - component: {fileID: 118116477128171140}
+  - component: {fileID: 118116477127171140}
   m_Layer: 9
-  m_Name: EquipLog
+  m_Name: Coal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 4294967295
+  m_StaticEditorFlags: 126
   m_IsActive: 1
---- !u!4 &1552129738016060226
+--- !u!4 &118116477129465508
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552129738016026466}
+  m_GameObject: {fileID: 118116477129425540}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5888847, y: 0.38087392, z: -0.5949625, w: 0.39264423}
-  m_LocalPosition: {x: 1.837, y: -1.098, z: 2.743}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.1, y: -0.85, z: 1.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4244474768293172267}
-  m_LocalEulerAnglesHint: {x: -179.471, y: -90.93399, z: 66.325}
---- !u!33 &1552129738018927458
+  m_Father: {fileID: 8771189415835390996}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &118116477128171140
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552129738016026466}
-  m_Mesh: {fileID: 4300000, guid: d215d40c0f10c0e4d840d05f62427501, type: 3}
---- !u!23 &1552129738017960354
+  m_GameObject: {fileID: 118116477129425540}
+  m_Mesh: {fileID: 4300000, guid: 43ee757e6d4e733469e710178cf7e322, type: 3}
+--- !u!23 &118116477127171140
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1552129738016026466}
+  m_GameObject: {fileID: 118116477129425540}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,8 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 57f391477e46ecd44af6579114e37dfb, type: 2}
-  - {fileID: 2100000, guid: 983007e3e230f954187baf11f58a929d, type: 2}
+  - {fileID: 2100000, guid: 5bfbfdebccebf0c45832bef70d1337f7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,7 +83,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &3859881394929056588
+--- !u!1 &7740100716170711972
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,60 +91,60 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4244474768293172267}
-  - component: {fileID: 6656656070700272754}
-  - component: {fileID: 1066740875764906202}
+  - component: {fileID: 8771189415835390996}
+  - component: {fileID: 1030300161985907379}
+  - component: {fileID: 55587609363081256}
   m_Layer: 9
-  m_Name: Equip_Wood
+  m_Name: Equip_Coal
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4244474768293172267
+--- !u!4 &8771189415835390996
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3859881394929056588}
+  m_GameObject: {fileID: 7740100716170711972}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1552129738016060226}
+  - {fileID: 118116477129465508}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6656656070700272754
+--- !u!114 &1030300161985907379
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3859881394929056588}
+  m_GameObject: {fileID: 7740100716170711972}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a1a5890bbe897c4f856fe4fd818a00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   attackRate: 0.55
-  attackDistance: 2
+  attackDistance: 1
   useStamina: 5
-  damage: 3
+  damage: 2
   camera: {fileID: 0}
---- !u!95 &1066740875764906202
+--- !u!95 &55587609363081256
 Animator:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3859881394929056588}
+  m_GameObject: {fileID: 7740100716170711972}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 1fd99db5bbf97404ab67ce8311f5930e, type: 2}
+  m_Controller: {fileID: 9100000, guid: d6d6f670a01bac64fbef2ebd2d3cc027, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
