@@ -281,6 +281,10 @@ public class PlayerController : MonoBehaviour
     } 
     #endregion
 
+    /// <summary>
+    /// 인벤토리로 사용X 건축에서 사용될 예정
+    /// </summary>
+    /// <param name="context"></param>
     public void OnInventory(InputAction.CallbackContext context)
     {
         if(context.phase == InputActionPhase.Started)
@@ -320,7 +324,10 @@ public class PlayerController : MonoBehaviour
     {
         if(context.phase == InputActionPhase.Started)
         {
-            Debug.Log("1번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(0);
+            }
         }
     }
 
@@ -328,7 +335,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("2번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(1);
+            }
         }
     }
 
@@ -336,7 +346,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("3번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(2);
+            }
         }
     }
 
@@ -344,7 +357,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("4번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(3);
+            }
         }
     }
 
@@ -352,7 +368,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("5번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(4);
+            }
         }
     }
 
@@ -360,7 +379,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("6번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(5);
+            }
         }
     }
 
@@ -368,7 +390,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("7번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(6);
+            }
         }
     }
 
@@ -376,7 +401,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("8번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(7);
+            }
         }
     }
 
@@ -384,7 +412,10 @@ public class PlayerController : MonoBehaviour
     {
         if (context.phase == InputActionPhase.Started)
         {
-            Debug.Log("9번 선택");
+            if (PlayerManager.Instance.PlayerInventory != null)
+            {
+                PlayerManager.Instance.PlayerInventory.EquipItemInSlot(8);
+            }
         }
     }
     #endregion

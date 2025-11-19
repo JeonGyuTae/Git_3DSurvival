@@ -9,18 +9,25 @@ public class PlayerInventory : MonoBehaviour
     [SerializeField] private Transform slotPanel;
     private Transform dropPosition;
 
-    [Header("Select Item")]
-    public TextMeshProUGUI selectedItemName;
-
-    [SerializeField] private GameObject useButton;
-    [SerializeField] private GameObject equipButton;
-
     private PlayerController controller;
     private PlayerCondition condition;
 
     private ItemData selectedItem;
-    private int selectedItemIndex = 0;
+    private int selectedItemIndex = -1;
 
+    private void Awake()
+    {
+        PlayerManager.Instance.PlayerInventory = this;
+
+        slots = new ItemSlot[slotPanel.childCount];
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
+            slots[i].index = i;
+            slots[i].inventory = this;
+        }
+    }
     private void Start()
     {
         controller = PlayerManager.Instance.Player.controller;
@@ -32,14 +39,7 @@ public class PlayerInventory : MonoBehaviour
         PlayerManager.Instance.Player.addItem += AddItem;
 
         inventoryUI.SetActive(false);
-        slots = new ItemSlot[slotPanel.childCount];
-
-        for (int i = 0; i < slots.Length; i++)
-        {
-            slots[i] = slotPanel.GetChild(i).GetComponent<ItemSlot>();
-            slots[i].index = i;
-            slots[i].inventory = this;
-        }
+        SelectItem(-1);
     }
 
     public void AddItem()
@@ -136,15 +136,24 @@ public class PlayerInventory : MonoBehaviour
 
     public void SelectItem(int index)
     {
-        if (slots[index].itemdata == null) return;
+        if (index < 0 || index >= slots.Length)
+        {
+            selectedItem = null;
+            selectedItemIndex = -1;
+            return;
+        }
 
-        selectedItem = slots[index].itemdata;
+        ItemSlot slot = slots[index];
+
+        if (slot.itemdata == null)
+        {
+            selectedItem = null;
+            selectedItemIndex = -1;
+            return;
+        }
+
+        selectedItem = slot.itemdata;
         selectedItemIndex = index;
-
-        selectedItemName.text = selectedItem.itemname;
-
-        /*useButton.SetActive(selectedItem.type == ItemType.Consumable);
-        equipButton.SetActive(selectedItem.type == ItemType.Equipable);*/
     }
 
     public void OnDropItem()
@@ -155,47 +164,48 @@ public class PlayerInventory : MonoBehaviour
             RemoveSelectedItem();
         }
     }
+
     void RemoveSelectedItem()
     {
         slots[selectedItemIndex].quantity--;
 
         if (slots[selectedItemIndex].quantity <= 0)
         {
+            PlayerManager.Instance.Player.equip.UnEquip();
             selectedItem = null;
             slots[selectedItemIndex].itemdata = null;
-            selectedItemIndex = -1;
+            SelectItem(-1);
         }
 
         UpdateUI();
     }
 
-    private void EquipItemSlot(int slotNumber)
+    public void EquipItemInSlot(int slotIndex)
     {
-        if (slots != null)
-        {
-            if (slotNumber <= 9)
-            {
-                slotNumber -= 1;
-                slots[slotNumber].equipped = true;
-                PlayerManager.Instance.Player.equip.EquipNew(selectedItem);
+        ItemSlot targetSlot = slots[slotIndex];
+        ItemData itemToEquip = targetSlot.itemdata;
+        Equipment playerEquipment = PlayerManager.Instance.Player.equip;
 
-                SelectItem(slotNumber);
-                // 1~9번을 눌렀을 때 해당 슬롯의 아이템을 장착하는 로직
+        SelectItem(slotIndex);
+
+        foreach (var slot in slots)
+        {
+            if (slot.equipped)
+            {
+                slot.equipped = false;
             }
         }
-        else
-        {
-            Debug.Log("인벤토리 없음");
-        }
-    }
-    void UnEquip(int index)
-    {
-        slots[index].equipped = false;
-        PlayerManager.Instance.Player.equip.UnEquip();
 
-        if (selectedItemIndex == index)
+        UpdateUI();
+
+        if (itemToEquip == null)
         {
-            SelectItem(selectedItemIndex);
+            playerEquipment.UnEquip(); // 플레이어 장비 해제
+            return;
         }
+            playerEquipment.EquipNew(itemToEquip);
+            targetSlot.equipped = true;
+
+        UpdateUI();
     }
 }
