@@ -29,25 +29,20 @@ public class Animal : MonoBehaviour, IInteractable
         controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
 
         fx_dead = GetComponentInChildren<ParticleSystem>();
-    }
 
-    private void OnEnable()
-    {
         Init();
     }
 
-    private void OnDisable()
-    {
-        
-    }
-
-    private void Init()
+    public void Init()
     {
         // 체력 설정
         conditionHandler.SetHealth(data.maxHp);
 
         // SkinnedMeshRenderer 설정
         skinnedMeshRenderer.enabled = true;
+
+        // controller Init
+        controller.Init();
     }
 
     public InteractableType GetInteractableType()
