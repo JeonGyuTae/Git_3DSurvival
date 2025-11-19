@@ -20,33 +20,49 @@ public class AnimalSpawn : MonoBehaviour
     [SerializeField] private Vector3 spawnArea = new Vector3(50f, 5f, 50f);
     [SerializeField] private float offsetY = 10.0f;
 
+    private PoolManager poolManager;
+    private string key;
+
     private void Start()
     {
+        poolManager = PoolManager.Instance;
+        key = _animal.animalName;
         InitSpawn();
     }
 
     private void InitSpawn()
     {
-        PoolManager.Instance.CreatePool(_animal.animalName, _animal.prefab, maxAnimalCount);
+        poolManager.CreatePool(key, _animal.prefab, maxAnimalCount);
 
-        Spawn();
+        // 처음에는 최대로 소환
+        for(int i=0; i<maxAnimalCount; i++)
+        {
+            Spawn();
+        }
     }
 
     public void Spawn()
     {
-        GameObject animal = PoolManager.Instance.GetObject(_animal.animalName);
+        GameObject animal = poolManager.GetObject(key);
         NavMeshAgent agent = animal.GetComponent<NavMeshAgent>();
 
         // 위치 초기화
-        Vector3 spawnPosition = GetRandomPositionInArea();
-
-        if(agent != null)
+        // NavMeshAgent가 움직일 수 있는 영역 내에 Warp
+        Vector3 spawnPosition;
+        bool successWarp = false;
+        do
         {
-            if(!agent.Warp(spawnPosition))
-            {
-                Debug.Log($"{_animal.animalName} Warp 실패.");
-            }
+            spawnPosition = GetRandomPositionInArea();
+            successWarp = agent.Warp(spawnPosition);
+
+            if (!successWarp) Debug.Log($"{key} Warp 실패 위치 재설정");
         }
+        while (successWarp == false);
+    }
+
+    public void Release(GameObject obj)
+    {
+        poolManager.ReleasePool(key, obj);
     }
 
     private Vector3 GetRandomPositionInArea()
@@ -58,7 +74,7 @@ public class AnimalSpawn : MonoBehaviour
         float randomPosZ = Random.Range(pivotPos.z - spawnArea.z / 2, pivotPos.z + spawnArea.z / 2);
 
         // Y 축은 일정 offset 범위 위에서 지정 (땅 위에서 생성될 수 있도록)
-        float posY = pivotPos.y + offsetY;
+        float posY = pivotPos.y + Random.Range(0, offsetY);
 
         // 위치 반환
         Vector3 spawnPos = new Vector3(randomPosX, posY, randomPosZ);
@@ -70,4 +86,10 @@ public class AnimalSpawn : MonoBehaviour
         Gizmos.color = UnityEngine.Color.red;
         Gizmos.DrawWireCube(transform.position, spawnArea);
     }
+
+    #region 프로퍼티
+
+    public string Key {  get { return key; } }
+
+    #endregion
 }
