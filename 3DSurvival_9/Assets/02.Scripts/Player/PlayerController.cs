@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
@@ -25,12 +24,8 @@ public class PlayerController : MonoBehaviour
     private float camCurXRot;
     [SerializeField] float lookSensitivity;
     private Vector2 mouseDelta;
-    private bool canLook;
+    public bool canLook { get; private set; }
     [SerializeField] private Image crossHair;
-
-    [Header("Attack")]
-    [SerializeField] private float attackCooldown;
-    private float lastAttackTime;
 
     private Rigidbody _rigidbody;
     private bool isMoving;
@@ -46,14 +41,17 @@ public class PlayerController : MonoBehaviour
     private float sneakingColliderCenterY;
 
     public System.Action inventory;
+    public System.Action throwItem;
 
     private PlayerCondition condition;
+    private Equipment equipment;
 
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
         condition = GetComponent<PlayerCondition>();
         _capsuleCollider = GetComponent<CapsuleCollider>();
+        equipment = GetComponent<Equipment>();
 
         // 웅크리기시 콜라이더와 시점 조절
         if (_capsuleCollider != null )
@@ -74,6 +72,10 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         canLook = true;
+        if (crossHair != null)
+        {
+            crossHair.gameObject.SetActive(true);
+        }
     }
 
     private void Update()
@@ -293,21 +295,10 @@ public class PlayerController : MonoBehaviour
         bool toggle = Cursor.lockState == CursorLockMode.Locked;
         Cursor.lockState = toggle ? CursorLockMode.None : CursorLockMode.Locked;
         canLook = !toggle;
-    }
-
-    public void OnAttack(InputAction.CallbackContext context)
-    {
-        if (context.phase == InputActionPhase.Started && Time.time >= lastAttackTime + attackCooldown) 
+        if (crossHair != null)
         {
-            lastAttackTime = Time.time;
-            Debug.Log("공격 시도");
-            Attack();
+            crossHair.gameObject.SetActive(canLook);
         }
-    }
-
-    private void Attack()
-    {
-        Debug.Log("공격 했음");
     }
 
     public void OnUseItem(InputAction.CallbackContext context)
@@ -330,7 +321,6 @@ public class PlayerController : MonoBehaviour
         if(context.phase == InputActionPhase.Started)
         {
             Debug.Log("1번 선택");
-            EquipItemSlot(1);
         }
     }
 
@@ -339,7 +329,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("2번 선택");
-            EquipItemSlot(2);
         }
     }
 
@@ -348,7 +337,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("3번 선택");
-            EquipItemSlot(3);
         }
     }
 
@@ -357,7 +345,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("4번 선택");
-            EquipItemSlot(4);
         }
     }
 
@@ -366,7 +353,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("5번 선택");
-            EquipItemSlot(5);
         }
     }
 
@@ -375,7 +361,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("6번 선택");
-            EquipItemSlot(6);
         }
     }
 
@@ -384,7 +369,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("7번 선택");
-            EquipItemSlot(7);
         }
     }
 
@@ -393,7 +377,6 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("8번 선택");
-            EquipItemSlot(8);
         }
     }
 
@@ -402,13 +385,14 @@ public class PlayerController : MonoBehaviour
         if (context.phase == InputActionPhase.Started)
         {
             Debug.Log("9번 선택");
-            EquipItemSlot(9);
         }
     }
     #endregion
-
-    private void EquipItemSlot(int slotNumber)
+    public void OnThrow(InputAction.CallbackContext context)
     {
-        Debug.Log($"{slotNumber}번 인벤토리 슬롯 장착했음");
+        if (context.phase == InputActionPhase.Started)
+        {
+            throwItem?.Invoke();
+        }
     }
 }

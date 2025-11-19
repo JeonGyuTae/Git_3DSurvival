@@ -4,16 +4,18 @@ public class Player : MonoBehaviour
 {
     public PlayerController controller {get; private set;}
     public PlayerCondition condition {get; private set;}
+    public Equipment equip;
 
     public ItemData itemData;
     public System.Action addItem;
 
-    [SerializeField] private Transform dropPosition;
+    public Transform dropPosition;
 
     private void Awake()
     {
         PlayerManager.Instance.Player = this;
         controller = GetComponent<PlayerController>();
         condition = GetComponent<PlayerCondition>();
+        equip = GetComponent<Equipment>();
     }
 }
