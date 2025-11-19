@@ -23,6 +23,13 @@ public class PlayerManager : MonoBehaviour
         set {  _player = value; }
     }
 
+    private PlayerInventory _playerInventory;
+    public PlayerInventory PlayerInventory
+    {
+        get { return _playerInventory; }
+        set { _playerInventory = value; }
+    }
+
     private void Awake()
     {
         if ( _instance == null)

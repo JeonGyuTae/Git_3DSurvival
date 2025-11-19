@@ -1151,13 +1151,13 @@ GameObject:
   m_Component:
   - component: {fileID: 1625629194550074096}
   - component: {fileID: 5741939118632800782}
-  - component: {fileID: 4417137678362702035}
   - component: {fileID: 8570254884858774232}
   - component: {fileID: 4980352309851549585}
   - component: {fileID: 7480540033951874854}
   - component: {fileID: 5790663587584868263}
   - component: {fileID: 2396650433505113310}
   - component: {fileID: 4592869245931013033}
+  - component: {fileID: 6899331178099844360}
   m_Layer: 8
   m_Name: AI_Deer
   m_TagString: Untagged
@@ -1203,19 +1203,6 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4417137678362702035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8160935626576493460}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7e90e8a35e5b4bc47be32bdf5009babd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: d230b49e44b1cdf4eb813dc0156ac0ac, type: 2}
 --- !u!114 &8570254884858774232
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1240,6 +1227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fae0905ab27ce564ea98e5c2972f0094, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  health: 0
 --- !u!54 &7480540033951874854
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1332,6 +1320,19 @@ MonoBehaviour:
   maxDecisionDuration: 1
   minDecisionDuration: 3
   isHit: 0
+--- !u!114 &6899331178099844360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8160935626576493460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31d830efd8ac09642a82b294756fdbc0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: d230b49e44b1cdf4eb813dc0156ac0ac, type: 2}
 --- !u!1 &8490718526220463915
 GameObject:
   m_ObjectHideFlags: 0

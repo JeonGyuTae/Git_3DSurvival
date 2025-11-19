@@ -35,6 +35,5 @@ public class NPCBehaviour : MonoBehaviour, IInteractable
     {
         // NPC와 상호작용 시 대화 시작
         DialogueManager.Instance.StartDialogue(npcData, transform);
-        Debug.Log("상호작용 시도됨");
     }
 }

@@ -28,8 +28,8 @@ public class BuildingUIManager : MonoBehaviour
 
     void Update()
     {
-        // 1번 키로 건축 UI 열기/닫기
-        if (Input.GetKeyDown(KeyCode.Alpha1))
+        // Tab 키로 건축 UI 열기/닫기
+        if (Input.GetKeyDown(KeyCode.T))
         {
             ToggleUI();
         }

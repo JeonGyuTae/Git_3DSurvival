@@ -45,6 +45,11 @@ public abstract class AIController : MonoBehaviour
         tree.RunTree();
     }
 
+    public virtual void OnHit(Vector3 hitPosition)
+    {
+        // 피격 판정
+    }
+
     protected void ResetDecisionStartTime()
     {
         // 타이머 초기화

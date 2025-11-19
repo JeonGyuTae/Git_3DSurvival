@@ -35,6 +35,7 @@ public class HerbivoreAIController : AIController
         base.Awake();
         animationHandler = GetComponent<AnimalAnimationHandler>();
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        conditionHandler = GetComponent<AnimalConditionHandler>();
         _rigidbody = GetComponent<Rigidbody>();
     }
 
@@ -228,10 +229,12 @@ public class HerbivoreAIController : AIController
         animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
-    public void OnHit(Vector3 hitPosition)
+    public override void OnHit(Vector3 hitPosition)
     {
         this.hitPosition = hitPosition;
         isHit = true;
+
+        conditionHandler.TakeDamage(30);
     }
 
     public void OnTakeDamage(int damage)

@@ -3,6 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+public enum AnimalType
+{
+    Carnivore,
+    Herbivore,
+}
+
 /// <summary>
 /// AnimalData SO 데이터
 /// Animal Data가 가지는 필드는 다음과 같다.
@@ -18,8 +24,12 @@ public class AnimalData : ScriptableObject
     [Header("Animal Info")]
     public string animalName;
     public string description;
+    public AnimalType type;
 
     [Header("Stat Info")]
     public float maxHp;
     public float atk;
+
+    [Header("Spawn Info")]
+    public GameObject prefab;
 }

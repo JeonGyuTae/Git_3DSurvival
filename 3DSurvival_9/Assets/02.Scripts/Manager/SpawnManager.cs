@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,7 +10,7 @@ public class SpawnManager : MonoBehaviour
 
     private Player player;
 
-    private void Start()
+    private void Awake()
     {
         player = PlayerManager.Instance.Player;
 
