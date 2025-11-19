@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6519934391333114444
+--- !u!1 &5507324749170010597
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,46 +8,46 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6518623686409439548}
-  - component: {fileID: 6489059377181104214}
-  - component: {fileID: 6496809881774625476}
+  - component: {fileID: 8252937337319058121}
+  - component: {fileID: 7723279646460015786}
+  - component: {fileID: 319472968514830110}
   m_Layer: 9
-  m_Name: LowPolyEquipAxe
+  m_Name: Rock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 126
   m_IsActive: 1
---- !u!4 &6518623686409439548
+--- !u!4 &8252937337319058121
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6519934391333114444}
+  m_GameObject: {fileID: 5507324749170010597}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.78131646, y: -0.099860355, z: -0.0781079, w: 0.6111233}
-  m_LocalPosition: {x: 1.821, y: -2.06, z: 2.813}
-  m_LocalScale: {x: 77.0776, y: 77.07759, z: 77.07759}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.083, y: -0.685, z: 1.616}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2930571613951797857}
-  m_LocalEulerAnglesHint: {x: -103.937, y: 0, z: -14.56702}
---- !u!33 &6489059377181104214
+  m_Father: {fileID: 8967953696432675042}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!33 &7723279646460015786
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6519934391333114444}
-  m_Mesh: {fileID: 4300000, guid: f532911410a807e4d9293715f61e6276, type: 3}
---- !u!23 &6496809881774625476
+  m_GameObject: {fileID: 5507324749170010597}
+  m_Mesh: {fileID: 4300002, guid: 9b23133e3eda78249896e5786ae357a2, type: 3}
+--- !u!23 &319472968514830110
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6519934391333114444}
+  m_GameObject: {fileID: 5507324749170010597}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 7f5063e664151a746bca416ec31b7890, type: 2}
+  - {fileID: 2100000, guid: 5bfbfdebccebf0c45832bef70d1337f7, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -73,7 +73,7 @@ MeshRenderer:
   m_PreserveUVs: 0
   m_IgnoreNormalsForChartDetection: 0
   m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
+  m_StitchLightmapSeams: 0
   m_SelectedEditorRenderState: 3
   m_MinimumChartSize: 4
   m_AutoUVMaxDistance: 0.5
@@ -83,7 +83,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!1 &9085129210769003454
+--- !u!1 &5728430635097179198
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -91,47 +91,47 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2930571613951797857}
-  - component: {fileID: -2141896575368621765}
+  - component: {fileID: 8967953696432675042}
+  - component: {fileID: 5946124165740794166}
   m_Layer: 9
-  m_Name: Equip_Axe
+  m_Name: Equip_Stone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2930571613951797857
+--- !u!4 &8967953696432675042
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9085129210769003454}
+  m_GameObject: {fileID: 5728430635097179198}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 6518623686409439548}
+  - {fileID: 8252937337319058121}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-2141896575368621765
+--- !u!114 &5946124165740794166
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9085129210769003454}
+  m_GameObject: {fileID: 5728430635097179198}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4a1a5890bbe897c4f856fe4fd818a00d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackRate: 0.8
-  attackDistance: 3
+  attackRate: 0.5
+  attackDistance: 1
   useStamina: 10
   doesGatherResources: 1
   doesDealDamage: 1
-  damage: 10
+  damage: 2
   camera: {fileID: 0}

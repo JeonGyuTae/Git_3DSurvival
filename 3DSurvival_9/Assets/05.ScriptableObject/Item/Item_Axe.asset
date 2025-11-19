@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemname: Axe
   type: 0
-  icon: {fileID: 21300000, guid: 09355a48e904cc045bc4ecfcedab9fec, type: 3}
+  icon: {fileID: 21300000, guid: 08e2f4b2cf036c841a5f9ba78de585ab, type: 3}
   dropPrefab: {fileID: 1000010400305472, guid: 020b6435500f295448736ac456402187, type: 3}
   canStack: 0
   maxStack: 0

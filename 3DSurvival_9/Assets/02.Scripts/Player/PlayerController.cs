@@ -42,6 +42,7 @@ public class PlayerController : MonoBehaviour
 
     public System.Action inventory;
     public System.Action throwItem;
+    public System.Action useItem;
 
     private PlayerCondition condition;
     private Equipment equipment;
@@ -309,14 +310,8 @@ public class PlayerController : MonoBehaviour
     {
         if(context.phase == InputActionPhase.Started)
         {
-            Debug.Log("우클릭 했음");
-            UseEquippedItem();
+            useItem?.Invoke();
         }
-    }
-
-    private void UseEquippedItem()
-    {
-        Debug.Log("아이템 사용 했음");
     }
 
     #region 아이템 슬롯 선택
