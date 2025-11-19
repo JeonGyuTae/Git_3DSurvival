@@ -227,7 +227,7 @@ public class HerbivoreAIController : AIController
         float desiredState = (velocity.sqrMagnitude > Mathf.Epsilon) ? 1f : 0f;
 
         // 애니메이션 적용
-        animationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
+        animal.AnimationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
     public override void OnHit(Vector3 hitPosition)
@@ -235,13 +235,13 @@ public class HerbivoreAIController : AIController
         this.hitPosition = hitPosition;
         isHit = true;
 
-        conditionHandler.TakeDamage(30);
+        animal.ConditionHandler.TakeDamage(30);
     }
 
     public void OnTakeDamage(int damage)
     {
         isHit = true;
-        conditionHandler.TakeDamage(damage);
+        animal.ConditionHandler.TakeDamage(damage);
     }
 
     private void ResetSetting()
@@ -264,14 +264,14 @@ public class HerbivoreAIController : AIController
 
     private IEnumerator DamageEffect()
     {
-        Material mat = skinnedMeshRenderer.material;
+        Material mat = animal.SkinnedMeshRenderer.material;
         mat.color = Color.red;
 
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
 
         yield return new WaitForSeconds(0.5f);
 
         mat.color = Color.white;
-        skinnedMeshRenderer.material = mat;
+        animal.SkinnedMeshRenderer.material = mat;
     }
 }
