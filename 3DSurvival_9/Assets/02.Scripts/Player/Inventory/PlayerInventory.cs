@@ -74,6 +74,117 @@ public class PlayerInventory : MonoBehaviour
         PlayerManager.Instance.Player.itemData = null;
     }
 
+    // 해당 아이템이 amount 개 이상 있는지
+    public bool HasItem(ItemData item, int amount) 
+    {
+        if (item == null || amount <= 0)
+            return false;
+
+        int total = 0;
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            if (slots[i].itemdata == item)
+            {
+                total += slots[i].quantity;
+
+                if (total >= amount)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    // 아이템 amount 개 소모 (재료 제거)
+    public bool RemoveItem(ItemData item, int amount) 
+    {
+        if (!HasItem(item, amount))
+            return false;
+
+        int remaining = amount;
+
+        for (int i = 0; i < slots.Length; i++)
+        {
+            ItemSlot slot = slots[i];
+
+            if (slot.itemdata != item)
+                continue;
+
+            if (slot.quantity <= remaining)
+            {
+                remaining -= slot.quantity;
+                slot.quantity = 0;
+                slot.itemdata = null;
+            }
+            else
+            {
+                slot.quantity -= remaining;
+                remaining = 0;
+            }
+
+            if (remaining <= 0)
+                break;
+        }
+
+        UpdateUI();
+        return true;
+    }
+
+    // 아이템 amount 개 추가(제작 결과 지급)
+    public bool AddItem(ItemData item, int amount)
+    {
+        if (item == null || amount <= 0)
+            return false;
+
+        int remaining = amount;
+
+        // 기존 스택 채우기
+        if (item.canStack)
+        {
+            for (int i = 0; i < slots.Length; i++)
+            {
+                ItemSlot slot = slots[i];
+                if (slot.itemdata == item && slot.quantity < item.maxStack)
+                {
+                    int space = item.maxStack - slot.quantity;
+                    int add = Mathf.Min(space, remaining);
+
+                    slot.quantity += add;
+                    remaining -= add;
+
+                    if (remaining <= 0)
+                    {
+                        UpdateUI();
+                        return true;
+                    }
+                }
+            }
+        }
+        // 빈 슬롯 채우기
+        while (remaining > 0)
+        {
+            ItemSlot empty = GetEmptySlot();
+            if (empty == null)
+            {
+                UpdateUI();
+                return false;
+            }
+
+            int addAmount = item.canStack ? Mathf.Min(item.maxStack, remaining) : 1;
+
+            empty.itemdata = item;
+            empty.quantity = addAmount;
+
+            remaining -= addAmount;
+        }
+
+        UpdateUI();
+        return true;
+    }
+
+
+
     public void ToggleInventory()
     {
         if (IsOpen())
