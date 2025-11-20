@@ -45,6 +45,11 @@ public class AnimalSpawn : MonoBehaviour
     {
         GameObject animal = poolManager.GetObject(key);
         NavMeshAgent agent = animal.GetComponent<NavMeshAgent>();
+        AnimalData animalData = animal.GetComponent<Animal>().Data;
+
+        // 서식지 설정
+        animalData.pivotArea = this.transform.position;
+        animalData.habitat = spawnArea;
 
         // 위치 초기화
         // NavMeshAgent가 움직일 수 있는 영역 내에 Warp

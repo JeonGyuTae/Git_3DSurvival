@@ -33,4 +33,6 @@ public class AnimalData : ScriptableObject
     [Header("Spawn Info")]
     public GameObject prefab;
     public float respawnTime;
+    public Vector3 pivotArea;
+    public Vector3 habitat;
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.InputSystem;
 
 
 /// <summary>
@@ -32,6 +33,18 @@ public abstract class AIController : MonoBehaviour
     private float currentDeadCoolTime = 0.0f;
     private bool canDestory = false;
 
+    private bool isMovingToTarget = false; // 플래그 설정
+    private bool isDead = false;
+    public bool IsDeaded {  get { return isDead; } }
+
+    private int cntFindPatrolPath = 0;      // 순회 결정 카운트
+    private int threadHoldFindPatrolPathCount = 30;  // 최대 순회 결정 카운트
+
+    protected Vector3 hitPosition;
+
+    [SerializeField] protected bool isHit = false;
+    public bool IsHit { get { return isHit; } set { isHit = value; } }
+
     protected Animal animal;
     protected Coroutine deadCoroutine;
     protected WaitForSeconds waitForSeconds;
@@ -47,6 +60,9 @@ public abstract class AIController : MonoBehaviour
         // 활성화 시 세팅
         currentDeadCoolTime = 0.0f;
         canDestory = false;
+
+        isDead = false;
+        isHit = false;
     }
 
     protected virtual void Start()
@@ -85,6 +101,8 @@ public abstract class AIController : MonoBehaviour
             canDestory = false;
             SetAgentStop(false);
             animal.SkinnedMeshRenderer.enabled = false;
+           
+            isDead = true;
 
             Invoke("DisableObject", deadCoolTime);
 
@@ -120,7 +138,177 @@ public abstract class AIController : MonoBehaviour
 
     #endregion
 
-    public virtual void OnHit(Vector3 hitPosition)
+    #region Sequence : Patrol
+
+    protected NodeState SetPatrolTargetPosition()
+    {
+        // targetDestination이 지정이 되었다면 Move로 이동
+        if (targetDestination != Vector3.zero)
+        {
+            return NodeState.SUCCESS;
+        }
+
+        if (decisionStartTime < 0f)
+        {
+            // 처음 노드 진입 시 초기화
+            targetDestination = Vector3.zero;
+            decisionStartTime = Time.time;
+
+            // 고민하는 시간 랜덤으로 부여
+            SetDecisionDuration();
+
+            return NodeState.RUNNING;
+        }
+
+        if (Time.time < decisionStartTime + decisionDuration)
+        {
+            // 고민 중인 상태 일때는 RUNNING 반환
+            //Debug.Log("다음 포지션 고민 중...");
+            return NodeState.RUNNING;
+        }
+        else
+        {
+            Vector3 randomDirection = Random.onUnitSphere * Random.Range(minMoveDistance, maxMoveDistance);
+            Vector3 randomPosition = transform.position + randomDirection;
+
+            // 선택한 목표가 서식지 영역 내에 있는지 확인
+            if (!IsPositionInHabitatArea(randomPosition))
+            {
+                cntFindPatrolPath++;
+
+                CheckFindPatrolPath();
+
+                ResetDecisionStartTime();
+                return NodeState.RUNNING;
+            }
+
+            // 목표 설정 : 선택한 목표가 서식지 영역 내에 있는지 확인
+            if (CheckTargetPositionOnNavMesh(randomPosition, maxMoveDistance, NavMesh.AllAreas))
+            {
+                // 속도 세팅
+                SetSpeed(runSpeed);
+
+                // 타이머 리셋
+                ResetDecisionStartTime();
+
+                // 순회 카운트 리셋
+                cntFindPatrolPath = 0;
+
+                return NodeState.SUCCESS;
+            }
+
+            cntFindPatrolPath++;
+
+            CheckFindPatrolPath();
+
+            // 타이머 리셋
+            ResetDecisionStartTime();
+            return NodeState.RUNNING;
+        }
+    }
+
+    private void CheckFindPatrolPath()
+    {
+        // 만약 장시간 순회위치를 못찾은 다면 위치 재설정
+        if (cntFindPatrolPath > threadHoldFindPatrolPathCount)
+        {
+            bool successWarp;
+            Vector3 resetPosition;
+            do
+            {
+                resetPosition = GetRandomPositionInArea();
+                successWarp = agent.Warp(resetPosition);
+            }
+            while (successWarp == false);
+
+            cntFindPatrolPath = 0;
+            Debug.Log($"{animal.Data.animalName} 장기간 순회 위치 못찾아서 위치 재설정");
+        }
+    }
+
+    protected bool IsPositionInHabitatArea(Vector3 position)
+    {
+        // pivot 위치와 habitat 가져오기
+        Vector3 pivotPos = animal.Data.pivotArea;
+        Vector3 habitat = animal.Data.habitat;
+
+        // x 경계 확인
+        float minX = pivotPos.x - habitat.x / 2;
+        float maxX = pivotPos.x + habitat.x / 2;
+        bool inX = (position.x >= minX) && (position.x <= maxX);
+
+        // z 경계 확인
+        float minZ = pivotPos.z - habitat.z / 2;
+        float maxZ = pivotPos.z + habitat.z / 2;
+        bool inZ = (position.z >= minX) && (position.z <= maxX);
+
+        // 해당 Position이 Habitat 영역 내에 있는지 반환
+        return inX && inZ;
+    }
+
+    private Vector3 GetRandomPositionInArea()
+    {
+        Vector3 pivotPos = animal.Data.pivotArea;
+
+        // X, Z 축은 Area 영역 내 지정
+        float randomPosX = Random.Range(pivotPos.x - animal.Data.habitat.x / 2, pivotPos.x + animal.Data.habitat.x / 2);
+        float randomPosZ = Random.Range(pivotPos.z - animal.Data.habitat.z / 2, pivotPos.z + animal.Data.habitat.z / 2);
+
+        // Y 축은 일정 offset 범위 위에서 지정 (땅 위에서 생성될 수 있도록)
+        float posY = pivotPos.y + Random.Range(0, 4f);
+
+        // 위치 반환
+        Vector3 spawnPos = new Vector3(randomPosX, posY, randomPosZ);
+        return spawnPos;
+    }
+
+    protected NodeState MoveToTarget()
+    {
+        // 목표가 설정되지 않으면 return
+        if (!agent.enabled || targetDestination == Vector3.zero || !isMovingToTarget) return NodeState.SUCCESS;
+
+
+        // 이동 시작
+        if (agent.remainingDistance <= agent.stoppingDistance)
+        {
+            ResetSetting();
+            return NodeState.SUCCESS;
+        }
+        else
+        {
+            return NodeState.RUNNING;
+        }
+    }
+
+    #endregion
+
+    protected bool CheckTargetPositionOnNavMesh(Vector3 sourcePosition, float maxDistance, int areaMask)
+    {
+        if (NavMesh.SamplePosition(sourcePosition, out NavMeshHit hit, maxDistance, areaMask))
+        {
+            targetDestination = hit.position;
+            Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
+
+            agent.SetDestination(targetDestination);
+            SetAgentStop(false);
+
+            isMovingToTarget = true; // 플래그 설정
+
+            return true;
+        }
+
+        return false;
+    }
+
+    protected void ResetSetting()
+    {
+        SetAgentStop(true);
+        targetDestination = Vector3.zero;
+        isMovingToTarget = false;
+        isHit = false;
+    }
+
+    public virtual void OnHit(int damage, Vector3 hitPosition)
     {
         // 피격 판정
     }

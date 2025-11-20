@@ -446,12 +446,12 @@ MonoBehaviour:
   maxDecisionDuration: 2
   minDecisionDuration: 3
   deadCoolTime: 2
+  isHit: 0
   filedOfView: 120
   detectDistance: 10
   attackDistance: 2
   attackCoolTime: 5
   threadHoldRunHp: 30
-  isHit: 0
 --- !u!114 &4458086321288928036
 MonoBehaviour:
   m_ObjectHideFlags: 0

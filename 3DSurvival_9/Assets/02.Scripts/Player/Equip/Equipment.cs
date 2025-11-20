@@ -79,7 +79,7 @@ public class Equipment : MonoBehaviour
                     IDamageable damageable = hit.collider.GetComponent<IDamageable>();
                     if (damageable != null)
                     {
-                        damageable.TakeDamage((int)attackDamage);
+                        damageable.TakeDamage((int)attackDamage, hit.point);
                         break;
                     }
                 }
