@@ -10,8 +10,6 @@ using UnityEngine;
 /// </summary>
 public class ObjectCuller : MonoBehaviour
 {
-    [SerializeField] private string cullingTag;
-
     private void OnTriggerEnter(Collider other)
     {
         if(other.TryGetComponent<ICullable>(out ICullable cullable))
