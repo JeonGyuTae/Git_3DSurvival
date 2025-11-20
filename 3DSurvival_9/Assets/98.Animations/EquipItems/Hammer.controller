@@ -64,10 +64,10 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 2607118358339914530}
-    m_Position: {x: 320, y: 100, z: 0}
+    m_Position: {x: 320, y: 120, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 8118106365070221581}
-    m_Position: {x: 320, y: 200, z: 0}
+    m_Position: {x: 320, y: 220, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -85,7 +85,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Axe_Idle
+  m_Name: Hammer_Idle
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -99,7 +99,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 0a272ba841082d84daaf87529da2e4c3, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9efc5526d2a585c49bdd11f9c5eec546, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -134,7 +134,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Axe_Attack
+  m_Name: Hammer_Attack
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions:
@@ -148,7 +148,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: 5d82d98e283a85d47a118380b415fe7c, type: 2}
+  m_Motion: {fileID: 7400000, guid: 9b0c68daadc8f454a821ce1f23599255, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
