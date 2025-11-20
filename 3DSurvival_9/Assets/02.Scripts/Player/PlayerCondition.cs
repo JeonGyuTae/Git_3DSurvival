@@ -12,8 +12,11 @@ public class PlayerCondition : MonoBehaviour, IDamageable
 
     [SerializeField] private float noHungerHealthDecay;
     [SerializeField] private float noThirstyHealthDecay;
-    // 배고픔과 목마름이 0일 때 체력 소모
-    // 플레이어가 공격 등의 데미지를 입었을 때 표현할 데미지 이벤트 액션
+
+    public event System.Action OnTakeDamageToHalf;
+    public event System.Action OnTakeDamageToZero;
+    public event System.Action OnHeal;
+
     private void Awake()
     {
         controller = GetComponent<PlayerController>();
@@ -57,16 +60,19 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     public void Heal(float amount)
     {
         health.Add(amount);
+        OnHeal?.Invoke();
     }
 
     public void Eat(float amount)
     {
         hunger.Add(amount);
+        OnHeal?.Invoke();
     }
 
     public void Drink(float amount)
     {
         thirsty.Add(amount);
+        OnHeal?.Invoke();
     }
 
     public void Rest(float amount)
@@ -83,7 +89,19 @@ public class PlayerCondition : MonoBehaviour, IDamageable
     public void TakeDamage(int damage)
     {
         health.Sub(damage);
-        //OnTakeDamage?.Invoke();
+        if(health.curValue % 50 >= 1)
+        {
+            OnTakeDamageToHalf?.Invoke();
+        }
+        else
+        {
+            OnTakeDamageToZero?.Invoke();
+        }
+    }
+
+    public void TakeDamage(int damage, Vector3 hitPoint)
+    {
+        health.Sub(damage);
     }
 
     public bool UseStamina(float amount)

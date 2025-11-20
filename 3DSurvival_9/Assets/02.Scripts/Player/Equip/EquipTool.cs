@@ -51,7 +51,7 @@ public class EquipTool : Equip
 
             if(damageable != null)
             {
-                damageable.TakeDamage((int)damage);
+                damageable.TakeDamage((int)damage, hit.point);
             }
         }
     }
