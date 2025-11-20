@@ -26,7 +26,7 @@ public class PlayerCondition : MonoBehaviour, IDamageable
 
     private void Start()
     {
-        
+
     }
     void Update()
     {
@@ -175,14 +175,14 @@ public class PlayerCondition : MonoBehaviour, IDamageable
         thirsty.ResetToStartValue();
         stamina.ResetToStartValue();
 
+        if (SpawnManager.Instance != null)
+        {
+            SpawnManager.Instance.TeleportToSpawnPoint();
+        }
+
         if (controller != null)
         {
             controller.EnableMovement();
-        }
-
-        if(SpawnManager.Instance != null)
-        {
-            SpawnManager.Instance.TeleportToSpawnPoint();
         }
     }
 }
