@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HarvestableNode : MonoBehaviour
+public class HarvestableNode : MonoBehaviour, ICullable
 {
     [Header("Drop Item")]
     public ItemData dropItem;
@@ -19,25 +19,43 @@ public class HarvestableNode : MonoBehaviour
 
     private int _currentHits;
 
+    private MeshRenderer meshRenderer;
+
+    private void Start()
+    {
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        DisableCullComponents();
+    }
+
+    public void EnableCullComponents()
+    {
+        meshRenderer.enabled = true;
+    }
+
+    public void DisableCullComponents()
+    {
+        meshRenderer.enabled = false;
+    }
+
     public void Harvest(GameObject interactor, ToolType usedTool)
     {
         if (dropItem == null)
         {
-            Debug.LogWarning($"{name} : dropItemÀÌ ºñ¾î ÀÖÀ½");
+            Debug.LogWarning($"{name} : dropItemì´ ë¹„ì–´ ìˆìŒ");
             return;
         }
 
-        // µµ±¸°¡ ¾ø°Å³ª, Àß¸øµÈ µµ±¸¸é ½ÇÆĞ
+        // ë„êµ¬ê°€ ì—†ê±°ë‚˜, ì˜ëª»ëœ ë„êµ¬ë©´ ì‹¤íŒ¨
         if (usedTool == ToolType.None || usedTool != requiredTool)
         {
-            Debug.Log($"[HarvestableNode] Àß¸øµÈ µµ±¸·Î Ã¤Áı ½Ãµµ ({usedTool} vs {requiredTool})");
+            Debug.Log($"[HarvestableNode] ì˜ëª»ëœ ë„êµ¬ë¡œ ì±„ì§‘ ì‹œë„ ({usedTool} vs {requiredTool})");
             return;
         }
 
         int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
         if (amount <= 0) amount = 1;
 
-        // ÀÎº¥Åä¸®¿¡ µå¶ø ¾ÆÀÌÅÛ Ãß°¡
+        // ì¸ë²¤í† ë¦¬ì— ë“œë ì•„ì´í…œ ì¶”ê°€
         var inventory = interactor.GetComponent<PlayerInventory>();
         if (inventory != null)
         {
@@ -47,7 +65,7 @@ public class HarvestableNode : MonoBehaviour
         _currentHits++;
         if (_currentHits >= hitsToBreak)
         {
-            // ÆÄ±« ÀÌÆåÆ®/»ç¿îµå
+            // íŒŒê´´ ì´í™íŠ¸/ì‚¬ìš´ë“œ
             Destroy(gameObject);
         }
     }

@@ -7,6 +7,7 @@ public enum AnimalType
 {
     Carnivore,
     Herbivore,
+    Partner,
 }
 
 /// <summary>

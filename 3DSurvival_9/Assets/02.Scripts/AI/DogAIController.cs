@@ -3,17 +3,16 @@ using System.Collections.Generic;
 using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.LightAnchor;
 
-public class CarnivoreAIController : AIController
+public class DogAIController : AIController
 {
-    [Header("Carnivor Stat")]
-    [SerializeField] private float filedOfView = 120f;
-    [SerializeField] private float detectDistance = 10f;
+    [Header("Dog Stat")]
     [SerializeField] private float attackDistance = 2.0f;
     [SerializeField] private float attackCoolTime = 3.0f;
+    [SerializeField] private float minDistancePlayer = 1.0f;
+    [SerializeField] private float maxDistancePlayer = 4.0f;
 
-    [SerializeField] private int threadHoldRunHp = 30;
+    [SerializeField] private Transform target;
 
     // 공격 상태 변수
     private float currentAttackCoolTime = 0.0f;
@@ -23,9 +22,12 @@ public class CarnivoreAIController : AIController
     private float playerDistance;
 
     // 상태 변수
-    private bool isAttackMode = false;
     private bool isAttack = false;
-    private bool isRunMode = false;
+    private bool isCanActive = false;
+    public void SetCanActive()
+    {
+        isCanActive = true;
+    }
 
     // 코루틴 변수
     private Coroutine damageEffectCoroutine;
@@ -56,82 +58,74 @@ public class CarnivoreAIController : AIController
         ConditionNode isDead = new ConditionNode("IsDead", IsDead);
         Action dead = new Action("Dead", Dead);
 
-        // 순회
+        // 플레이어 따라다니기
         Action moveToTarget = new Action("Move Next Position", MoveToTarget);
-        Action setPatrolTargetPosition = new Action("Decision Next Position", SetPatrolTargetPosition);
+        Action setTargetToPlayer = new Action("Set Target To Player", SetTargetToPlayer);
         ConditionNode checkDamage = new ConditionNode("Check Damage From Player", CheckDamage);
         Action hit = new Action("Hit", Hit);
         Action setRunTargetPosition = new Action("Set Run Position", SetRunTargetPosition);
 
         // Sequence Patrol 생성
-        Sequence patrol = new Sequence("Patrol Around", setPatrolTargetPosition, moveToTarget);
+        Sequence followPlayer = new Sequence("Follow Player", setTargetToPlayer, moveToTarget);
 
         // Sequence RunAway 생성
         Sequence runAway = new Sequence("RunAway", checkDamage, hit, setRunTargetPosition, moveToTarget);
 
-        // 순회 모드
-        Selector patrolMode = new Selector("Patrol Mode", runAway, patrol);
+        // 따라가기 모드
+        Selector followMode = new Selector("Follow Mode", runAway, followPlayer);
 
         // 공격 모드
-        ConditionNode findPlayer = new ConditionNode("Is Find Player?", FindPlayer);
-        Action setTargetToPlayer = new Action("SetTargetToPlayer", SetTargetToPlayer);
+        ConditionNode isTargetExist = new ConditionNode("IsTargetExist?", IsTargetExist);
+        Action setTarget = new Action("SetTarget", SetTarget);
         Action attack = new Action("Attack Player", Attack);
 
         // Sequence FindMode 생성
-        Sequence attackSequence = new Sequence("Attack Sequence", setTargetToPlayer, moveToTarget, attack);
+        Sequence attackSequence = new Sequence("Attack Sequence", setTarget, moveToTarget, attack);
         Selector attackMode = new Selector("Attack Mode", runAway, attackSequence);
-        Sequence findMode = new Sequence("Find Mode", findPlayer, attackMode);
+        Sequence findMode = new Sequence("Find Mode", isTargetExist, attackMode);
 
         // Sequence Dead 생성
         Sequence checkDead = new Sequence("Check Dead", isDead, dead);
 
+        // 상태 노드 생성
+        ConditionNode isCanMovable = new ConditionNode("Can Movable?", IsCanMovable);
+
         // Selector Root 생성
-        Selector root = new Selector("Root", checkDead, findMode, patrolMode);
+        Selector active = new Selector("Root", checkDead, findMode, followMode);
+        Sequence root = new Sequence("Root", isCanMovable, active);
 
         tree = new BehaviorTree(root);
     }
 
+    #region 상태 노드
+
+    private NodeState IsCanMovable()
+    {
+        return (isCanActive) ? NodeState.SUCCESS : NodeState.FAILURE;
+    }
+
+    #endregion
+
     #region 공격 모드
 
-    private NodeState FindPlayer()
+    private NodeState IsTargetExist()
     {
-        // RUN 모드면 FAIL
-        if (isRunMode) return NodeState.FAILURE;
-
-        // 이미 공격모드면 SUCCESS
-        if (isAttackMode) return NodeState.SUCCESS;
-
-        // 플레이어 찾기
-        playerDistance = Vector3.Distance(transform.position, player.transform.position);
-
-        if(playerDistance < detectDistance && IsPlayerInFieldOfView())
-        {
-            isAttackMode = true;
-            return NodeState.SUCCESS;
-        }
-
-        return NodeState.FAILURE;
+        target = player.target;
+        return (target != null) ? NodeState.SUCCESS : NodeState.FAILURE;
     }
 
-    private bool IsPlayerInFieldOfView()
-    {
-        Vector3 directionToPlayer = PlayerManager.Instance.Player.transform.position - transform.position;
-        float angle = Vector3.Angle(transform.forward, directionToPlayer);
-        return angle < filedOfView * 0.5f;
-    }
-
-    private NodeState SetTargetToPlayer()
+    private NodeState SetTarget()
     {
         // 속도 세팅
         SetSpeed(runSpeed);
 
-        // 플레이어 
+        // 타켓 위치로 목표 설정
         SetAgentStop(false);
         NavMeshPath path = new NavMeshPath();
-        if (agent.CalculatePath(player.transform.position, path))
+        if (agent.CalculatePath(target.transform.position, path))
         {
-            agent.SetDestination(player.transform.position);
-            targetDestination = player.transform.position;
+            agent.SetDestination(target.transform.position);
+            targetDestination = target.transform.position;
             SetStoppingDistance(2.0f);
             return NodeState.SUCCESS;
         }
@@ -145,10 +139,12 @@ public class CarnivoreAIController : AIController
 
         if (agent.remainingDistance <= agent.stoppingDistance)
         {
-            if(canAttack)
+            if (canAttack)
             {
-                player.condition.TakeDamage((int)animal.Data.atk);
-                Debug.Log("공격!");
+                if(target.transform.TryGetComponent<AIController>(out AIController _target))
+                {
+                    _target.OnHit((int)animal.Data.atk, this.transform.position);
+                }
                 isAttack = true;
                 canAttack = false;
                 currentAttackCoolTime = 0;
@@ -165,11 +161,8 @@ public class CarnivoreAIController : AIController
 
     private NodeState CheckDamage()
     {
-        // 플레이어로부터 데미지를 받았는지 체크
+        // 데미지를 받았는지 체크
         if (isHit) return NodeState.SUCCESS;
-
-        // RUN 모드면 SUCCESS
-        if (isRunMode) return NodeState.SUCCESS;
 
         return NodeState.FAILURE;
     }
@@ -180,9 +173,6 @@ public class CarnivoreAIController : AIController
         if (isHit)
         {
             StartDamageEffectCoroutine();
-
-            // 피격 당할 시 공격모드
-            isAttackMode = true;
         }
 
         return NodeState.SUCCESS;
@@ -190,7 +180,8 @@ public class CarnivoreAIController : AIController
 
     private NodeState SetRunTargetPosition()
     {
-        if (hitPosition == Vector3.zero) return NodeState.FAILURE;
+        if(player.target == null) return NodeState.FAILURE;
+        if (player.target.transform.position == Vector3.zero) return NodeState.FAILURE;
 
         // 도망갈 포지션 세팅
 
@@ -198,7 +189,7 @@ public class CarnivoreAIController : AIController
         SetSpeed(runSpeed);
 
         // hit 된 포지션 반대방향으로 설정
-        Vector3 backDirection = transform.position - hitPosition;
+        Vector3 backDirection = transform.position - player.target.transform.position;
         backDirection.y = 0;
         Vector3 backDirectionNormalized = backDirection.normalized;
 
@@ -221,13 +212,68 @@ public class CarnivoreAIController : AIController
 
     #endregion
 
+    #region 플레이어 따라다니기 Sequence
+
+    private NodeState SetTargetToPlayer()
+    {
+        // targetDestination이 지정이 되었다면 Move로 이동
+        if (targetDestination != Vector3.zero)
+        {
+            return NodeState.SUCCESS;
+        }
+
+        if (decisionStartTime < 0f)
+        {
+            // 처음 노드 진입 시 초기화
+            targetDestination = Vector3.zero;
+            decisionStartTime = Time.time;
+
+            // 고민하는 시간 랜덤으로 부여
+            SetDecisionDuration();
+
+            return NodeState.RUNNING;
+        }
+
+        if (Time.time < decisionStartTime + decisionDuration)
+        {
+            // 고민 중인 상태 일때는 RUNNING 반환
+            return NodeState.RUNNING;
+        }
+        else
+        {
+            // 속도 세팅
+            SetSpeed(runSpeed);
+
+            // 타켓 위치로 목표 설정
+            SetAgentStop(false);
+            NavMeshPath path = new NavMeshPath();
+            if (agent.CalculatePath(player.transform.position, path))
+            {
+                agent.SetDestination(player.transform.position);
+                SetAgentStop(false);
+                isMovingToTarget = true; // 플래그 설정
+                targetDestination = player.transform.position;
+                float randomDistance = Random.Range(minDistancePlayer, maxDistancePlayer);
+                SetStoppingDistance(randomDistance);
+
+                // 타이머 리셋
+                ResetDecisionStartTime();
+
+                return NodeState.SUCCESS;
+            }
+
+            return NodeState.RUNNING;
+        }
+    }
+
+    #endregion
+
     protected override void Update()
     {
         base.Update();
 
         AnimationHandle();
         UpdateAttackCoolTime();
-        UpdateRunMode();
     }
 
     private void AnimationHandle()
@@ -250,11 +296,7 @@ public class CarnivoreAIController : AIController
         isHit = true;
 
         animal.ConditionHandler.TakeDamage(damage);
-        if (animal.ConditionHandler.Health < threadHoldRunHp)
-        {
-            isAttackMode = false;
-            isRunMode = true;
-        }
+
     }
 
     /// <summary>
@@ -282,24 +324,16 @@ public class CarnivoreAIController : AIController
 
     private void UpdateAttackCoolTime()
     {
-        if(currentAttackCoolTime >= attackCoolTime)
+        if (currentAttackCoolTime >= attackCoolTime)
         {
             return;
         }
 
         currentAttackCoolTime += Time.deltaTime;
-        if(currentAttackCoolTime >= attackCoolTime)
+        if (currentAttackCoolTime >= attackCoolTime)
         {
             currentAttackCoolTime = attackCoolTime;
             canAttack = true;
-        }
-    }
-
-    private void UpdateRunMode()
-    {
-        if(Vector3.Distance(player.transform.position, transform.position) > 20.0f)
-        {
-            isRunMode = false;
         }
     }
 }
