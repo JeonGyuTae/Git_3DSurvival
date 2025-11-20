@@ -5932,12 +5932,12 @@ MonoBehaviour:
   maxDecisionDuration: 2
   minDecisionDuration: 5
   deadCoolTime: 2
+  isHit: 0
   filedOfView: 120
   detectDistance: 10
   attackDistance: 2
   attackCoolTime: 1
   threadHoldRunHp: 30
-  isHit: 0
 --- !u!114 &2114298757606568781
 MonoBehaviour:
   m_ObjectHideFlags: 0
