@@ -141,6 +141,7 @@ public class CarnivoreAIController : AIController
         {
             if(canAttack)
             {
+                player.condition.TakeDamage((int)animal.Data.atk);
                 Debug.Log("공격!");
                 isAttack = true;
                 canAttack = false;
@@ -234,12 +235,12 @@ public class CarnivoreAIController : AIController
         animal.AnimationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
-    public override void OnHit(Vector3 hitPosition)
+    public override void OnHit(int damage, Vector3 hitPosition)
     {
         this.hitPosition = hitPosition;
         isHit = true;
 
-        animal.ConditionHandler.TakeDamage(30);
+        animal.ConditionHandler.TakeDamage(damage);
         if (animal.ConditionHandler.Health < threadHoldRunHp)
         {
             isAttackMode = false;

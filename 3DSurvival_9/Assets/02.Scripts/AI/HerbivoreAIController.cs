@@ -134,12 +134,12 @@ public class HerbivoreAIController : AIController
         animal.AnimationHandler.Animate(in desiredAxis, desiredState, Time.deltaTime);
     }
 
-    public override void OnHit(Vector3 hitPosition)
+    public override void OnHit(int damage, Vector3 hitPosition)
     {
         this.hitPosition = hitPosition;
         isHit = true;
 
-        animal.ConditionHandler.TakeDamage(30);
+        animal.ConditionHandler.TakeDamage(damage);
     }
 
     /// <summary>

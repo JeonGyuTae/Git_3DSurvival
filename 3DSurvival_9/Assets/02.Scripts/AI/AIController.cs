@@ -300,7 +300,7 @@ public abstract class AIController : MonoBehaviour
         isHit = false;
     }
 
-    public virtual void OnHit(Vector3 hitPosition)
+    public virtual void OnHit(int damage, Vector3 hitPosition)
     {
         // 피격 판정
     }

@@ -6,7 +6,7 @@ using UnityEngine;
 /// Animal 스크립트
 /// Animal에 대한 Interact를 처리하는 스크립트이다.
 /// </summary>
-public class Animal : MonoBehaviour, IInteractable
+public class Animal : MonoBehaviour, IInteractable, IDamageable
 {
     [SerializeField] private AnimalData data;
 
@@ -67,11 +67,21 @@ public class Animal : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        // Test 공격 판정
+        /*// Test 공격 판정
         // Raycast로 hit 된 Position 값을 얻어와야 함
 
         Interaction interact = GameObject.FindAnyObjectByType<Interaction>();
-        controller.OnHit(interact.hitPosition);
+        controller.OnHit(interact.hitPosition);*/
+    }
+
+    public void TakeDamage(int damage)
+    {
+        
+    }
+
+    public void TakeDamage(int damage, Vector3 hitPosition)
+    {
+        controller.OnHit(damage, hitPosition);
     }
 
     #region 프로퍼티
