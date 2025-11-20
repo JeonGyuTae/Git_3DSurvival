@@ -14,9 +14,12 @@ public class HarvestableNode : MonoBehaviour
     [Header("Durability")]
     public int hitsToBreak = 3;
 
+    [Header("Required Tool")]
+    public ToolType requiredTool = ToolType.None;
+
     private int _currentHits;
 
-    public void Harvest(GameObject interactor, bool hasProperTool)
+    public void Harvest(GameObject interactor, ToolType usedTool)
     {
         if (dropItem == null)
         {
@@ -24,20 +27,27 @@ public class HarvestableNode : MonoBehaviour
             return;
         }
 
-        if (!hasProperTool)
+        // 도구가 없거나, 잘못된 도구면 실패
+        if (usedTool == ToolType.None || usedTool != requiredTool)
         {
-            Debug.Log($"[HarvestableNode] 잘못된 도구로 채집 시도: {dropItem.itemname}");
+            Debug.Log($"[HarvestableNode] 잘못된 도구로 채집 시도 ({usedTool} vs {requiredTool})");
             return;
         }
 
         int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
         if (amount <= 0) amount = 1;
 
-        Debug.Log($"[HarvestableNode] {dropItem.itemname} x{amount} 채집 성공");
+        // 인벤토리에 드랍 아이템 추가
+        var inventory = interactor.GetComponent<PlayerInventory>();
+        if (inventory != null)
+        {
+            inventory.AddItem(dropItem, amount);
+        }
 
         _currentHits++;
         if (_currentHits >= hitsToBreak)
         {
+            // 파괴 이펙트/사운드
             Destroy(gameObject);
         }
     }

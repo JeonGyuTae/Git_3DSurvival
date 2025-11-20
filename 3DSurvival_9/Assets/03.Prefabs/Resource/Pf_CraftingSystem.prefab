@@ -47,3 +47,4 @@ MonoBehaviour:
   recipes:
   - {fileID: 11400000, guid: b0162de1b49bc3a41a5dc59c15de448e, type: 2}
   - {fileID: 11400000, guid: 6c8a12c2d96f7c847a0a9ebd769cc806, type: 2}
+  playerInventory: {fileID: 0}
