@@ -306,10 +306,10 @@ GameObject:
   - component: {fileID: 5307694277841444636}
   - component: {fileID: 5135323545239040784}
   - component: {fileID: 7220967818650697820}
-  - component: {fileID: 6971023916529845989}
   - component: {fileID: 4458086321288928036}
   - component: {fileID: 3904654129706894003}
   - component: {fileID: -7181751081494244143}
+  - component: {fileID: 2708207132568203683}
   m_Layer: 0
   m_Name: AI_Dog
   m_TagString: Untagged
@@ -426,32 +426,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6971023916529845989
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1601339452394189622}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4286be8fa1c7eb54f8c35a2c7fa7a7bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  agent: {fileID: 0}
-  moveSpeed: 6
-  runSpeed: 13
-  maxMoveDistance: 3
-  minMoveDistance: 12
-  maxDecisionDuration: 2
-  minDecisionDuration: 3
-  deadCoolTime: 2
-  isHit: 0
-  filedOfView: 120
-  detectDistance: 10
-  attackDistance: 2
-  attackCoolTime: 5
-  threadHoldRunHp: 30
 --- !u!114 &4458086321288928036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -490,6 +464,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   data: {fileID: 11400000, guid: c9a0a4acae64db343b7006f062a60203, type: 2}
+--- !u!114 &2708207132568203683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1601339452394189622}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ba0d307fee8cc144bf51a18d4bd6c96, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  agent: {fileID: 0}
+  moveSpeed: 5
+  runSpeed: 10
+  maxMoveDistance: 2
+  minMoveDistance: 5
+  maxDecisionDuration: 2
+  minDecisionDuration: 3
+  deadCoolTime: 2
+  isHit: 0
+  attackDistance: 2
+  attackCoolTime: 3
 --- !u!1 &1648593758663553850
 GameObject:
   m_ObjectHideFlags: 0
