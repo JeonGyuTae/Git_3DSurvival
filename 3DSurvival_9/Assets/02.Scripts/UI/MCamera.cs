@@ -2,14 +2,14 @@
 
 public class MapPlayerTransform : MonoBehaviour
 {
-    public Transform transform;
+    public Transform mCamTransform;
     public Transform playerTransform;
 
     private void Awake()
     {
-        if (transform == null)
+        if (mCamTransform == null)
         {
-            Debug.Log("Player와 Map 간 연동 실패");
+            Debug.Log("Player와 MMap 간 연동 실패");
         }
     }
 
@@ -27,7 +27,7 @@ public class MapPlayerTransform : MonoBehaviour
 
     private void FollowTransform()
     {
-        transform.position = new Vector3
+        mCamTransform.position = new Vector3
             (
             PlayerManager.Instance.Player.transform.position.x,
             100,
