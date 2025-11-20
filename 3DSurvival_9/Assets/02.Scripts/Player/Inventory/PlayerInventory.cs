@@ -180,25 +180,6 @@ public class PlayerInventory : MonoBehaviour
         return true;
     }
 
-
-
-    public void ToggleInventory()
-    {
-        if (IsOpen())
-        {
-            inventoryUI.SetActive(false);
-        }
-        else
-        {
-            inventoryUI.SetActive(true);
-        }
-    }
-
-    public bool IsOpen()
-    {
-        return inventoryUI.activeInHierarchy;
-    }
-
     void UpdateUI()
     {
         for (int i = 0; i < slots.Length; i++)
