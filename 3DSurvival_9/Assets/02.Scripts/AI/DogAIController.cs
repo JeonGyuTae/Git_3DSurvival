@@ -116,6 +116,8 @@ public class DogAIController : AIController
 
     private NodeState SetTarget()
     {
+        if (target == null) return NodeState.FAILURE;
+
         // 속도 세팅
         SetSpeed(runSpeed);
 
