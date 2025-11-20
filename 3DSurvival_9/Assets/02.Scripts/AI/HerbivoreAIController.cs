@@ -16,7 +16,7 @@ using static UnityEngine.LightAnchor;
 /// </summary>
 public class HerbivoreAIController : AIController
 {
-    private const float OFFSET_RUN_ANGLE = 5.0f;
+    // 피격 코루틴
     private Coroutine damageEffectCoroutine;
 
     protected override void Awake()

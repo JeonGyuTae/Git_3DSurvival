@@ -10,11 +10,10 @@ using UnityEngine;
 /// </summary>
 public class ObjectCuller : MonoBehaviour
 {
-    [SerializeField] private string cullingTag;
-
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<ICullable>(out ICullable cullable))
+        ICullable cullable = other.GetComponentInParent<ICullable>();
+        if(cullable != null)
         {
             cullable.EnableCullComponents();
         }
@@ -22,7 +21,8 @@ public class ObjectCuller : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<ICullable>(out ICullable cullable))
+        ICullable cullable = other.GetComponentInParent<ICullable>();
+        if (cullable != null)
         {
             cullable.DisableCullComponents();
         }

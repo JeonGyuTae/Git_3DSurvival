@@ -10,27 +10,46 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 {
     [SerializeField] private AnimalData data;
 
-    private AIController controller;
+    protected AIController controller;
 
     [Header("Compnent")]
     private Rigidbody _rigidbody;
     private AnimalConditionHandler conditionHandler;
     private AnimalAnimationHandler animationHandler;
-    private SkinnedMeshRenderer skinnedMeshRenderer;
+    protected SkinnedMeshRenderer skinnedMeshRenderer;
     private ParticleSystem fx_dead;
 
-    private void Awake()
+    private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         animationHandler = GetComponent<AnimalAnimationHandler>();
         conditionHandler = GetComponent<AnimalConditionHandler>();;
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
+        SetController();
 
         fx_dead = GetComponentInChildren<ParticleSystem>();
 
         Init();
+    }
+
+    private void SetController()
+    {
+        switch(data.type)
+        {
+            case AnimalType.Herbivore:
+                controller = GetComponent<HerbivoreAIController>();
+                break;
+            case AnimalType.Carnivore:
+                controller = GetComponent<CarnivoreAIController>();
+                break;
+            case AnimalType.Partner:
+                controller = GetComponent<DogAIController>();
+                break;
+            default:
+                Debug.Log("타입이 없습니다.");
+                break;
+        }
     }
 
     public void Init()
@@ -47,8 +66,9 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
         DisableCullComponents();
     }
 
-    public InteractableType GetInteractableType()
+    public virtual InteractableType GetInteractableType()
     {
+        if (data.type == AnimalType.Partner) return InteractableType.NPC;
         return InteractableType.Animal;
     }
 
@@ -67,13 +87,12 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
         
     }
 
-    public void OnInteract()
+    public virtual void OnInteract()
     {
-        /*// Test 공격 판정
-        // Raycast로 hit 된 Position 값을 얻어와야 함
-
-        Interaction interact = GameObject.FindAnyObjectByType<Interaction>();
-        controller.OnHit(interact.hitPosition);*/
+        if(TryGetComponent<DogAIController>(out  var controller))
+        {
+            controller.SetCanActive();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -88,13 +107,19 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 
     public void EnableCullComponents()
     {
+        if (controller == null) return;
         if (controller.IsDeaded) return;
+
         skinnedMeshRenderer.enabled = true;
+        controller.enabled = true;
     }
 
-    public void DisableCullComponents()
+    public virtual void DisableCullComponents()
     {
+        if (data.type == AnimalType.Partner) return;
+
         skinnedMeshRenderer.enabled = false;
+        controller.enabled = false;
     }
 
     #region 프로퍼티
