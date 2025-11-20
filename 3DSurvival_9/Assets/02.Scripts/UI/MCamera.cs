@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class MapPlayerTransform : MonoBehaviour
+public class MCamera : MonoBehaviour
 {
     public Transform mCamTransform;
     public Transform playerTransform;
