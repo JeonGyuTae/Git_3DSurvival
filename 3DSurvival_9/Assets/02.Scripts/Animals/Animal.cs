@@ -6,7 +6,7 @@ using UnityEngine;
 /// Animal 스크립트
 /// Animal에 대한 Interact를 처리하는 스크립트이다.
 /// </summary>
-public class Animal : MonoBehaviour, IInteractable, IDamageable
+public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 {
     [SerializeField] private AnimalData data;
 
@@ -43,6 +43,8 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable
 
         // controller Init
         controller.Init();
+
+        DisableCullComponents();
     }
 
     public InteractableType GetInteractableType()
@@ -82,6 +84,17 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable
     public void TakeDamage(int damage, Vector3 hitPosition)
     {
         controller.OnHit(damage, hitPosition);
+    }
+
+    public void EnableCullComponents()
+    {
+        if (controller.IsDeaded) return;
+        skinnedMeshRenderer.enabled = true;
+    }
+
+    public void DisableCullComponents()
+    {
+        skinnedMeshRenderer.enabled = false;
     }
 
     #region 프로퍼티

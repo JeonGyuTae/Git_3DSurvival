@@ -50,6 +50,7 @@ MonoBehaviour:
   baseAmount: 1
   toolYieldMultiplier: 2
   hitsToBreak: 3
+  requiredTool: 1
 --- !u!208 &8718851639831564571
 NavMeshObstacle:
   m_ObjectHideFlags: 0

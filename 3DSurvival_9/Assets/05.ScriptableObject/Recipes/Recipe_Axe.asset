@@ -15,6 +15,6 @@ MonoBehaviour:
   inputA: {fileID: 11400000, guid: 2a91fe04d5a1aa841bf240856748f267, type: 2}
   inputCountA: 2
   inputB: {fileID: 11400000, guid: a1befcd42a1cc3e419f57db2fb531e12, type: 2}
-  inputCountB: 3
-  outputItem: {fileID: 11400000, guid: fc0082fdd67175e4ead4f4e97815f712, type: 2}
+  inputCountB: 2
+  outputItem: {fileID: 11400000, guid: c1590d9ce416ede4ca38a91995d36642, type: 2}
   outputItemCount: 1

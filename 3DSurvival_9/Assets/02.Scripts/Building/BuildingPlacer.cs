@@ -11,10 +11,10 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("Raycast Settings")]
     [SerializeField] private LayerMask placeMask;           // Ground 등
-    [SerializeField] private float maxPlaceDistance = 6f;   // 설치 최대 거리
+    [SerializeField] private float maxPlaceDistance = 8f;   // 설치 최대 거리
 
     [Header("Inventory")]
-    [SerializeField] private PlayerInventory playerInventory; // 인벤토리 (비워둬도 자동 찾음)
+    [SerializeField] private PlayerInventory playerInventory; // 인벤토리 (비워두면 자동 찾음)
 
     [Header("Rotation")]
     [SerializeField] private float rotateStep = 15f;
@@ -34,18 +34,15 @@ public class BuildingPlacer : MonoBehaviour
     private float currentYRotation = 0f;
     private Quaternion baseRotation = Quaternion.identity;
 
-    // ──────────────────────────────────────────────
-    // PlayerInventory 자동 찾기
-    // ──────────────────────────────────────────────
     private void TryGetInventory()
     {
-        if (playerInventory == null)
+        if (playerInventory != null) return;
+
+        // 비활성 오브젝트까지 포함해서 PlayerInventory 찾기
+        playerInventory = FindObjectOfType<PlayerInventory>(true);
+        if (playerInventory != null)
         {
-            playerInventory = FindObjectOfType<PlayerInventory>();
-            if (playerInventory != null)
-            {
-                Debug.Log("BuildingPlacer: PlayerInventory 자동 연결됨.");
-            }
+            Debug.Log("BuildingPlacer: PlayerInventory 자동 연결됨", this);
         }
     }
 
@@ -204,14 +201,17 @@ public class BuildingPlacer : MonoBehaviour
             if (!canPlace || currentPreview == null || buildingPrefab == null)
                 return;
 
-            // 혹시 중간에 인벤에서 버렸을 수도 있으니 한 번 더 체크
+            // 혹시 그 사이에 재료를 버렸을 수도 있으니 한 번 더 체크
             if (!HasRequiredResources())
             {
                 Debug.Log("건축 실패: 재료가 부족합니다.");
                 return;
             }
 
-            // 실제 건물 설치 (※ 지금은 재료를 차감하지는 않음)
+            // 재료 소모
+            ConsumeResources();
+
+            // 실제 건물 설치
             Instantiate(
                 buildingPrefab,
                 currentPreview.transform.position,
@@ -236,8 +236,13 @@ public class BuildingPlacer : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 현재 선택된 건물에 필요한 재료가 인벤토리에 있는지 확인.
+    /// (PlayerInventory.slots 를 그대로 읽어서 이름/개수만 체크)
+    /// </summary>
     private bool HasRequiredResources()
     {
+        // 인벤토리나 cost 설정이 없으면 체크 안 함
         if (playerInventory == null || currentOption == null ||
             currentOption.cost == null || currentOption.cost.Length == 0)
             return true;
@@ -245,6 +250,7 @@ public class BuildingPlacer : MonoBehaviour
         var slots = playerInventory.slots;
         if (slots == null) return true;
 
+        // 여러 재료가 필요할 수도 있으므로 cost 배열 전체 검사
         foreach (var c in currentOption.cost)
         {
             if (c == null || string.IsNullOrEmpty(c.resourceName) || c.amount <= 0)
@@ -252,11 +258,13 @@ public class BuildingPlacer : MonoBehaviour
 
             int total = 0;
 
+            // 인벤토리 슬롯 전체 돌면서 해당 이름의 개수 합산
             for (int i = 0; i < slots.Length; i++)
             {
                 var data = slots[i].itemdata;
                 if (data == null) continue;
 
+                // ItemData.itemname 기준으로 비교
                 if (data.itemname == c.resourceName)
                 {
                     total += slots[i].quantity;
@@ -270,5 +278,57 @@ public class BuildingPlacer : MonoBehaviour
 
         // 모든 재료가 충분
         return true;
+    }
+
+    /// <summary>
+    /// 설치가 확정됐을 때, 인벤토리에서 실제로 재료를 차감하고 UI를 갱신.
+    /// </summary>
+    private void ConsumeResources()
+    {
+        if (playerInventory == null || currentOption == null ||
+            currentOption.cost == null || currentOption.cost.Length == 0)
+            return;
+
+        var slots = playerInventory.slots;
+        if (slots == null) return;
+
+        foreach (var c in currentOption.cost)
+        {
+            if (c == null || string.IsNullOrEmpty(c.resourceName) || c.amount <= 0)
+                continue;
+
+            int remaining = c.amount;   // 아직 빼야 할 개수
+
+            for (int i = 0; i < slots.Length; i++)
+            {
+                var slot = slots[i];
+                var data = slot.itemdata;
+                if (data == null) continue;
+
+                if (data.itemname != c.resourceName)
+                    continue;
+
+                // 이 슬롯에서 얼마나 뺄지
+                int use = Mathf.Min(remaining, slot.quantity);
+                slot.quantity -= use;
+                remaining -= use;
+
+                // 개수가 0이 되면 아이템 자체 제거
+                if (slot.quantity <= 0)
+                {
+                    slot.itemdata = null;
+                    slot.Clear();   // UI 비우기
+                }
+                else
+                {
+                    slot.Set();     // UI 숫자 갱신
+                }
+
+                if (remaining <= 0)
+                    break;
+            }
+        }
+
+        Debug.Log("BuildingPlacer: 건설에 필요한 재료를 소모했습니다.");
     }
 }
