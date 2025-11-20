@@ -34,13 +34,14 @@ public class PlayerController : MonoBehaviour
     private bool isJumping;
     private bool runInputHold;
 
+    private bool canControl;
+
     private CapsuleCollider _capsuleCollider;
     private float originalColliderHeight;
     private Vector3 originalColliderCenter;
     private Vector3 originalCamLocalPos;
     private float sneakingColliderCenterY;
 
-    public System.Action inventory;
     public System.Action throwItem;
     public System.Action useItem;
 
@@ -73,6 +74,7 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         canLook = true;
+        canControl = true;
         if (crossHair != null)
         {
             crossHair.gameObject.SetActive(true);
@@ -81,12 +83,26 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        isMoving = curMovementInput.magnitude > 0.1f;
-        isRunning = runInputHold && isMoving && !isSneaking;
+        if (!canControl)
+        {
+            isMoving = false;
+            isRunning = false;
+        }
+        else
+        {
+            isMoving = curMovementInput.magnitude > 0.1f;
+            isRunning = runInputHold && isMoving && !isSneaking;
+        }
     }
 
     private void FixedUpdate()
     {
+        if (!canControl)
+        {
+            _rigidbody.velocity = Vector3.zero;
+            return;
+        }
+
         Move();
         GravityEffect();
     }
@@ -145,6 +161,11 @@ public class PlayerController : MonoBehaviour
     #region 이동입력
     public void OnMove(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Performed)
         {
             isMoving = true;
@@ -161,6 +182,11 @@ public class PlayerController : MonoBehaviour
     #region 웅크리기
     public void OnSneaking(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Performed)
         {
             isSneaking = true;
@@ -195,6 +221,11 @@ public class PlayerController : MonoBehaviour
     #region 달리기
     public void OnRun(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (isSneaking)
         {
             runInputHold = false;
@@ -215,6 +246,11 @@ public class PlayerController : MonoBehaviour
     // 외부 접근용(PlayerCondition.cs)
     public void runInputHoldFalse()
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (runInputHold)
         {
             runInputHold = false;
@@ -223,12 +259,22 @@ public class PlayerController : MonoBehaviour
 
     public void OnLook(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         mouseDelta = context.ReadValue<Vector2>();
     }
 
     #region 점프
     public void OnJump(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (IsGrounded() && condition.UseStamina(useJumpStamina))
@@ -290,7 +336,6 @@ public class PlayerController : MonoBehaviour
     {
         if(context.phase == InputActionPhase.Started)
         {
-            inventory?.Invoke();
             ToggleCursor();
         }
     }
@@ -308,7 +353,12 @@ public class PlayerController : MonoBehaviour
 
     public void OnUseItem(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (!canControl)
+        {
+            return;
+        }
+
+        if (context.phase == InputActionPhase.Started)
         {
             useItem?.Invoke();
         }
@@ -317,7 +367,12 @@ public class PlayerController : MonoBehaviour
     #region 아이템 슬롯 선택
     public void OnSelectSlot1(InputAction.CallbackContext context)
     {
-        if(context.phase == InputActionPhase.Started)
+        if (!canControl)
+        {
+            return;
+        }
+
+        if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
             {
@@ -328,6 +383,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot2(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -339,6 +399,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot3(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -350,6 +415,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot4(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -361,6 +431,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot5(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -372,6 +447,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot6(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -383,6 +463,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot7(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -394,6 +479,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot8(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -405,6 +495,11 @@ public class PlayerController : MonoBehaviour
 
     public void OnSelectSlot9(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             if (PlayerManager.Instance.PlayerInventory != null)
@@ -416,9 +511,30 @@ public class PlayerController : MonoBehaviour
     #endregion
     public void OnThrow(InputAction.CallbackContext context)
     {
+        if (!canControl)
+        {
+            return;
+        }
+
         if (context.phase == InputActionPhase.Started)
         {
             throwItem?.Invoke();
         }
+    }
+    public void DisableMovement()
+    {
+        canControl = false;
+        curMovementInput = Vector2.zero;
+        _rigidbody.velocity = Vector3.zero;
+        isRunning = false;
+        runInputHold = false;
+        isSneaking = false;
+        ToggleCursor();
+    }
+
+    public void EnableMovement()
+    {
+        canControl = true;
+        ToggleCursor();
     }
 }

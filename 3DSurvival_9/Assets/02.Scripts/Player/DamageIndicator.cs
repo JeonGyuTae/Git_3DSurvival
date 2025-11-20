@@ -44,7 +44,7 @@ public class DamageIndicator : MonoBehaviour
 
         effectHigh.enabled = true;
         effectHigh.color = new Color(1f, 1f, 1f);
-        coroutine = StartCoroutine(FadeAway(effectHigh, 0.5f));
+        coroutine = StartCoroutine(FadeAway(effectHigh, 0.7f));
     }
 
     public void FlashHeal()
