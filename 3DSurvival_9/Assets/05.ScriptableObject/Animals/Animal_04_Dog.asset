@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: Animal_04_Dog
   m_EditorClassIdentifier: 
   animalName: "\uAC1C"
-  description: "\uC0AC\uB098\uC6B4 \uAC1C\uC774\uB2E4"
-  type: 0
-  maxHp: 100
+  description: "\uB3D9\uB8CC \uD30C\uD2B8\uB108"
+  type: 2
+  maxHp: 500
   atk: 15
   prefab: {fileID: 1601339452394189622, guid: 26a303c27fb1587448fcdec64ff4e705, type: 3}
   respawnTime: 30
+  pivotArea: {x: 0, y: 0, z: 0}
+  habitat: {x: 0, y: 0, z: 0}

@@ -26,11 +26,30 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
         conditionHandler = GetComponent<AnimalConditionHandler>();;
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
 
-        controller = (data.type == AnimalType.Herbivore) ? GetComponent<HerbivoreAIController>() : GetComponent<CarnivoreAIController>();
+        SetController();
 
         fx_dead = GetComponentInChildren<ParticleSystem>();
 
         Init();
+    }
+
+    private void SetController()
+    {
+        switch(data.type)
+        {
+            case AnimalType.Herbivore:
+                controller = GetComponent<HerbivoreAIController>();
+                break;
+            case AnimalType.Carnivore:
+                controller = GetComponent<CarnivoreAIController>();
+                break;
+            case AnimalType.Partner:
+                controller = GetComponent<DogAIController>();
+                break;
+            default:
+                Debug.Log("타입이 없습니다.");
+                break;
+        }
     }
 
     public void Init()
@@ -90,6 +109,8 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 
     public void DisableCullComponents()
     {
+        if (data.type == AnimalType.Partner) return;
+
         skinnedMeshRenderer.enabled = false;
         controller.enabled = false;
     }

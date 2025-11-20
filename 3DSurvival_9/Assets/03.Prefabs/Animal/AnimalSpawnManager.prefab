@@ -129,6 +129,7 @@ Transform:
   - {fileID: 1001762056239859095}
   - {fileID: 7364972796405470548}
   - {fileID: 304527007259865733}
+  - {fileID: 7800196853438072375}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6402901327385625942
@@ -143,6 +144,54 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 30cd2d5cf3d6f9a498c3b8528ec26d4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &7591621345834322086
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7800196853438072375}
+  - component: {fileID: 4356595752689675409}
+  m_Layer: 0
+  m_Name: SpawnAnimal_Dog
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7800196853438072375
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591621345834322086}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -183.1, y: 5.77, z: -172.57}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5758738391821107951}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4356595752689675409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7591621345834322086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 183bdb7436e77e4488ba2eb98e9cea0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animal: {fileID: 11400000, guid: c9a0a4acae64db343b7006f062a60203, type: 2}
+  maxAnimalCount: 1
+  spawnArea: {x: 30, y: 5, z: 30}
+  offsetY: 5
 --- !u!1 &9022637814987649710
 GameObject:
   m_ObjectHideFlags: 0
