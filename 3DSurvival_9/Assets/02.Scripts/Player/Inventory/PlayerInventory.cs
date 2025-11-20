@@ -5,7 +5,6 @@ public class PlayerInventory : MonoBehaviour
 {
     public ItemSlot[] slots;
 
-    [SerializeField] private GameObject inventoryUI;
     [SerializeField] private Transform slotPanel;
     private Transform dropPosition;
 
@@ -34,12 +33,10 @@ public class PlayerInventory : MonoBehaviour
         condition = PlayerManager.Instance.Player.condition;
         dropPosition = PlayerManager.Instance.Player.dropPosition;
 
-        controller.inventory += ToggleInventory;
         controller.throwItem += OnDropItem;
         controller.useItem += OnUseItem;
         PlayerManager.Instance.Player.addItem += AddItem;
 
-        inventoryUI.SetActive(false);
         SelectItem(-1);
     }
 
@@ -181,25 +178,6 @@ public class PlayerInventory : MonoBehaviour
 
         UpdateUI();
         return true;
-    }
-
-
-
-    public void ToggleInventory()
-    {
-        if (IsOpen())
-        {
-            inventoryUI.SetActive(false);
-        }
-        else
-        {
-            inventoryUI.SetActive(true);
-        }
-    }
-
-    public bool IsOpen()
-    {
-        return inventoryUI.activeInHierarchy;
     }
 
     void UpdateUI()

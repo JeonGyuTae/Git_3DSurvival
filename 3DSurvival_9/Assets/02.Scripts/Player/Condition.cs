@@ -13,7 +13,7 @@ public class Condition : MonoBehaviour
 
     void Start()
     {
-        curValue = startValue;
+        ResetToStartValue();
     }
 
     void Update()
@@ -35,5 +35,10 @@ public class Condition : MonoBehaviour
     public void Sub(float value)
     {
         curValue = Mathf.Max(curValue  - value, 0);
+    }
+
+    public void ResetToStartValue()
+    {
+        curValue = startValue;
     }
 }

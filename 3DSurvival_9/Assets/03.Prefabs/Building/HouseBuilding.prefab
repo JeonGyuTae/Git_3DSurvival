@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8631882000693163598}
   - component: {fileID: 3230664827998761171}
   m_Layer: 5
-  m_Name: Stairs
+  m_Name: Boat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -347,10 +347,10 @@ MonoBehaviour:
     previewPrefab: {fileID: 1344937545588530064, guid: e113f6dc8ec1ec44f86ba379012f53c9,
       type: 3}
     cost: []
-  - displayName: Stairs
-    prefab: {fileID: 4885501389981479253, guid: fc4f044bf67d473479d756437dcdad85,
+  - displayName: Boat
+    prefab: {fileID: 8348763054766809644, guid: 6abcad8f5ed6af94ab36e6fc0700e4bb,
       type: 3}
-    previewPrefab: {fileID: 9205689054176204165, guid: 3ec615242d1cc7c4185469f1282312c7,
+    previewPrefab: {fileID: 8348763054766809644, guid: 6abcad8f5ed6af94ab36e6fc0700e4bb,
       type: 3}
     cost: []
 --- !u!114 &1885512527094644112
@@ -439,7 +439,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Fence : Wood X 5'
+  m_text: 'Fence : Wood X 2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -857,7 +857,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 60a1325aa5c26104e9ed60ad5bd97d0e, type: 3}
+  m_Sprite: {fileID: 21300000, guid: dba27a2a2ee6fe944b5a87b47b221b52, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1421,7 +1421,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'CampFire : Wood X 5'
+  m_text: 'CampFire : Wood X 2'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2156,7 +2156,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Stairs : Wood X 5'
+  m_text: 'Stairs : Wood X 30'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
