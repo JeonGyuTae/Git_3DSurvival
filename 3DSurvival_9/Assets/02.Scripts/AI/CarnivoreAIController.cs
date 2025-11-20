@@ -19,13 +19,6 @@ public class CarnivoreAIController : AIController
 
     private float playerDistance;
 
-    private bool isMovingToTarget = false; // 플래그 설정
-
-    private Vector3 hitPosition;
-
-    [SerializeField] private bool isHit = false;
-    public bool IsHit { get { return isHit; } set { isHit = value; } }
-
     private bool isAttackMode = false;
     private bool isAttack = false;
     private bool isRunMode = false;
@@ -161,78 +154,6 @@ public class CarnivoreAIController : AIController
 
     #endregion
 
-
-    #region Sequence : Patrol
-
-    private NodeState SetPatrolTargetPosition()
-    {
-        // targetDestination이 지정이 되었다면 Move로 이동
-        if (targetDestination != Vector3.zero)
-        {
-            return NodeState.SUCCESS;
-        }
-
-        if (decisionStartTime < 0f)
-        {
-            // 처음 노드 진입 시 초기화
-            targetDestination = Vector3.zero;
-            decisionStartTime = Time.time;
-
-            // 고민하는 시간 랜덤으로 부여
-            SetDecisionDuration();
-
-            return NodeState.RUNNING;
-        }
-
-        if (Time.time < decisionStartTime + decisionDuration)
-        {
-            // 고민 중인 상태 일때는 RUNNING 반환
-            return NodeState.RUNNING;
-        }
-        else
-        {
-            Vector3 randomDirection = Random.onUnitSphere * Random.Range(minMoveDistance, maxMoveDistance);
-            Vector3 randomPosition = transform.position + randomDirection;
-
-            // 목표 설정
-            if (CheckTargetPositionOnNavMesh(randomPosition, maxMoveDistance, NavMesh.AllAreas))
-            {
-                // 속도 세팅
-                SetSpeed(runSpeed);
-
-                SetStoppingDistance(0.0f);
-
-                // 타이머 리셋
-                ResetDecisionStartTime();
-                return NodeState.SUCCESS;
-            }
-
-            // 목표가 설정되지 못하면 다시 고민하고 목표 찾기
-            ResetDecisionStartTime();
-            return NodeState.RUNNING;
-        }
-    }
-
-    private NodeState MoveToTarget()
-    {
-        // 목표가 설정되지 않으면 return
-        if (!agent.enabled || targetDestination == Vector3.zero || !isMovingToTarget) return NodeState.SUCCESS;
-
-
-        // 이동 시작
-        if (agent.remainingDistance <= agent.stoppingDistance)
-        {
-            ResetSetting();
-            return NodeState.SUCCESS;
-        }
-        else
-        {
-            return NodeState.RUNNING;
-        }
-    }
-
-    #endregion
-
     #region Sequence : Run Away
 
     private NodeState CheckDamage()
@@ -290,24 +211,6 @@ public class CarnivoreAIController : AIController
 
     #endregion
 
-    private bool CheckTargetPositionOnNavMesh(Vector3 sourcePosition, float maxDistance, int areaMask)
-    {
-        if (NavMesh.SamplePosition(sourcePosition, out NavMeshHit hit, maxDistance, areaMask))
-        {
-            targetDestination = hit.position;
-            Debug.DrawRay(targetDestination, Vector3.up * 5f, Color.green, 1f);
-
-            agent.SetDestination(targetDestination);
-            SetAgentStop(false);
-
-            isMovingToTarget = true; // 플래그 설정
-
-            return true;
-        }
-
-        return false;
-    }
-
     protected override void Update()
     {
         base.Update();
@@ -342,26 +245,6 @@ public class CarnivoreAIController : AIController
             isAttackMode = false;
             isRunMode = true;
         }
-    }
-
-    public void OnTakeDamage(int damage)
-    {
-        isHit = true;
-        animal.ConditionHandler.TakeDamage(damage);
-
-        if(animal.ConditionHandler.Health > threadHoldRunHp) isRunMode = true;
-    }
-
-    private void ResetSetting()
-    {
-        SetAgentStop(true);
-        targetDestination = Vector3.zero;
-        isMovingToTarget = false;
-
-        // 피격 당할 시 자동으로 플레이어 쫓기
-        if (isHit && !isRunMode) isAttackMode = true;
-
-        isHit = false;
     }
 
     /// <summary>
