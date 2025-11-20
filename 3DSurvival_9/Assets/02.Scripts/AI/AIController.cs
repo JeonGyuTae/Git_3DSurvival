@@ -34,6 +34,9 @@ public abstract class AIController : MonoBehaviour
     private bool canDestory = false;
 
     private bool isMovingToTarget = false; // 플래그 설정
+    private bool isDead = false;
+    public bool IsDeaded {  get { return isDead; } }
+
     private int cntFindPatrolPath = 0;      // 순회 결정 카운트
     private int threadHoldFindPatrolPathCount = 30;  // 최대 순회 결정 카운트
 
@@ -57,6 +60,9 @@ public abstract class AIController : MonoBehaviour
         // 활성화 시 세팅
         currentDeadCoolTime = 0.0f;
         canDestory = false;
+
+        isDead = false;
+        isHit = false;
     }
 
     protected virtual void Start()
@@ -95,6 +101,8 @@ public abstract class AIController : MonoBehaviour
             canDestory = false;
             SetAgentStop(false);
             animal.SkinnedMeshRenderer.enabled = false;
+           
+            isDead = true;
 
             Invoke("DisableObject", deadCoolTime);
 
