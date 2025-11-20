@@ -174,6 +174,9 @@ public class CarnivoreAIController : AIController
         if (isHit)
         {
             StartDamageEffectCoroutine();
+
+            // 피격 당할 시 공격모드
+            isAttackMode = true;
         }
 
         return NodeState.SUCCESS;
