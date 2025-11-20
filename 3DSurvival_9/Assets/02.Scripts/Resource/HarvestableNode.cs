@@ -1,71 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class HarvestableNode : MonoBehaviour, ICullable
+public class HarvestableNode : MonoBehaviour
 {
     [Header("Drop Item")]
     public ItemData dropItem;
     public int baseAmount = 1;
 
     [Header("Tool Bonus")]
-    public float toolYieldMultiplier = 2f;
+    public float toolYieldMultiplier = 1f;
 
     [Header("Durability")]
     public int hitsToBreak = 3;
 
-    [Header("Required Tool")]
-    public ToolType requiredTool = ToolType.None;
-
     private int _currentHits;
 
-    private MeshRenderer meshRenderer;
-
-    private void Start()
-    {
-        meshRenderer = GetComponentInChildren<MeshRenderer>();
-        DisableCullComponents();
-    }
-
-    public void EnableCullComponents()
-    {
-        meshRenderer.enabled = true;
-    }
-
-    public void DisableCullComponents()
-    {
-        meshRenderer.enabled = false;
-    }
-
-    public void Harvest(GameObject interactor, ToolType usedTool)
+    // µµ±¸ ±¸ºĞ ¾È ÇÑ´Ù. ±×³É ¸ÂÀ¸¸é Ä³Áü.
+    public void Harvest()
     {
         if (dropItem == null)
         {
-            Debug.LogWarning($"{name} : dropItemì´ ë¹„ì–´ ìˆìŒ");
+            Debug.LogWarning($"{name} : dropItemÀÌ ºñ¾î ÀÖÀ½");
             return;
-        }
-
-        // ë„êµ¬ê°€ ì—†ê±°ë‚˜, ì˜ëª»ëœ ë„êµ¬ë©´ ì‹¤íŒ¨
-        if (usedTool == ToolType.None || usedTool != requiredTool)
-        {
-            Debug.Log($"[HarvestableNode] ì˜ëª»ëœ ë„êµ¬ë¡œ ì±„ì§‘ ì‹œë„ ({usedTool} vs {requiredTool})");
-            return;
-        }
-
-        int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
-        if (amount <= 0) amount = 1;
-
-        // ì¸ë²¤í† ë¦¬ì— ë“œë ì•„ì´í…œ ì¶”ê°€
-        var inventory = interactor.GetComponent<PlayerInventory>();
-        if (inventory != null)
-        {
-            inventory.AddItem(dropItem, amount);
         }
 
         _currentHits++;
+        Debug.Log($"{name} ¸ÂÀ½! ÇöÀç È÷Æ® ¼ö: {_currentHits}/{hitsToBreak}");
+
         if (_currentHits >= hitsToBreak)
         {
-            // íŒŒê´´ ì´í™íŠ¸/ì‚¬ìš´ë“œ
+            int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
+            if (amount <= 0) amount = 1;
+
+            var inventory = PlayerManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                inventory.AddItem(dropItem, amount);
+                Debug.Log($"[HarvestableNode] {dropItem.name} x{amount} ÀÎº¥Åä¸®¿¡ Ãß°¡");
+            }
+
             Destroy(gameObject);
         }
     }

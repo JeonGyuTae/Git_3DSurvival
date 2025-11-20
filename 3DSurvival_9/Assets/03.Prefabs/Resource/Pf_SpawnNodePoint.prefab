@@ -47,10 +47,10 @@ MonoBehaviour:
   spawnEntries:
   - nodePrefab: {fileID: 6091938890221920170, guid: 8a42e54c51150d24c8e91838b7a51906,
       type: 3}
-    weight: 0
+    weight: 1
   - nodePrefab: {fileID: 977515659621658839, guid: fc72636e5272cc74ca35274b1c75d0c7,
       type: 3}
-    weight: 0
+    weight: 1
   respawnDelay: 5
   groundMask:
     serializedVersion: 2
