@@ -51,6 +51,11 @@ public class EquipTool : Equip
 
             if(damageable != null)
             {
+                if (hit.collider.transform.GetComponent<Animal>())
+                {
+                    PlayerManager.Instance.Player.target = hit.collider.gameObject.transform;
+                }
+
                 damageable.TakeDamage((int)damage, hit.point);
             }
         }

@@ -11,6 +11,8 @@ public class Player : MonoBehaviour
 
     public Transform dropPosition;
 
+    public Transform target;
+
     private void Awake()
     {
         PlayerManager.Instance.Player = this;
