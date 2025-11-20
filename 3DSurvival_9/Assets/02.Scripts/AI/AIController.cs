@@ -33,7 +33,7 @@ public abstract class AIController : MonoBehaviour
     private float currentDeadCoolTime = 0.0f;
     private bool canDestory = false;
 
-    private bool isMovingToTarget = false; // 플래그 설정
+    protected bool isMovingToTarget = false; // 플래그 설정
     private bool isDead = false;
     public bool IsDeaded {  get { return isDead; } }
 

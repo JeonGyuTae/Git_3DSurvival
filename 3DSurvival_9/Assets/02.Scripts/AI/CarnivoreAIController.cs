@@ -7,6 +7,7 @@ using static UnityEngine.LightAnchor;
 
 public class CarnivoreAIController : AIController
 {
+    [Header("Carnivor Stat")]
     [SerializeField] private float filedOfView = 120f;
     [SerializeField] private float detectDistance = 10f;
     [SerializeField] private float attackDistance = 2.0f;
@@ -14,17 +15,22 @@ public class CarnivoreAIController : AIController
 
     [SerializeField] private int threadHoldRunHp = 30;
 
+    // 공격 상태 변수
     private float currentAttackCoolTime = 0.0f;
     private bool canAttack = false;
 
+    // 플레이어와 거리를 체크하는 함수
     private float playerDistance;
 
+    // 상태 변수
     private bool isAttackMode = false;
     private bool isAttack = false;
     private bool isRunMode = false;
 
+    // 코루틴 변수
     private Coroutine damageEffectCoroutine;
 
+    // 플레이어 참조
     private Player player;
 
     protected override void Awake()
