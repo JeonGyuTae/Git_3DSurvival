@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class HarvestableNode : MonoBehaviour
@@ -9,17 +7,15 @@ public class HarvestableNode : MonoBehaviour
     public int baseAmount = 1;
 
     [Header("Tool Bonus")]
-    public float toolYieldMultiplier = 2f;
+    public float toolYieldMultiplier = 1f;
 
     [Header("Durability")]
     public int hitsToBreak = 3;
 
-    [Header("Required Tool")]
-    public ToolType requiredTool = ToolType.None;
-
     private int _currentHits;
 
-    public void Harvest(GameObject interactor, ToolType usedTool)
+    // 도구 구분 안 한다. 그냥 맞으면 캐짐.
+    public void Harvest()
     {
         if (dropItem == null)
         {
@@ -27,27 +23,21 @@ public class HarvestableNode : MonoBehaviour
             return;
         }
 
-        // 도구가 없거나, 잘못된 도구면 실패
-        if (usedTool == ToolType.None || usedTool != requiredTool)
-        {
-            Debug.Log($"[HarvestableNode] 잘못된 도구로 채집 시도 ({usedTool} vs {requiredTool})");
-            return;
-        }
-
-        int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
-        if (amount <= 0) amount = 1;
-
-        // 인벤토리에 드랍 아이템 추가
-        var inventory = interactor.GetComponent<PlayerInventory>();
-        if (inventory != null)
-        {
-            inventory.AddItem(dropItem, amount);
-        }
-
         _currentHits++;
+        Debug.Log($"{name} 맞음! 현재 히트 수: {_currentHits}/{hitsToBreak}");
+
         if (_currentHits >= hitsToBreak)
         {
-            // 파괴 이펙트/사운드
+            int amount = Mathf.RoundToInt(baseAmount * toolYieldMultiplier);
+            if (amount <= 0) amount = 1;
+
+            var inventory = PlayerManager.Instance.PlayerInventory;
+            if (inventory != null)
+            {
+                inventory.AddItem(dropItem, amount);
+                Debug.Log($"[HarvestableNode] {dropItem.name} x{amount} 인벤토리에 추가");
+            }
+
             Destroy(gameObject);
         }
     }

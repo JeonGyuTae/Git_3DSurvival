@@ -21,3 +21,4 @@ MonoBehaviour:
   consumables: []
   equipPrefab: {fileID: 9085129210769003454, guid: 09b078aa226e70045b70d755ffa2e623,
     type: 3}
+  toolType: 1

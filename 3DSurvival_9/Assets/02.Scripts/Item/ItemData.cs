@@ -42,4 +42,7 @@ public class ItemData : ScriptableObject
 
     [Header("Equip")]
     public GameObject equipPrefab;
+
+    [Header("Tool Info")]
+    public ToolType toolType = ToolType.None;
 }
