@@ -66,7 +66,7 @@ public class DamageIndicator : MonoBehaviour
         while (alpha > 0)
         {
             alpha -= (startAlpha / flashSpeed) * Time.deltaTime;
-            effect.color = new Color(255f, 255f, 255f, alpha);
+            effect.color = new Color(1f, 1f, 1f, alpha);
             yield return null;
         }
 
