@@ -39,7 +39,7 @@ public class BuildingUIManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
+        if (Input.GetKeyDown(KeyCode.Tab))
         {
             ToggleUI();
         }
