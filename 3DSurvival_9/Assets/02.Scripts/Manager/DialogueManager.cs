@@ -74,7 +74,7 @@ public class DialogueManager : MonoBehaviour
         if (playerInput != null)
             playerInput.enabled = false;
 
-        nameText.text = data.npcName;
+        nameText.text = data.displayName;
         currentDialogues = data.dialogues;
         index = 0;
         lookTargetNPC = npcTransform;
