@@ -211,6 +211,16 @@ public class BuildingPlacer : MonoBehaviour
             // 재료 소모
             ConsumeResources();
 
+            // 설치하려는 오브젝트 Boat인지 체크
+            if(IsBuildBoat(buildingPrefab))
+            {
+                if(!CheckBuildInEsacpeZone(currentPreview))
+                {
+                    CancelPlacing();
+                    return;
+                }
+            }
+
             // 실제 건물 설치
             Instantiate(
                 buildingPrefab,
@@ -221,6 +231,32 @@ public class BuildingPlacer : MonoBehaviour
             // 한 번 설치 후 배치 모드 종료
             CancelPlacing();
         }
+    }
+
+    private bool IsBuildBoat(GameObject prefab)
+    {
+        return (prefab.transform.TryGetComponent<Boat>(out Boat boat));
+    }
+
+    private bool CheckBuildInEsacpeZone(GameObject currentPreview)
+    {
+        // 현재 설치하려는 지역이 EscapeZone인지 확인
+        EscapeZone escapeZone = FindFirstObjectByType<EscapeZone>();
+
+        Vector3 pivot = escapeZone.Pivot;
+        Vector3 area = escapeZone.AreaScale;
+
+        bool inX;
+        float minX = (pivot.x - area.x);
+        float maxX = (pivot.x + area.x);
+        inX = (currentPreview.transform.position.x > minX && currentPreview.transform.position.x < maxX);
+
+        bool inZ;
+        float minZ = (pivot.z - area.z);
+        float maxZ = (pivot.z + area.z);
+        inZ = (currentPreview.transform.position.z > minZ && currentPreview.transform.position.z < maxZ);
+
+        return inX && inZ;
     }
 
     private void UpdatePreviewColor()

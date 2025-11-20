@@ -9,7 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6307506802149437211}
-  m_Layer: 0
+  - component: {fileID: 3434555058978027472}
+  - component: {fileID: 2670084365129338171}
+  m_Layer: 8
   m_Name: Boat
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,6 +46,40 @@ Transform:
   - {fileID: 7240849524475974093}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &3434555058978027472
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861084606563570461}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4, y: 5, z: 3}
+  m_Center: {x: -1.6, y: 0, z: -1.2}
+--- !u!114 &2670084365129338171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4861084606563570461}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aeef936f59cdeb94bb976fc76ede8744, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endingUI: {fileID: 0}
 --- !u!1001 &587651625974770312
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -116,6 +152,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Log (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -201,6 +242,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -223,6 +269,10 @@ PrefabInstance:
     - target: {fileID: 1000012508307484, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
       propertyPath: m_Name
       value: LowPolyTent
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012508307484, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4000011385456942, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
       propertyPath: m_LocalScale.x
@@ -364,6 +414,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -447,6 +502,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Log (8)
+      objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -532,6 +592,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -615,6 +680,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Log (10)
+      objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -700,6 +770,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -784,6 +859,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -867,6 +947,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Log (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -957,6 +1042,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Log (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -979,6 +1069,10 @@ PrefabInstance:
     - target: {fileID: 1000012508307484, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
       propertyPath: m_Name
       value: LowPolyTent (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012508307484, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4000011385456942, guid: 9afb5f65098c7cb4786543d2601e0d1e, type: 3}
       propertyPath: m_LocalScale.x
@@ -1119,6 +1213,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Log
+      objectReference: {fileID: 0}
+    - target: {fileID: 522459008932986039, guid: 23bd600a3424d9e44ac451d447977c93,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
