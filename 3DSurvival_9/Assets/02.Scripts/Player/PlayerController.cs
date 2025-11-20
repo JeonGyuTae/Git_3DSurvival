@@ -328,17 +328,13 @@ public class PlayerController : MonoBehaviour
     } 
     #endregion
 
-    /// <summary>
-    /// 인벤토리로 사용X 건축에서 사용될 예정
-    /// </summary>
-    /// <param name="context"></param>
-    //public void OnInventory(InputAction.CallbackContext context)
-    //{
-        //if(context.phase == InputActionPhase.Started)
-        //{
-            //ToggleCursor();
-        //}
-    //}
+    public void OnChangeCursor(InputAction.CallbackContext context)
+    {
+        if(context.phase == InputActionPhase.Started)
+        {
+            ToggleCursor();
+        }
+    }
     
     void ToggleCursor()
     {
@@ -529,12 +525,12 @@ public class PlayerController : MonoBehaviour
         isRunning = false;
         runInputHold = false;
         isSneaking = false;
-        ToggleCursor();
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void EnableMovement()
     {
         canControl = true;
-        ToggleCursor();
+        Cursor.lockState = CursorLockMode.Locked;
     }
 }

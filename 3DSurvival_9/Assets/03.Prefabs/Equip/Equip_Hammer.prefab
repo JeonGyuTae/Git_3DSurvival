@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5076765735399911336}
   - component: {fileID: 5048327521032051934}
   - component: {fileID: 5056355010959240090}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Hammer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26,13 +26,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5078358290104567212}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 22, y: 22, z: 22}
-  m_ConstrainProportionsScale: 0
+  m_LocalRotation: {x: -0.06489531, y: 0.06553289, z: 0.68922806, w: 0.71865076}
+  m_LocalPosition: {x: 0.2629721, y: -0.4193101, z: 0.5070068}
+  m_LocalScale: {x: 6, y: 6, z: 6}
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 2930571613951797857}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: -10.58, y: 0.276, z: 87.58}
 --- !u!33 &5048327521032051934
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -144,7 +144,7 @@ Animator:
   m_GameObject: {fileID: 9085129210769003454}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: fd0cb5b8e7a48594aa1880c93af8ea31, type: 2}
+  m_Controller: {fileID: 9100000, guid: e460bf92d446390459bc4f050b533226, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

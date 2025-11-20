@@ -52,7 +52,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Inventory",
+                    "name": "ToggleCursor",
                     "type": "Button",
                     "id": "0afdebd3-aa31-4bb5-aa1f-b25577d04b8e",
                     "expectedControlType": "",
@@ -281,11 +281,11 @@
                 {
                     "name": "",
                     "id": "4c611464-46d0-42f4-b805-d9223be2add4",
-                    "path": "<Keyboard>/tab",
+                    "path": "<Keyboard>/v",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Inventory",
+                    "action": "ToggleCursor",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

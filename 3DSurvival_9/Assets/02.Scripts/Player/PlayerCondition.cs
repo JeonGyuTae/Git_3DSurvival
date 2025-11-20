@@ -108,6 +108,8 @@ public class PlayerCondition : MonoBehaviour, IDamageable
         {
             DieUIManager.Instance.ShowDieScreen();
         }
+
+        PlayerManager.Instance.Player.target = null;
     }
 
     public void TakeDamage(int damage)

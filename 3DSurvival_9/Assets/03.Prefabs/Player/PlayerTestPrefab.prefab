@@ -1027,7 +1027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b40334b5714ad1f4a8bf6055fdc1c212, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curValue: 0
+  curValue: 1
   startValue: 100
   maxValue: 100
   passiveValue: 1
@@ -3062,7 +3062,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4065394087993386084}
         m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: OnInventory
+        m_MethodName: OnChangeCursor
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
