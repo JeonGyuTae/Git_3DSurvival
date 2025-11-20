@@ -11,7 +11,7 @@ public class BuildingPlacer : MonoBehaviour
 
     [Header("Raycast Settings")]
     [SerializeField] private LayerMask placeMask;           // Ground 등
-    [SerializeField] private float maxPlaceDistance = 8f;   // 설치 최대 거리
+    [SerializeField] private float maxPlaceDistance = 10f;   // 설치 최대 거리
 
     [Header("Inventory")]
     [SerializeField] private PlayerInventory playerInventory; // 인벤토리 (비워두면 자동 찾음)

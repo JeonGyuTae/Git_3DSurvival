@@ -332,13 +332,13 @@ public class PlayerController : MonoBehaviour
     /// 인벤토리로 사용X 건축에서 사용될 예정
     /// </summary>
     /// <param name="context"></param>
-    public void OnInventory(InputAction.CallbackContext context)
-    {
-        if(context.phase == InputActionPhase.Started)
-        {
-            ToggleCursor();
-        }
-    }
+    //public void OnInventory(InputAction.CallbackContext context)
+    //{
+        //if(context.phase == InputActionPhase.Started)
+        //{
+            //ToggleCursor();
+        //}
+    //}
     
     void ToggleCursor()
     {
