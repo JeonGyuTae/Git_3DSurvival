@@ -10,6 +10,13 @@ public enum AnimalType
     Partner,
 }
 
+[System.Serializable]
+public class DropItem
+{
+    public int count;
+    public ItemData data;
+}
+
 /// <summary>
 /// AnimalData SO 데이터
 /// Animal Data가 가지는 필드는 다음과 같다.
@@ -36,4 +43,7 @@ public class AnimalData : ScriptableObject
     public float respawnTime;
     public Vector3 pivotArea;
     public Vector3 habitat;
+
+    [Header("DropItems")]
+    public List<DropItem> dropItems; 
 }

@@ -104,6 +104,16 @@ public abstract class AIController : MonoBehaviour
            
             isDead = true;
 
+            foreach(DropItem dropItem in animal.Data.dropItems)
+            {
+                for(int i=0; i<dropItem.count; i++)
+                {
+                    float offset = Random.Range(-0.5f, 0.5f);
+                    Vector3 spawnPosition = new Vector3(transform.position.x + i * offset, transform.position.y + 1.0f, transform.position.z);
+                    Instantiate(dropItem.data.dropPrefab, spawnPosition, Quaternion.identity);
+                }
+            }
+
             Invoke("DisableObject", deadCoolTime);
 
             // 리스폰 할 수 있도록 설정

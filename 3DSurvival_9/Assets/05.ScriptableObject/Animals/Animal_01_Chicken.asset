@@ -19,3 +19,8 @@ MonoBehaviour:
   atk: 10
   prefab: {fileID: 7865765865287956085, guid: 705c4001ea4d6934aa5630845d0b973b, type: 3}
   respawnTime: 10
+  pivotArea: {x: -50.8, y: 18, z: -87.2}
+  habitat: {x: 80, y: 5, z: 80}
+  dropItems:
+  - count: 1
+    data: {fileID: 11400000, guid: 56c935e24c903ad408e351bb8bc9570d, type: 2}

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class HarvestableNode : MonoBehaviour
+public class HarvestableNode : MonoBehaviour, IDamageable, ICullable
 {
     [Header("Drop Item")]
     public ItemData dropItem;
@@ -14,17 +14,37 @@ public class HarvestableNode : MonoBehaviour
 
     private int _currentHits;
 
-    // µµ±¸ ±¸ºÐ ¾È ÇÑ´Ù. ±×³É ¸ÂÀ¸¸é Ä³Áü.
+    private MeshRenderer meshRenderer;
+
+    private void Start()
+    {
+        meshRenderer = GetComponentInChildren<MeshRenderer>();
+        DisableCullComponents();
+    }
+
+    public void DisableCullComponents()
+    {
+        meshRenderer.enabled = false;
+    }
+
+    public void EnableCullComponents()
+    {
+        meshRenderer.enabled = true;
+    }
+
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Ñ´ï¿½. ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½.
     public void Harvest()
     {
+        Debug.Log("ìºê¸°");
+
         if (dropItem == null)
         {
-            Debug.LogWarning($"{name} : dropItemÀÌ ºñ¾î ÀÖÀ½");
+            Debug.LogWarning($"{name} : dropItemï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
             return;
         }
 
         _currentHits++;
-        Debug.Log($"{name} ¸ÂÀ½! ÇöÀç È÷Æ® ¼ö: {_currentHits}/{hitsToBreak}");
+        Debug.Log($"{name} ï¿½ï¿½ï¿½ï¿½! ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Æ® ï¿½ï¿½: {_currentHits}/{hitsToBreak}");
 
         if (_currentHits >= hitsToBreak)
         {
@@ -35,10 +55,20 @@ public class HarvestableNode : MonoBehaviour
             if (inventory != null)
             {
                 inventory.AddItem(dropItem, amount);
-                Debug.Log($"[HarvestableNode] {dropItem.name} x{amount} ÀÎº¥Åä¸®¿¡ Ãß°¡");
+                Debug.Log($"[HarvestableNode] {dropItem.name} x{amount} ï¿½Îºï¿½ï¿½ä¸®ï¿½ï¿½ ï¿½ß°ï¿½");
             }
 
             Destroy(gameObject);
         }
+    }
+
+    public void TakeDamage(int damage)
+    {
+        Harvest();
+    }
+
+    public void TakeDamage(int damage, Vector3 hitPosition)
+    {
+        Harvest();
     }
 }

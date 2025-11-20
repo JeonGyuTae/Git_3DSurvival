@@ -21,3 +21,8 @@ MonoBehaviour:
   respawnTime: 30
   pivotArea: {x: 0, y: 0, z: 0}
   habitat: {x: 0, y: 0, z: 0}
+  dropItems:
+  - count: 2
+    data: {fileID: 11400000, guid: c3499295432b0124d861634d17385b9c, type: 2}
+  - count: 2
+    data: {fileID: 11400000, guid: 56c935e24c903ad408e351bb8bc9570d, type: 2}
