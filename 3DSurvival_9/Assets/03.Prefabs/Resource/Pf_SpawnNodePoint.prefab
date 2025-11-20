@@ -54,4 +54,4 @@ MonoBehaviour:
   respawnDelay: 5
   groundMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 128

@@ -1,21 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(
-    fileName = "RecipeData",
-    menuName = "Game/Recipe Data",
-    order = 1)]
+[CreateAssetMenu(fileName = "NewRecipe", menuName = "ScriptableObjects/Recipe")]
 public class RecipeData : ScriptableObject
 {
-    [Header("Inputs")]
-    public ItemData inputA;
-    public int inputCountA = 1;
+    [System.Serializable]
+    public struct RecipeInput
+    {
+        public ItemData item;   // 필요한 재료 아이템
+        public int amount;      // 필요한 개수
+    }
 
-    public ItemData inputB;
-    public int inputCountB = 0;
+    [Header("재료들")]
+    public RecipeInput[] inputs;
 
-    [Header("Output")]
-    public ItemData outputItem;      // 도끼, 곡괭이, 가공 자원 등
-    public int outputItemCount = 1;  // 보통 1
+    [Header("결과 아이템")]
+    public ItemData outputItem;   // 도끼, 해머 같은 결과물
+    public int outputAmount = 1;  // 결과 개수 (기본 1개)
 }
