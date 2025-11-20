@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class Boat : MonoBehaviour, IInteractable
 {
-    private EndingUI endingUI;
+    [SerializeField] private GameObject endingUI;
     private string endingTxt = "The End";
 
     private void Start()
     {
-        endingUI = FindFirstObjectByType<EndingUI>();
+        endingUI = GameObject.Find("EndingUI");
     }
 
     public InteractableType GetInteractableType()
@@ -34,6 +34,6 @@ public class Boat : MonoBehaviour, IInteractable
 
     public void OnInteract()
     {
-        endingUI.gameObject.SetActive(true);
+        endingUI.transform.GetChild(0).gameObject.SetActive(true);
     }
 }

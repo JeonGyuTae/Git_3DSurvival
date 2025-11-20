@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8423936122040562620}
   - component: {fileID: -5872508616152557861}
-  - component: {fileID: 7581482937764486772}
+  - component: {fileID: 2952457574310373754}
   m_Layer: 0
   m_Name: Boat_Root
   m_TagString: Player
@@ -55,7 +55,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7581482937764486772
+--- !u!114 &2952457574310373754
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -64,11 +64,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8348763054766809644}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b8d8cf92afd8cc04ba6ce634178df99e, type: 3}
+  m_Script: {fileID: 11500000, guid: aeef936f59cdeb94bb976fc76ede8744, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  escapePanel: {fileID: 0}
-  interactKey: 101
+  endingUI: {fileID: 0}
 --- !u!1001 &8656840353326568523
 PrefabInstance:
   m_ObjectHideFlags: 0
