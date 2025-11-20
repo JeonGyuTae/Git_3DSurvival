@@ -3220,8 +3220,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 537540577}
+  - {fileID: 4268792325780181526}
   - {fileID: 1952911175592869637}
+  - {fileID: 6592194131576602860}
+  - {fileID: 111953774307246051}
+  - {fileID: 537540577}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1912822771
@@ -3704,12 +3707,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1132462989638072345}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1892933523}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &123217831540870552
 MonoBehaviour:
@@ -6104,7 +6107,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1485399568219190700}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6113,7 +6116,7 @@ Transform:
   - {fileID: 1361012541765289389}
   - {fileID: 8137740359004381820}
   - {fileID: 1795027192911468238}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1892933523}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!224 &4283083375277839109
 RectTransform:
@@ -7570,12 +7573,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2549417694971410396}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1892933523}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!65 &6621640958322726886
 BoxCollider:
@@ -9253,9 +9256,6 @@ SceneRoots:
   - {fileID: 1548656279}
   - {fileID: 20903698046982941}
   - {fileID: 381338644}
-  - {fileID: 4268792325780181526}
-  - {fileID: 111953774307246051}
-  - {fileID: 6592194131576602860}
   - {fileID: 578400499}
   - {fileID: 36462584}
   - {fileID: 7086830327431610299}
