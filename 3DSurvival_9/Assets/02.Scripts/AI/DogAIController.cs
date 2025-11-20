@@ -9,6 +9,10 @@ public class DogAIController : AIController
     [Header("Dog Stat")]
     [SerializeField] private float attackDistance = 2.0f;
     [SerializeField] private float attackCoolTime = 3.0f;
+    [SerializeField] private float minDistancePlayer = 1.0f;
+    [SerializeField] private float maxDistancePlayer = 4.0f;
+
+    [SerializeField] private Transform target;
 
     // 공격 상태 변수
     private float currentAttackCoolTime = 0.0f;
@@ -17,12 +21,13 @@ public class DogAIController : AIController
     // 플레이어와 거리를 체크하는 함수
     private float playerDistance;
 
-    // 공격 대상
-    private Transform target = null;
-
     // 상태 변수
-    private bool isAttackMode = false;
     private bool isAttack = false;
+    private bool isCanActive = false;
+    public void SetCanActive()
+    {
+        isCanActive = true;
+    }
 
     // 코루틴 변수
     private Coroutine damageEffectCoroutine;
@@ -82,16 +87,30 @@ public class DogAIController : AIController
         // Sequence Dead 생성
         Sequence checkDead = new Sequence("Check Dead", isDead, dead);
 
+        // 상태 노드 생성
+        ConditionNode isCanMovable = new ConditionNode("Can Movable?", IsCanMovable);
+
         // Selector Root 생성
-        Selector root = new Selector("Root", checkDead, findMode, followMode);
+        Selector active = new Selector("Root", checkDead, findMode, followMode);
+        Sequence root = new Sequence("Root", isCanMovable, active);
 
         tree = new BehaviorTree(root);
     }
+
+    #region 상태 노드
+
+    private NodeState IsCanMovable()
+    {
+        return (isCanActive) ? NodeState.SUCCESS : NodeState.FAILURE;
+    }
+
+    #endregion
 
     #region 공격 모드
 
     private NodeState IsTargetExist()
     {
+        target = player.target;
         return (target != null) ? NodeState.SUCCESS : NodeState.FAILURE;
     }
 
@@ -122,7 +141,10 @@ public class DogAIController : AIController
         {
             if (canAttack)
             {
-                player.condition.TakeDamage((int)animal.Data.atk);
+                if(target.transform.TryGetComponent<AIController>(out AIController _target))
+                {
+                    _target.OnHit((int)animal.Data.atk, this.transform.position);
+                }
                 isAttack = true;
                 canAttack = false;
                 currentAttackCoolTime = 0;
@@ -158,7 +180,8 @@ public class DogAIController : AIController
 
     private NodeState SetRunTargetPosition()
     {
-        if (target.transform.position == Vector3.zero) return NodeState.FAILURE;
+        if(player.target == null) return NodeState.FAILURE;
+        if (player.target.transform.position == Vector3.zero) return NodeState.FAILURE;
 
         // 도망갈 포지션 세팅
 
@@ -166,7 +189,7 @@ public class DogAIController : AIController
         SetSpeed(runSpeed);
 
         // hit 된 포지션 반대방향으로 설정
-        Vector3 backDirection = transform.position - target.transform.position;
+        Vector3 backDirection = transform.position - player.target.transform.position;
         backDirection.y = 0;
         Vector3 backDirectionNormalized = backDirection.normalized;
 
@@ -230,7 +253,7 @@ public class DogAIController : AIController
                 SetAgentStop(false);
                 isMovingToTarget = true; // 플래그 설정
                 targetDestination = player.transform.position;
-                float randomDistance = Random.Range(3.0f, 8.0f);
+                float randomDistance = Random.Range(minDistancePlayer, maxDistancePlayer);
                 SetStoppingDistance(randomDistance);
 
                 // 타이머 리셋
@@ -274,11 +297,6 @@ public class DogAIController : AIController
 
         animal.ConditionHandler.TakeDamage(damage);
 
-    }
-
-    public void SetTarget(Transform target)
-    {
-        this.target = target;
     }
 
     /// <summary>

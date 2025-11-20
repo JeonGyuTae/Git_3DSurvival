@@ -10,13 +10,13 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 {
     [SerializeField] private AnimalData data;
 
-    private AIController controller;
+    protected AIController controller;
 
     [Header("Compnent")]
     private Rigidbody _rigidbody;
     private AnimalConditionHandler conditionHandler;
     private AnimalAnimationHandler animationHandler;
-    private SkinnedMeshRenderer skinnedMeshRenderer;
+    protected SkinnedMeshRenderer skinnedMeshRenderer;
     private ParticleSystem fx_dead;
 
     private void Start()
@@ -66,8 +66,9 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
         DisableCullComponents();
     }
 
-    public InteractableType GetInteractableType()
+    public virtual InteractableType GetInteractableType()
     {
+        if (data.type == AnimalType.Partner) return InteractableType.NPC;
         return InteractableType.Animal;
     }
 
@@ -86,8 +87,12 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
         
     }
 
-    public void OnInteract()
+    public virtual void OnInteract()
     {
+        if(TryGetComponent<DogAIController>(out  var controller))
+        {
+            controller.SetCanActive();
+        }
     }
 
     public void TakeDamage(int damage)
@@ -102,12 +107,14 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 
     public void EnableCullComponents()
     {
+        if (controller == null) return;
         if (controller.IsDeaded) return;
+
         skinnedMeshRenderer.enabled = true;
         controller.enabled = true;
     }
 
-    public void DisableCullComponents()
+    public virtual void DisableCullComponents()
     {
         if (data.type == AnimalType.Partner) return;
 

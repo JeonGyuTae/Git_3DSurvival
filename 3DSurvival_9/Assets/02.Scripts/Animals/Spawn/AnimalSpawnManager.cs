@@ -69,6 +69,9 @@ public class AnimalSpawnManager : MonoBehaviour
 
     public void Respawn(Animal animal)
     {
+        // 플레이어에게 target이 없어졌다는 것을 알림
+        PlayerManager.Instance.Player.target = null;
+
         StartCoroutine(RespawnCoroutine(animal));
     }
 
