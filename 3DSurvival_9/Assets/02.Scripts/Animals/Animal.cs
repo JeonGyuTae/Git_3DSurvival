@@ -19,7 +19,7 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
     private SkinnedMeshRenderer skinnedMeshRenderer;
     private ParticleSystem fx_dead;
 
-    private void Awake()
+    private void Start()
     {
         _rigidbody = GetComponent<Rigidbody>();
         animationHandler = GetComponent<AnimalAnimationHandler>();
@@ -69,11 +69,6 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
 
     public void OnInteract()
     {
-        /*// Test 공격 판정
-        // Raycast로 hit 된 Position 값을 얻어와야 함
-
-        Interaction interact = GameObject.FindAnyObjectByType<Interaction>();
-        controller.OnHit(interact.hitPosition);*/
     }
 
     public void TakeDamage(int damage)
@@ -90,11 +85,13 @@ public class Animal : MonoBehaviour, IInteractable, IDamageable, ICullable
     {
         if (controller.IsDeaded) return;
         skinnedMeshRenderer.enabled = true;
+        controller.enabled = true;
     }
 
     public void DisableCullComponents()
     {
         skinnedMeshRenderer.enabled = false;
+        controller.enabled = false;
     }
 
     #region 프로퍼티
