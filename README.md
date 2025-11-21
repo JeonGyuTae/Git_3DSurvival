@@ -3,9 +3,7 @@
 ## 1인칭 생존 어드밴처 게임
 <br>
 
-
-<img width="2021" height="1136" alt="image 81" src="https://github.com/user-attachments/assets/ea448543-0979-454f-89f8-619c5856eacf" />
-
+<img width="1036" height="577" alt="5" src="https://github.com/user-attachments/assets/19b91a72-b6a4-419f-9461-d6e28b07ff20" />
 
 ## 1. 프로젝트 소개
 
