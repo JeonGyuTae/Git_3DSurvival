@@ -64,4 +64,42 @@ public virtual void DisableCullComponents()
 
  - Trigger는 비활성화 된 Collider 탐지 불가 -> 오브젝트는 활성화한 채 성능에 영향 주는 요소만 비활성화(Renderer, Script)
 
+### 2) Crafting Issue
+
+<pre>
+<code>
+ private void Update()
+{
+    // 먼저 인벤토리 자동 연결 시도
+    TryGetInventory();
+
+    if (!isPlacing)
+        return;
+
+    // 카메라 자동 할당
+    if (playerCamera == null)
+    {
+        playerCamera = Camera.main;
+        if (playerCamera == null)
+            return;
+    }
+
+    UpdatePreviewPosition();
+    HandleRotationInput();
+    HandlePlaceInput();
+}
+</code>
+</pre>
+
+- 건축물을 설치할 때 플레이어가 바라보는 곳이 아닌 항상 같은 곳에서 고정되어 생성됨
+- playerCamera = null인경우 메인 카메라로 자동 할당 되도록 수정
+
+
+### 3) Terrain
+
+<img width="404" height="407" alt="9" src="https://github.com/user-attachments/assets/4f2394c4-a430-4854-9f5b-bf5043320047" />
+
+ - Terrain 제작 중 Texture를 적용하는 부분에서 문제 발생
+ - Terrain 내 Paint Texture 메뉴에서 Brush로 직접 채색하여 해결
+
 
