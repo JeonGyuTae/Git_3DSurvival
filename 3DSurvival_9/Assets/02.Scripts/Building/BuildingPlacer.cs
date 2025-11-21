@@ -216,6 +216,7 @@ public class BuildingPlacer : MonoBehaviour
             {
                 if(!CheckBuildInEsacpeZone(currentPreview))
                 {
+                    Debug.Log($"탈출지역이 아닙니다. boat를 설치할 수 없습니다.");
                     CancelPlacing();
                     return;
                 }
