@@ -26,7 +26,7 @@
 |이의환(https://github.com/UihwanLee)|김하늘(https://github.com/Hagill)|전규태(https://github.com/JeonGyuTae)|송정민(https://github.com/song010301-cloud)|김문경(https://github.com/moon7441-dev)|
 
 - 이의환: AI + 전투 시스템
-- 김하: 플레이어, 인벤토
+- 김하늘: 플레이어, 인벤토리
 - 전규태: 맵&지도, NPC
 - 송정민: 건축 시스
 - 김문경: 자원 스폰, 수집, 가공
